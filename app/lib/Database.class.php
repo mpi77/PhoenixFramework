@@ -4,7 +4,7 @@
  * Database provides interaction between this program
  * and db server.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  *        
  */
@@ -45,12 +45,12 @@ class Database {
     public function selectQuery($query, $queryArgs, $fetchConfig = array("type"=>PDO::FETCH_ASSOC, "className" => "")) {
         try {
             $r = $this->link->prepare($query);
-            switch ($fetchConfig ["type"]) {
+            switch ($fetchConfig["type"]) {
                 case PDO::FETCH_ASSOC :
                     $r->setFetchMode(PDO::FETCH_ASSOC);
                     break;
                 case PDO::FETCH_CLASS :
-                    $r->setFetchMode(PDO::FETCH_CLASS, $fetchConfig ["className"]);
+                    $r->setFetchMode(PDO::FETCH_CLASS, $fetchConfig["className"]);
                     break;
                 default :
                     $r->setFetchMode(PDO::FETCH_ASSOC);
@@ -95,7 +95,6 @@ class Database {
     /**
      * Get the ID of the last inserted row or sequence value.
      *
-     *
      * @param string $name
      *            Name of the sequence object from which the ID should be returned.
      * @return string
@@ -115,7 +114,7 @@ class Database {
      * @return string
      */
     public function quote($text, $parameter_type = null) {
-        return $this->link->quote($text, $params);
+        return $this->link->quote($text, $parameter_type);
     }
     
     /**
@@ -174,7 +173,7 @@ class Database {
         }
         
         try {
-            $link = new PDO(sprintf("%s:host=%s:%d;dbname=%s;charset=%s", $connectionParams ["driver"], $connectionParams ["server"], $connectionParams ["port"], $connectionParams ["schema"], $connectionParams ["charset"]), $connectionParams ["login"], $connectionParams ["password"]);
+            $link = new PDO(sprintf("%s:host=%s:%d;dbname=%s;charset=%s", $connectionParams["driver"], $connectionParams["server"], $connectionParams["port"], $connectionParams["schema"], $connectionParams["charset"]), $connectionParams["login"], $connectionParams["password"]);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             return false;
@@ -189,7 +188,7 @@ class Database {
      */
     private function connect() {
         try {
-            $this->link = new PDO(sprintf("%s:host=%s:%d;dbname=%s;charset=%s", $this->connectionParams ["driver"], $this->connectionParams ["server"], $this->connectionParams ["port"], $this->connectionParams ["schema"], $this->connectionParams ["charset"]), $this->connectionParams ["login"], $this->connectionParams ["password"]);
+            $this->link = new PDO(sprintf("%s:host=%s:%d;dbname=%s;charset=%s", $this->connectionParams["driver"], $this->connectionParams["server"], $this->connectionParams["port"], $this->connectionParams["schema"], $this->connectionParams["charset"]), $this->connectionParams["login"], $this->connectionParams["password"]);
             $this->link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             $this->status = false;
