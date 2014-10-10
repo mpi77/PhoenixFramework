@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 class FrontController {
@@ -38,7 +38,7 @@ class FrontController {
 
 	public function __destruct() {
 		if (!empty($this->db)) {
-			$this->db->close();
+			$this->db = null;
 		}
 		System::setViewEnabled();
 		System::clearException();
