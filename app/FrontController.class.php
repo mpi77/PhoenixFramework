@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 class FrontController {
@@ -19,7 +19,7 @@ class FrontController {
 			$this->router->addRoute("default", "IndexController", "IndexView", "IndexModel");
 			$this->router->addRoute("user", "UserController", "UserView", "UserModel");
 			
-			$this->db = new Database(Config::getDbParams());
+			$this->db = new Database(Config::getDatabaseConnectionParams(Config::DB_DEFAULT_POOL));
 			System::setViewEnabled();
 			System::clearException();
 		} catch (FailureException $e) {

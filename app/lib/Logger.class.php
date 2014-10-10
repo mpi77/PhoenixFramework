@@ -3,7 +3,7 @@
 /**
  * Logger object
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 class Logger{
@@ -21,7 +21,8 @@ class Logger{
 	 */
 	public static function saveWarning(Database $db, WarningException $e){
 		try{
-			$r = $db->actionQuery(sprintf("INSERT INTO log_internal VALUES (default, default, '%s', %d, '%s')", $e->getName(), $e->getCode(), $db->escape($e->getTraceAsString())));
+		    // TODO
+			//$r = $db->actionQuery(sprintf("INSERT INTO log_internal VALUES (default, default, '%s', %d, '%s')", $e->getName(), $e->getCode(), $db->escape($e->getTraceAsString())));
 		}catch(WarningException $e){
 			self::saveFailure(new FailureException(FailureException::FAILURE_UNABLE_SAVE_WARNING));
 			header("Location: " . Config::SITE_PATH . Config::SHUTDOWN_PAGE);
@@ -32,8 +33,7 @@ class Logger{
 	/**
 	 * Save failure to log file.
 	 *
-	 * @param WarningException $e
-	 *        	WarningException object
+	 * @param FailureException $e
 	 */
 	public static function saveFailure(FailureException $e){
 		$files = System::findAllFiles(Config::LOG_DIR, array(
