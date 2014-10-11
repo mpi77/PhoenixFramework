@@ -4,7 +4,7 @@
  * Database provides interaction between this program
  * and db server.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  *        
  */
@@ -38,7 +38,7 @@ class Database {
      * @param array $queryArgs
      *            array with query arguments
      * @param array $fetchConfig
-     *            array with config of fetch op.
+     *            array with config fetch op. [type=>PDO::FETCH_ASSOC or PDO::FETCH_NUM or PDO::FETCH_CLASS, className=>string]
      * @throws WarningException
      * @return 2D array (more rows fetched) | 1D array (one row fetched) | Database::EMPTY_RESULT (nothing fetched)
      */
@@ -48,6 +48,9 @@ class Database {
             switch ($fetchConfig["type"]) {
                 case PDO::FETCH_ASSOC :
                     $r->setFetchMode(PDO::FETCH_ASSOC);
+                    break;
+                case PDO::FETCH_NUM :
+                    $r->setFetchMode(PDO::FETCH_NUM);
                     break;
                 case PDO::FETCH_CLASS :
                     $r->setFetchMode(PDO::FETCH_CLASS, $fetchConfig["className"]);
