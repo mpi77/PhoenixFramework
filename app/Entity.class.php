@@ -23,6 +23,6 @@ abstract class Entity {
 	 *
 	 * @all entities must contain a toString method
 	 */
-	public abstract function toString();
+	public abstract function __toString();
 }
 ?>
