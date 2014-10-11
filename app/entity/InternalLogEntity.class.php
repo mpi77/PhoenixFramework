@@ -2,7 +2,7 @@
 /**
  * Internal log entity.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 class InternalLogEntity extends Entity {
@@ -49,7 +49,7 @@ class InternalLogEntity extends Entity {
         $queryArgs = array (
                         ":class" => $class,
                         ":code" => $code,
-                        "stack" => $stack 
+                        ":stack" => $stack 
         );
         return $db->actionQuery($query, $queryArgs);
     }

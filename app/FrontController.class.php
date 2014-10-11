@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class FrontController {
@@ -33,7 +33,7 @@ class FrontController {
         $this->args["GET"] = System::trimSlashArray1dAssociative($_GET, true, true);
         $this->args["POST"] = System::trimSlashArray1dAssociative($_POST, true, true);
         
-        $this->dispatch(); var_dump($_SESSION);
+        $this->dispatch();
     }
 
     public function __destruct() {
