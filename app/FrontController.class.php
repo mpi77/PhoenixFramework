@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 class FrontController {
@@ -33,7 +33,7 @@ class FrontController {
         $this->args["GET"] = System::trimSlashArray1dAssociative($_GET, true, true);
         $this->args["POST"] = System::trimSlashArray1dAssociative($_POST, true, true);
         
-        $this->dispatch();
+        $this->dispatch(); var_dump($_SESSION);
     }
 
     public function __destruct() {
@@ -81,11 +81,11 @@ class FrontController {
                 throw new WarningException(WarningException::WARNING_INVALID_ROUTE);
             }
         } catch (NoticeException $e) {
-            $_SESSION["exception"] = $e;
+            $_SESSION[Config::SERVER_FQDN]["exception"] = $e;
         } catch (WarningException $e) {
             Logger::saveWarning($this->db, $e);
             System::setViewDisabled();
-            $_SESSION["exception"] = $e;
+            $_SESSION[Config::SERVER_FQDN]["exception"] = $e;
         } catch (FailureException $e) {
             Logger::saveFailure($e);
             header("Location: " . Config::SITE_PATH . Config::SHUTDOWN_PAGE);
@@ -105,11 +105,11 @@ class FrontController {
                 echo "<div class=\"page-header\">&nbsp;</div>";
             }
         } catch (NoticeException $e) {
-            $_SESSION["exception"] = $e;
+            $_SESSION[Config::SERVER_FQDN]["exception"] = $e;
             System::makeExceptionCont();
         } catch (WarningException $e) {
             Logger::saveWarning($this->db, $e);
-            $_SESSION["exception"] = $e;
+            $_SESSION[Config::SERVER_FQDN]["exception"] = $e;
             System::makeExceptionCont();
         } catch (FailureException $e) {
             Logger::saveFailure($e);

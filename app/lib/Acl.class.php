@@ -3,7 +3,7 @@
 /**
  * Acl class controls that user has privilege to do action.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  *
  */
@@ -20,7 +20,7 @@ class Acl{
 	}
 
 	public static function isLoggedin(){
-		return (isset($_SESSION["user"]["auth"]) && $_SESSION["user"]["auth"]);
+		return (isset($_SESSION[Config::SERVER_FQDN]["user"]["auth"]) && $_SESSION[Config::SERVER_FQDN]["user"]["auth"]);
 	}
 }
 ?>

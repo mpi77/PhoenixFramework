@@ -2,7 +2,7 @@
 /**
  * Translate is Translator singleton wrapper.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 class Translate{
@@ -20,7 +20,7 @@ class Translate{
 	 */
 	public static function get($key){
 		if(empty(self::$translator)){
-			self::initTranslator($_SESSION["user"]["lang"]);
+			self::initTranslator($_SESSION[Config::SERVER_FQDN]["user"]["lang"]);
 		}
 		return self::$translator->get($key);
 	}
@@ -34,7 +34,7 @@ class Translate{
 	 */
 	public static function display($key){
 		if(empty(self::$translator)){
-			self::initTranslator($_SESSION["user"]["lang"]);
+			self::initTranslator($_SESSION[Config::SERVER_FQDN]["user"]["lang"]);
 		}
 		echo htmlspecialchars(self::$translator->get($key));
 	}
