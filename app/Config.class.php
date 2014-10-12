@@ -2,7 +2,7 @@
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 class Config {
@@ -39,9 +39,10 @@ class Config {
                     "from_name" => "x",
                     "smtp_secure" => null 
     );
+
     private function __construct() {
     }
-    
+
     /**
      * Get configuration parameters for connection to db.
      *
@@ -51,7 +52,7 @@ class Config {
     public static function getDatabaseConnectionParams($connectionId) {
         return self::$dbParams[$connectionId];
     }
-    
+
     /**
      * Get configuration parameters to email server.
      *
