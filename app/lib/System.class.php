@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 class System {
@@ -466,7 +466,7 @@ class System {
     
     /**
      * Check session inactivity timeout.
-     * This method should be called after succesfull login to.
+     * This method should be called after succesfull login.
      */
     public static function checkSessionInactivity(){
         if(Config::SESSION_INACTIVITY_ENABLED !== true){
@@ -479,7 +479,7 @@ class System {
             if (time() - $_SESSION[Config::SERVER_FQDN]["last_activity"] > Config::SESSION_INACTIVITY_TIMEOUT) {
                 session_unset();
                 session_destroy();
-                self::redirect(Config::SESSION_INACTIVITY_REDIRECT_PATH);
+                self::redirect(Config::SITE_PATH + Config::SESSION_INACTIVITY_REDIRECT_PATH);
             } else {
                 $_SESSION[Config::SERVER_FQDN]["last_activity"] = time();
             }
@@ -488,7 +488,7 @@ class System {
     
     /**
      * Session fixation detection.
-     * This method should be called after succesfull login to.
+     * This method should be called after succesfull login.
      */
     public static function checkSessionFixation(){
         if(Config::SESSION_FIXATION_DETECTION_ENABLED !== true){
@@ -502,7 +502,7 @@ class System {
             if ($_SESSION[Config::SERVER_FQDN]["remote_addr"] !== $_SERVER["REMOTE_ADDR"] || $_SESSION[Config::SERVER_FQDN]["http_user_agent"] !== $_SERVER["HTTP_USER_AGENT"]) {
                 session_unset();
                 session_destroy();
-                self::redirect(Config::SESSION_FIXATION_REDIRECT_PATH);
+                self::redirect(Config::SITE_PATH + Config::SESSION_FIXATION_REDIRECT_PATH);
             }
         }
     }
