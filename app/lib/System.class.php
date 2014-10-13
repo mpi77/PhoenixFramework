@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 class System {
@@ -452,6 +452,19 @@ class System {
             $_SESSION[Config::SERVER_FQDN]["user"]["lang"] = Translator::LANG_CZ;
             $_SESSION[Config::SERVER_FQDN]["user"]["auth"] = false;
             self::initAuthToken();
+        }
+        if ($_SESSION[Config::SERVER_FQDN]["user"]["auth"] === true && Config::SESSION_INACTIVITY_ENABLED === true) {
+            if (!isset($_SESSION[Config::SERVER_FQDN]["last_activity"])) {
+                $_SESSION[Config::SERVER_FQDN]["last_activity"] = time();
+            } else {
+                if (time() - $_SESSION[Config::SERVER_FQDN]["last_activity"] > Config::SESSION_INACTIVITY_TIMEOUT) {
+                    session_unset();
+                    session_destroy();
+                    self::redirect(Config::SESSION_INACTIVITY_REDIRECT_PATH);
+                } else {
+                    $_SESSION[Config::SERVER_FQDN]["last_activity"] = time();
+                }
+            }
         }
         if (!isset($_SESSION[Config::SERVER_FQDN]["page_size"])) {
             $_SESSION[Config::SERVER_FQDN]["page_size"] = self::PAGE_SIZE_DEFAULT;

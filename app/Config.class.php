@@ -2,7 +2,7 @@
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class Config {
@@ -16,6 +16,9 @@ class Config {
     const SERVER_INTERNAL_IP = "x";
     const SERVER_PORT = "x";
     const SERVER_PROTOCOL = "x";
+    const SESSION_INACTIVITY_ENABLED = true;
+    const SESSION_INACTIVITY_TIMEOUT = 1800;
+    const SESSION_INACTIVITY_REDIRECT_PATH = "user/inactivity/";
     const SET = 1;
     const CLEAR = 2;
     const DB_DEFAULT_POOL = 1;
