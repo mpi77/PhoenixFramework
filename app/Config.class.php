@@ -2,7 +2,7 @@
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 class Config {
@@ -19,6 +19,8 @@ class Config {
     const SESSION_INACTIVITY_ENABLED = true;
     const SESSION_INACTIVITY_TIMEOUT = 1800;
     const SESSION_INACTIVITY_REDIRECT_PATH = "user/inactivity/";
+    const SESSION_FIXATION_DETECTION_ENABLED = true;
+    const SESSION_FIXATION_REDIRECT_PATH = "user/fixation/";
     const SET = 1;
     const CLEAR = 2;
     const DB_DEFAULT_POOL = 1;

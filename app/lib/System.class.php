@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class System {
@@ -453,24 +453,58 @@ class System {
             $_SESSION[Config::SERVER_FQDN]["user"]["auth"] = false;
             self::initAuthToken();
         }
-        if ($_SESSION[Config::SERVER_FQDN]["user"]["auth"] === true && Config::SESSION_INACTIVITY_ENABLED === true) {
-            if (!isset($_SESSION[Config::SERVER_FQDN]["last_activity"])) {
-                $_SESSION[Config::SERVER_FQDN]["last_activity"] = time();
-            } else {
-                if (time() - $_SESSION[Config::SERVER_FQDN]["last_activity"] > Config::SESSION_INACTIVITY_TIMEOUT) {
-                    session_unset();
-                    session_destroy();
-                    self::redirect(Config::SESSION_INACTIVITY_REDIRECT_PATH);
-                } else {
-                    $_SESSION[Config::SERVER_FQDN]["last_activity"] = time();
-                }
-            }
+        if ($_SESSION[Config::SERVER_FQDN]["user"]["auth"] === true) {
+            self::checkSessionInactivity();
+            self::checkSessionFixation();
         }
         if (!isset($_SESSION[Config::SERVER_FQDN]["page_size"])) {
             $_SESSION[Config::SERVER_FQDN]["page_size"] = self::PAGE_SIZE_DEFAULT;
         }
         $_SESSION[Config::SERVER_FQDN]["exception"] = null;
         $_SESSION[Config::SERVER_FQDN]["view"] = true;
+    }
+    
+    /**
+     * Check session inactivity timeout.
+     * This method should be called after succesfull login to.
+     */
+    public static function checkSessionInactivity(){
+        if(Config::SESSION_INACTIVITY_ENABLED !== true){
+            return;
+        }
+        
+        if (!isset($_SESSION[Config::SERVER_FQDN]["last_activity"])) {
+            $_SESSION[Config::SERVER_FQDN]["last_activity"] = time();
+        } else {
+            if (time() - $_SESSION[Config::SERVER_FQDN]["last_activity"] > Config::SESSION_INACTIVITY_TIMEOUT) {
+                session_unset();
+                session_destroy();
+                self::redirect(Config::SESSION_INACTIVITY_REDIRECT_PATH);
+            } else {
+                $_SESSION[Config::SERVER_FQDN]["last_activity"] = time();
+            }
+        }
+    }
+    
+    /**
+     * Session fixation detection.
+     * This method should be called after succesfull login to.
+     */
+    public static function checkSessionFixation(){
+        if(Config::SESSION_FIXATION_DETECTION_ENABLED !== true){
+            return;
+        }
+    
+        if (!isset($_SESSION[Config::SERVER_FQDN]["remote_addr"]) || !isset($_SESSION[Config::SERVER_FQDN]["http_user_agent"])) {
+            $_SESSION[Config::SERVER_FQDN]["remote_addr"] = $_SERVER["REMOTE_ADDR"];
+            $_SESSION[Config::SERVER_FQDN]["http_user_agent"] = $_SERVER["HTTP_USER_AGENT"];
+        } else {
+            if ($_SESSION[Config::SERVER_FQDN]["remote_addr"] !== $_SERVER["REMOTE_ADDR"] || $_SESSION[Config::SERVER_FQDN]["http_user_agent"] !== $_SERVER["HTTP_USER_AGENT"]) {
+                session_unset();
+                session_destroy();
+                self::redirect(Config::SESSION_FIXATION_REDIRECT_PATH);
+            }
+        }
     }
 
     /**
