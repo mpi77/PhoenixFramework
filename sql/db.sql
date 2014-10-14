@@ -53,6 +53,44 @@ ALTER TABLE `log_internal`
 --
 ALTER TABLE `log_internal`
 MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabulky `proxy`
+--
+
+CREATE TABLE IF NOT EXISTS `proxy` (
+`id` int(10) unsigned NOT NULL,
+  `token` varchar(16) NOT NULL,
+  `valid_from` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `valid_to` datetime DEFAULT NULL,
+  `link` varchar(255) NOT NULL,
+  `only_authenticated` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `only_uid` int(11) unsigned NOT NULL DEFAULT '0',
+  `only_gid` int(11) unsigned NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Klíče pro exportované tabulky
+--
+
+--
+-- Klíče pro tabulku `proxy`
+--
+ALTER TABLE `proxy`
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `token` (`token`,`valid_from`,`valid_to`);
+
+--
+-- AUTO_INCREMENT pro tabulky
+--
+
+--
+-- AUTO_INCREMENT pro tabulku `proxy`
+--
+ALTER TABLE `proxy`
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -2,10 +2,19 @@
 /**
  * Proxy entity.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 class ProxyEntity extends Entity {
+    
+    private $id;
+    private $token;
+    private $valid_from;
+    private $valid_to;
+    private $link;
+    private $only_authenticated;
+    private $only_uid;
+    private $only_gid;
     
     public function __construct() {
         parent::__construct();
@@ -16,7 +25,7 @@ class ProxyEntity extends Entity {
     }
 
     public function __toString() {
-        return "ProxyEntity{not implemented yet}";
+        return "ProxyEntity{id=" + $this->id + ", token=" + $this->token + "}";
     }
 }
 ?>
