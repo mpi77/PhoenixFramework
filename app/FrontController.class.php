@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 class FrontController {
@@ -46,6 +46,8 @@ class FrontController {
 
     /**
      * Dispatch user request.
+     *
+     * @todo translated dispatching
      */
     private function dispatch() {
         $route_name = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : "default";
