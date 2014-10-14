@@ -1,5 +1,5 @@
 #
-#	@version 1.1
+#	@version 1.2
 #	@author MPI
 #
 
@@ -42,8 +42,8 @@ RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule .* - [L]
 
 #redirect error
-RewriteCond %{REQUEST_URI} ^/phoenix/([0-9]+)$
-RewriteRule ^([0-9]+)$ /phoenix/error/error.php?code=$1 [NC,L]
+RewriteCond %{REQUEST_URI} ^/phoenix/([0-9]{3})$
+RewriteRule ^([0-9]{3})$ /phoenix/error/error.php?code=$1 [NC,L]
 
 # redirect proxy link /string_{4-16chars}
 RewriteCond %{REQUEST_URI} ^/phoenix/([a-zA-Z0-9]{4,16})$

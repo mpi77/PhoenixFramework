@@ -2,7 +2,7 @@
 /**
  * Internal log entity.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 class InternalLogEntity extends Entity {
@@ -28,7 +28,7 @@ class InternalLogEntity extends Entity {
         return $this->id;
     }
     
-    public function getts_insert(){
+    public function getTsInsert(){
         return $this->ts_insert;
     }
     
