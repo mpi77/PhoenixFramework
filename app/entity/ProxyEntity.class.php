@@ -2,7 +2,7 @@
 /**
  * Proxy entity.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 class ProxyEntity extends Entity {
@@ -11,6 +11,8 @@ class ProxyEntity extends Entity {
     private $valid_from;
     private $valid_to;
     private $link;
+    private $route;
+    private $action;
     private $only_authenticated;
     private $only_uid;
     private $only_gid;
@@ -47,6 +49,14 @@ class ProxyEntity extends Entity {
         return $this->link;
     }
     
+    public function getRoute(){
+        return $this->route;
+    }
+    
+    public function getAction(){
+        return $this->action;
+    }
+    
     public function getOnlyAuthenticated(){
         return $this->only_authenticated;
     }
@@ -60,7 +70,7 @@ class ProxyEntity extends Entity {
     }
 
     public static function getProxyItemByValidToken(Database $db, $token) {
-        $query = "SELECT id, token, valid_from, valid_to, link, only_authenticated, only_uid, only_gid FROM proxy WHERE (token=:token AND valid_from<=NOW() AND (valid_to IS NULL OR valid_to>NOW()))";
+        $query = "SELECT id, token, valid_from, valid_to, link, route, action, only_authenticated, only_uid, only_gid FROM proxy WHERE (token=:token AND valid_from<=NOW() AND (valid_to IS NULL OR valid_to>NOW()))";
         $queryArgs = array (
                         ":token" => $token 
         );

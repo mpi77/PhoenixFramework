@@ -65,11 +65,13 @@ CREATE TABLE IF NOT EXISTS `proxy` (
   `token` varchar(16) NOT NULL,
   `valid_from` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `valid_to` datetime DEFAULT NULL,
-  `link` varchar(255) NOT NULL,
+  `link` varchar(255) DEFAULT NULL,
+  `route` varchar(50) DEFAULT NULL,
+  `action` varchar(50) DEFAULT NULL,
   `only_authenticated` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `only_uid` int(11) unsigned NOT NULL DEFAULT '0',
   `only_gid` int(11) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 --
 -- Klíče pro exportované tabulky
@@ -89,7 +91,7 @@ ALTER TABLE `proxy`
 -- AUTO_INCREMENT pro tabulku `proxy`
 --
 ALTER TABLE `proxy`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

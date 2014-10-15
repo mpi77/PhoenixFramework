@@ -3,10 +3,12 @@
 /**
  * Proxy gateway
  * 
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 class Proxy {
+    const FILE_DOWNLOAD_ROUTE = "file";
+    const FILE_DOWNLOAD_ACTION = "download";
     private $db;
 
     public function __construct() {
@@ -23,7 +25,6 @@ class Proxy {
         
         if ($this->isLink() === true) {
             $this->linkProcess();
-            exit();
         }
     }
 
@@ -34,14 +35,20 @@ class Proxy {
             if ($proxyItem == Database::EMPTY_RESULT) {
                 throw new NoticeException(NoticeException::NOTICE_INVALID_TOKEN);
             }
-            
             // TODO: ACL
             
-            if (preg_match("/^htt(p|ps):\/\/.*/", $proxyItem[0]->getLink())) {
+            if (is_null($proxyItem[0]->getRoute()) && is_null($proxyItem[0]->getAction()) && !is_null($proxyItem[0]->getLink())) {
                 // external link to redirect on
                 System::redirect($proxyItem[0]->getLink());
+            } else if (!is_null($proxyItem[0]->getRoute()) && !is_null($proxyItem[0]->getAction()) && is_null($proxyItem[0]->getLink())) {
+                // internal rewrite link to app
+                $_GET["route"] = $proxyItem[0]->getRoute();
+                $_GET["action"] = $proxyItem[0]->getAction();
+                return;
+            } else if ($proxyItem[0]->getRoute() == self::FILE_DOWNLOAD_ROUTE && $proxyItem[0]->getAction() == self::FILE_DOWNLOAD_ACTION && !is_null($proxyItem[0]->getLink())) {
+                // file download
             } else {
-                // local file to output
+                throw new NoticeException(NoticeException::NOTICE_INVALID_TOKEN);
             }
         } catch (NoticeException $e) {
             header("Location: " . Config::SITE_PATH . "404");
@@ -55,6 +62,7 @@ class Proxy {
             header("Location: " . Config::SITE_PATH . "500");
             exit();
         }
+        exit();
     }
 
     private function isApp() {
