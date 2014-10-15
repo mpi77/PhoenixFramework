@@ -1,5 +1,5 @@
 #
-#	@version 1.3
+#	@version 1.4
 #	@author MPI
 #
 
@@ -44,6 +44,10 @@ RewriteRule .* - [L]
 #redirect error
 RewriteCond %{REQUEST_URI} ^/phoenix/([0-9]{3})$
 RewriteRule ^([0-9]{3})$ /phoenix/error/error.php?code=$1 [NC,L]
+
+#redirect empty path to app
+RewriteCond %{REQUEST_URI} ^/phoenix/$
+RewriteRule ^$ /phoenix/index.php [NC,L]
 
 # redirect proxy link /string_{4-50chars}
 RewriteCond %{REQUEST_URI} ^/phoenix/([a-zA-Z0-9]{4,50})$

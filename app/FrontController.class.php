@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.5
+ * @version 1.6
  * @author MPI
  * */
 class FrontController {
@@ -13,19 +13,22 @@ class FrontController {
     private $db;
     private $args = array ();
 
-    public function __construct() {
+    public function __construct(Database $db) {
         try {
+            if ($db->getStatus() !== true) {
+                throw new FailureException(FailureException::FAILURE_UNABLE_CONNECT_DB);
+            }
+            $this->db = $db;
+            
             $this->router = new Router();
             $this->router->addRoute("default", "IndexController", "IndexView", "IndexModel");
             $this->router->addRoute("user", "UserController", "UserView", "UserModel");
             
-            $this->db = new Database(Config::getDatabaseConnectionParams(Config::DB_DEFAULT_POOL));
             System::setViewEnabled();
             System::clearException();
         } catch (FailureException $e) {
             Logger::saveFailure($e);
-            header("Location: " . Config::SITE_PATH . Config::SHUTDOWN_PAGE);
-            exit();
+            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }
         
         // do not change (trim&slash) $_GET and $_POST
@@ -46,8 +49,6 @@ class FrontController {
 
     /**
      * Dispatch user request.
-     *
-     * @todo translated dispatching
      */
     private function dispatch() {
         $route_name = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : "default";
@@ -90,8 +91,7 @@ class FrontController {
             $_SESSION[Config::SERVER_FQDN]["exception"] = $e;
         } catch (FailureException $e) {
             Logger::saveFailure($e);
-            header("Location: " . Config::SITE_PATH . Config::SHUTDOWN_PAGE);
-            exit();
+            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }
     }
 
@@ -115,8 +115,7 @@ class FrontController {
             System::makeExceptionCont();
         } catch (FailureException $e) {
             Logger::saveFailure($e);
-            header("Location: " . Config::SITE_PATH . Config::SHUTDOWN_PAGE);
-            exit();
+            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }
     }
 }

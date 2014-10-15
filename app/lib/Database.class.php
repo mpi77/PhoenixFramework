@@ -4,14 +4,14 @@
  * Database provides interaction between this program
  * and db server.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  *        
  */
 class Database {
     private $link = null;
     private $connectionParams = null;
-    public $status = null;
+    private $status = null;
     const EMPTY_RESULT = -1;
     
     /**
@@ -161,6 +161,15 @@ class Database {
     }
     
     /**
+     * Get current status of db connection.
+     *
+     * @return boolean (true if conn is up | false if conn is down)
+     */
+    public function getStatus(){
+        return $this->status;
+    }
+    
+    /**
      * Test connection to db server.
      *
      * @param array $connectionParams
@@ -193,6 +202,7 @@ class Database {
         try {
             $this->link = new PDO(sprintf("%s:host=%s:%d;dbname=%s;charset=%s", $this->connectionParams["driver"], $this->connectionParams["server"], $this->connectionParams["port"], $this->connectionParams["schema"], $this->connectionParams["charset"]), $this->connectionParams["login"], $this->connectionParams["password"]);
             $this->link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->status = true;
         } catch (PDOException $e) {
             $this->status = false;
             throw new FailureException(FailureException::FAILURE_UNABLE_CONNECT_DB);

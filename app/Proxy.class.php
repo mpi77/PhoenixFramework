@@ -3,23 +3,43 @@
 /**
  * Proxy gateway
  * 
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class Proxy {
+    private $db;
+    private $frontController;
     const FILE_DOWNLOAD_ROUTE = "file";
     const FILE_DOWNLOAD_ACTION = "download";
-    private $db;
 
     public function __construct() {
-        $this->runProxyDetection();
+        try {
+            $this->db = new Database(Config::getDatabaseConnectionParams(Config::DB_DEFAULT_POOL));
+            $this->runProxy();
+        } catch (NoticeException $e) {
+            System::redirect(Config::SITE_PATH . "404");
+        } catch (WarningException $e) {
+            Logger::saveWarning($this->db, $e);
+            System::redirect(Config::SITE_PATH . "404");
+        } catch (FailureException $e) {
+            Logger::saveFailure($e);
+            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
+        }
     }
 
     public function __destruct() {
+        if (!empty($this->db)) {
+            $this->db = null;
+        }
     }
 
-    private function runProxyDetection() {
+    public function getFrontController() {
+        return $this->frontController;
+    }
+
+    private function runProxy() {
         if ($this->isApp() === true) {
+            $this->createAppFrontController();
             return;
         }
         
@@ -29,44 +49,39 @@ class Proxy {
     }
 
     private function linkProcess() {
-        try {
-            $this->db = new Database(Config::getDatabaseConnectionParams(Config::DB_DEFAULT_POOL));
-            $proxyItem = ProxyEntity::getProxyItemByValidToken($this->db, $_GET["token"]);
-            if ($proxyItem == Database::EMPTY_RESULT) {
-                throw new NoticeException(NoticeException::NOTICE_INVALID_TOKEN);
-            }
-            // TODO: ACL
-            
-            if (is_null($proxyItem[0]->getRoute()) && is_null($proxyItem[0]->getAction()) && !is_null($proxyItem[0]->getLink())) {
-                // external link to redirect on
-                System::redirect($proxyItem[0]->getLink());
-            } else if (!is_null($proxyItem[0]->getRoute()) && !is_null($proxyItem[0]->getAction()) && is_null($proxyItem[0]->getLink())) {
-                // internal rewrite link to app
-                $_GET["route"] = $proxyItem[0]->getRoute();
-                $_GET["action"] = $proxyItem[0]->getAction();
-                return;
-            } else if ($proxyItem[0]->getRoute() == self::FILE_DOWNLOAD_ROUTE && $proxyItem[0]->getAction() == self::FILE_DOWNLOAD_ACTION && !is_null($proxyItem[0]->getLink())) {
-                // file download
-            } else {
-                throw new NoticeException(NoticeException::NOTICE_INVALID_TOKEN);
-            }
-        } catch (NoticeException $e) {
-            header("Location: " . Config::SITE_PATH . "404");
-            exit();
-        } catch (WarningException $e) {
-            Logger::saveWarning($this->db, $e);
-            header("Location: " . Config::SITE_PATH . "404");
-            exit();
-        } catch (FailureException $e) {
-            Logger::saveFailure($e);
-            header("Location: " . Config::SITE_PATH . "500");
-            exit();
+        $proxyItem = ProxyEntity::getProxyItemByValidToken($this->db, $_GET["token"]);
+        if ($proxyItem == Database::EMPTY_RESULT) {
+            throw new NoticeException(NoticeException::NOTICE_INVALID_TOKEN);
         }
-        exit();
+        $proxyItem = $proxyItem[0];
+        
+        // TODO: ACL
+        
+        if (is_null($proxyItem->getRoute()) && is_null($proxyItem->getAction()) && !is_null($proxyItem->getLink())) {
+            // external link to redirect on
+            System::redirect($proxyItem->getLink());
+        } else if (!is_null($proxyItem->getRoute()) && !is_null($proxyItem->getAction()) && is_null($proxyItem->getLink())) {
+            // internal rewrite link to app
+            $_GET["route"] = $proxyItem->getRoute();
+            $_GET["action"] = $proxyItem->getAction();
+            $this->createAppFrontController();
+            return;
+        } else if ($proxyItem->getRoute() == self::FILE_DOWNLOAD_ROUTE && $proxyItem->getAction() == self::FILE_DOWNLOAD_ACTION && !is_null($proxyItem->getLink())) {
+            // file download
+            // TODO
+            exit();
+        } else {
+            throw new NoticeException(NoticeException::NOTICE_INVALID_TOKEN);
+        }
+    }
+
+    private function createAppFrontController() {
+        header("Content-Type: text/html; charset=utf-8");
+        $this->frontController = new FrontController($this->db);
     }
 
     private function isApp() {
-        return (isset($_GET["route"]) && !empty($_GET["route"]) && isset($_GET["action"]) && !empty($_GET["action"]));
+        return ((!isset($_GET["route"]) && !isset($_GET["action"]) && !isset($_GET["token"])) || (isset($_GET["route"]) && !empty($_GET["route"]) && isset($_GET["action"]) && !empty($_GET["action"])));
     }
 
     private function isLink() {
