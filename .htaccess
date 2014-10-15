@@ -1,5 +1,5 @@
 #
-#	@version 1.4
+#	@version 1.5
 #	@author MPI
 #
 
@@ -49,9 +49,9 @@ RewriteRule ^([0-9]{3})$ /phoenix/error/error.php?code=$1 [NC,L]
 RewriteCond %{REQUEST_URI} ^/phoenix/$
 RewriteRule ^$ /phoenix/index.php [NC,L]
 
-# redirect proxy link /string_{4-50chars}
-RewriteCond %{REQUEST_URI} ^/phoenix/([a-zA-Z0-9]{4,50})$
-RewriteRule ^([a-zA-Z0-9]{4,50})$ /phoenix/index.php?token=$1 [L,QSA]
+# redirect proxy link /string(with / -)
+RewriteCond %{REQUEST_URI} ^/phoenix/([a-zA-Z0-9\/\-]*[a-zA-Z0-9])$
+RewriteRule ^([a-zA-Z0-9\/\-]*[a-zA-Z0-9])$ /phoenix/index.php?token=$1 [L,QSA]
 
 # redirect app /route/action/
 RewriteCond %{REQUEST_URI} ^/phoenix/([a-z]+)/([a-z]+)/$

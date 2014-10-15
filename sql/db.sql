@@ -62,7 +62,7 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
 
 CREATE TABLE IF NOT EXISTS `proxy` (
 `id` int(10) unsigned NOT NULL,
-  `token` varchar(16) NOT NULL,
+  `token` varchar(100) NOT NULL,
   `valid_from` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `valid_to` datetime DEFAULT NULL,
   `link` varchar(255) DEFAULT NULL,
