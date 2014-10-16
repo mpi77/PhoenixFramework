@@ -68,9 +68,9 @@ CREATE TABLE IF NOT EXISTS `proxy` (
   `link` varchar(255) DEFAULT NULL,
   `route` varchar(50) DEFAULT NULL,
   `action` varchar(50) DEFAULT NULL,
-  `only_authenticated` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `only_uid` int(11) unsigned NOT NULL DEFAULT '0',
-  `only_gid` int(11) unsigned NOT NULL DEFAULT '0'
+  `only_authenticated` tinyint(1) unsigned DEFAULT NULL,
+  `only_uid` int(11) unsigned DEFAULT NULL,
+  `only_gid` int(11) unsigned DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 --

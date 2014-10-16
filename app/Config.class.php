@@ -2,7 +2,7 @@
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  * */
 class Config {
@@ -22,7 +22,7 @@ class Config {
     const SESSION_FIXATION_DETECTION_ENABLED = true;
     const SESSION_FIXATION_REDIRECT_PATH = "user/fixation/";
     const SET = 1;
-    const CLEAR = 2;
+    const CLEAR = 0;
     const DB_DEFAULT_POOL = 1;
     private static $dbParams = array (
                     self::DB_DEFAULT_POOL => array (

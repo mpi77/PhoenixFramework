@@ -3,7 +3,7 @@
 /**
  * Proxy gateway
  * 
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 class Proxy {
@@ -55,8 +55,21 @@ class Proxy {
         }
         $proxyItem = $proxyItem[0];
         
-        // TODO: ACL
+        // check ACL conditions
+        if ($proxyItem->getOnlyAuthenticated() == Config::SET && Acl::isLoggedin() !== true) {
+            // need to login before continue
+            System::redirect(Config::SITE_PATH . "user/login/?r=" . $proxyItem->getToken());
+        }
+        if (!is_null($proxyItem->getOnlyUid()) && $_SESSION[Config::SERVER_FQDN]["user"]["uid"] != $proxyItem->getOnlyUid()) {
+            // user is blocked
+            throw new NoticeException(NoticeException::NOTICE_PERMISSION_DENIED);
+        }
+        if (!is_null($proxyItem->getOnlyGid()) && !in_array($proxyItem->getOnlyGid(), $_SESSION[Config::SERVER_FQDN]["user"]["gid"])) {
+            // user has not membership in allowed group
+            throw new NoticeException(NoticeException::NOTICE_PERMISSION_DENIED);
+        }
         
+        // detect type of request
         if (is_null($proxyItem->getRoute()) && is_null($proxyItem->getAction()) && !is_null($proxyItem->getLink())) {
             // external link to redirect on
             System::redirect($proxyItem->getLink());
