@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  * */
 class System {
@@ -444,6 +444,7 @@ class System {
     public static function initSession() {
         if (!isset($_SESSION[Config::SERVER_FQDN]["user"])) {
             $_SESSION[Config::SERVER_FQDN]["user"]["uid"] = null;
+            $_SESSION[Config::SERVER_FQDN]["user"]["gid"] = array();
             $_SESSION[Config::SERVER_FQDN]["user"]["email"] = null;
             $_SESSION[Config::SERVER_FQDN]["user"]["first_name"] = null;
             $_SESSION[Config::SERVER_FQDN]["user"]["last_name"] = null;
