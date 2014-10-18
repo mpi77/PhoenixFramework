@@ -31,7 +31,8 @@ CREATE TABLE IF NOT EXISTS `log_internal` (
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `class` varchar(50) DEFAULT NULL,
   `code` int(11) DEFAULT '0',
-  `stack` text
+  `stack` text,
+  `message` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -82,16 +83,99 @@ CREATE TABLE IF NOT EXISTS `proxy` (
 --
 ALTER TABLE `proxy`
  ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `token` (`token`,`valid_from`,`valid_to`);
-
---
--- AUTO_INCREMENT pro tabulky
---
-
 --
 -- AUTO_INCREMENT pro tabulku `proxy`
 --
 ALTER TABLE `proxy`
 MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabulky `user`
+--
+
+CREATE TABLE IF NOT EXISTS `user` (
+`uid` int(10) unsigned NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` char(64) NOT NULL,
+  `type` tinyint(3) NOT NULL DEFAULT '0',
+  `status` tinyint(3) NOT NULL DEFAULT '0',
+  `first_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `gender` tinyint(3) unsigned DEFAULT '0',
+  `birth_year` smallint(4) unsigned DEFAULT '0',
+  `phone` varchar(13) DEFAULT NULL,
+  `ts_insert` timestamp NULL DEFAULT NULL,
+  `ts_last_login` datetime DEFAULT NULL,
+  `renew_token` char(64) DEFAULT NULL,
+  `renew_valid_to` timestamp NULL DEFAULT NULL,
+  `language` tinyint(3) DEFAULT '2'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+--
+-- Klíče pro tabulku `user`
+--
+ALTER TABLE `user`
+ ADD PRIMARY KEY (`uid`), ADD UNIQUE KEY `email_UNIQUE` (`email`);
+ 
+-- AUTO_INCREMENT pro tabulku `user`
+--
+ALTER TABLE `user`
+MODIFY `uid` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabulky `ucr`
+--
+
+CREATE TABLE IF NOT EXISTS `ucr` (
+`id` int(10) unsigned NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8 COLLATE utf8_czech_ci NOT NULL,
+  `token` char(64) CHARACTER SET utf8 COLLATE utf8_czech_ci NOT NULL,
+  `user_type` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `ts_valid_to` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Klíče pro tabulku `ucr`
+--
+ALTER TABLE `ucr`
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `email_UNIQUE` (`email`);
+
+--
+-- AUTO_INCREMENT pro tabulku `ucr`
+--
+ALTER TABLE `ucr`
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabulky `log_activity`
+--
+
+CREATE TABLE IF NOT EXISTS `log_activity` (
+`id` int(11) NOT NULL,
+  `user_uid` int(10) unsigned NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_czech_ci DEFAULT NULL,
+  `ts_insert` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Klíče pro tabulku `log_activity`
+--
+ALTER TABLE `log_activity`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_system_log_activity_user_idx` (`user_uid`);
+
+--
+-- AUTO_INCREMENT pro tabulku `log_activity`
+--
+ALTER TABLE `log_activity`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
