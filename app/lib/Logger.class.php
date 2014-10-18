@@ -3,7 +3,7 @@
 /**
  * Logger object
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 class Logger {
@@ -21,7 +21,7 @@ class Logger {
      */
     public static function saveException(Database $db, Exception $e) {
         try {
-            $r = InternalLogEntity::insertRecord($db, get_class($e), $e->getCode(), $e->getTraceAsString());
+            $r = InternalLogEntity::insertRecord($db, get_class($e), $e->getCode(), $e->getTraceAsString(), $e->getMessage());
             if ($r != 1) {
                 throw new WarningException(WarningException::WARNING_INVALID_SQL_ACTION);
             }
@@ -42,7 +42,7 @@ class Logger {
      */
     public static function saveWarning(Database $db, WarningException $e) {
         try {
-            $r = InternalLogEntity::insertRecord($db, "WarningException", $e->getCode(), $e->getTraceAsString());
+            $r = InternalLogEntity::insertRecord($db, "WarningException", $e->getCode(), $e->getTraceAsString(), $e->getMessage());
             if ($r != 1) {
                 throw new WarningException(WarningException::WARNING_INVALID_SQL_ACTION);
             }
@@ -78,7 +78,7 @@ class Logger {
         } else {
             $out_file .= "/" . $last . ".log";
         }
-        file_put_contents($out_file, sprintf("\n>> %s [%d] %s\n%s", $e->getName(), $e->getCode(), date("Y-m-d H:i:s"), $e->getTraceAsString()), FILE_APPEND | LOCK_EX);
+        file_put_contents($out_file, sprintf("\n>> %s [%d] %s\n%s\n%s", $e->getName(), $e->getCode(), date("Y-m-d H:i:s"), $e->getTraceAsString(), $e->getMessage()), FILE_APPEND | LOCK_EX);
     }
 }
 ?>

@@ -2,7 +2,7 @@
 /**
  * Internal log entity.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 class InternalLogEntity extends Entity {
@@ -11,6 +11,7 @@ class InternalLogEntity extends Entity {
     private $class;
     private $code;
     private $stack;
+    private $message;
     
     public function __construct() {
         parent::__construct();
@@ -21,7 +22,7 @@ class InternalLogEntity extends Entity {
     }
 
     public function __toString() {
-        return "InternalLogEntity{id=" . $this->id . ", ts_insert=" . $this->ts_insert . ", code=" . $this->code . ", class=" . $this->class . "}";
+        return "InternalLogEntity{id=" . $this->id . ", ts_insert=" . $this->ts_insert . ", code=" . $this->code . ", class=" . $this->class . ", message=" . $this->message . "}";
     }
     
     public function getId(){
@@ -43,13 +44,18 @@ class InternalLogEntity extends Entity {
     public function getStack(){
         return $this->stack;
     }
+    
+    public function getMessage(){
+        return $this->message;
+    }
 
-    public static function insertRecord(Database $db, $class, $code, $stack) {
-        $query = "INSERT INTO log_internal (id, ts_insert, class, code, stack) VALUES (default, default, :class, :code, :stack)";
+    public static function insertRecord(Database $db, $class, $code, $stack, $message = null) {
+        $query = "INSERT INTO log_internal (id, ts_insert, class, code, stack, message) VALUES (default, default, :class, :code, :stack, :message)";
         $queryArgs = array (
                         ":class" => $class,
                         ":code" => $code,
-                        ":stack" => $stack 
+                        ":stack" => $stack,
+                        ":message" => $message
         );
         return $db->actionQuery($query, $queryArgs);
     }

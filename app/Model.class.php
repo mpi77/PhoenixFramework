@@ -3,7 +3,7 @@
 /**
  * Root model object.
  * 
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 abstract class Model {
@@ -31,9 +31,8 @@ abstract class Model {
 	 *        	text msg to save
 	 * @return int
 	 */
-	public function insertActivityRecord($uid, $description) {
-		//$r = $this->db->actionQuery(sprintf("INSERT INTO system_log_activity (id, ts_insert, user_uid, description) VALUES (default, NOW(), '%d', '%s')", $uid, $description));
-		return $r;
+	public function insertActivityRecord($uid, $message) {
+		return ActivityLogEntity::insertRecord($this->db, $uid, $message);
 	}
 
 	/**
