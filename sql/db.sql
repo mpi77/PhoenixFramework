@@ -103,8 +103,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   `status` tinyint(3) NOT NULL DEFAULT '0',
   `first_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
-  `gender` tinyint(3) unsigned DEFAULT '0',
-  `birth_year` smallint(4) unsigned DEFAULT '0',
   `phone` varchar(13) DEFAULT NULL,
   `ts_insert` timestamp NULL DEFAULT NULL,
   `ts_last_login` datetime DEFAULT NULL,
@@ -136,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `ucr` (
   `email` varchar(100) CHARACTER SET utf8 COLLATE utf8_czech_ci NOT NULL,
   `token` char(64) CHARACTER SET utf8 COLLATE utf8_czech_ci NOT NULL,
   `user_type` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `ts_valid_to` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `valid_to` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
