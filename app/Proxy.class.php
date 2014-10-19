@@ -3,7 +3,7 @@
 /**
  * Proxy gateway
  * 
- * @version 1.5
+ * @version 1.6
  * @author MPI
  * */
 class Proxy {
@@ -19,10 +19,10 @@ class Proxy {
         } catch (NoticeException $e) {
             System::redirect(Config::SITE_PATH . "404");
         } catch (WarningException $e) {
-            Logger::saveWarning($this->db, $e);
+            Logger::log($e, $this->db);
             System::redirect(Config::SITE_PATH . "404");
         } catch (FailureException $e) {
-            Logger::saveFailure($e);
+            Logger::log($e);
             System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }
     }

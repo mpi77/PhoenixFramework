@@ -80,23 +80,5 @@ class Logger {
         }
         file_put_contents($out_file, sprintf("\n>> %s [%d] %s\n%s\n%s", get_class($e), $e->getCode(), date("Y-m-d H:i:s"), $e->getTraceAsString(), $e->getMessage()), FILE_APPEND | LOCK_EX);
     }
-
-    /**
-     *
-     * @deprecated
-     *
-     */
-    public static function saveWarning(Database $db, WarningException $e) {
-        return;
-    }
-
-    /**
-     *
-     * @deprecated
-     *
-     */
-    public static function saveFailure(FailureException $e) {
-        return;
-    }
 }
 ?>

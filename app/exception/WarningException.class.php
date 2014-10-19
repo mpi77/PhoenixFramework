@@ -8,7 +8,7 @@
  * state is logged. In normal running program, this type of exception 
  * should not be thrown. Typicaly thrown by incorect SQL query, bad ACL, etc. 
  * 
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 class WarningException extends Exception implements IAppException{
@@ -32,11 +32,11 @@ class WarningException extends Exception implements IAppException{
 			self::WARNING_UNABLE_COMPLETE_TRANSACTION => Translator::WARNING_UNABLE_COMPLETE_TRANSACTION
 	);
 
-	public function __construct($code = 0){
+	public function __construct($code = 0, $message = null){
 		if(!array_key_exists($code, self::$error)){
 			$code = 0;
 		}
-		parent::__construct(null, $code);
+		parent::__construct($message, $code);
 	}
 
 	public function __toString(){

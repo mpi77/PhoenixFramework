@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.6
+ * @version 1.7
  * @author MPI
  * */
 class FrontController {
@@ -27,7 +27,7 @@ class FrontController {
             System::setViewEnabled();
             System::clearException();
         } catch (FailureException $e) {
-            Logger::saveFailure($e);
+            Logger::log($e);
             System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }
         
@@ -86,11 +86,11 @@ class FrontController {
         } catch (NoticeException $e) {
             $_SESSION[Config::SERVER_FQDN]["exception"] = $e;
         } catch (WarningException $e) {
-            Logger::saveWarning($this->db, $e);
+            Logger::log($e, $this->db);
             System::setViewDisabled();
             $_SESSION[Config::SERVER_FQDN]["exception"] = $e;
         } catch (FailureException $e) {
-            Logger::saveFailure($e);
+            Logger::log($e);
             System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }
     }
@@ -110,11 +110,11 @@ class FrontController {
             $_SESSION[Config::SERVER_FQDN]["exception"] = $e;
             System::makeExceptionCont();
         } catch (WarningException $e) {
-            Logger::saveWarning($this->db, $e);
+            Logger::log($e, $this->db);
             $_SESSION[Config::SERVER_FQDN]["exception"] = $e;
             System::makeExceptionCont();
         } catch (FailureException $e) {
-            Logger::saveFailure($e);
+            Logger::log($e);
             System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }
     }

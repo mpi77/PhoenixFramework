@@ -6,7 +6,7 @@
  * and it doesn't mean that app crashed while processing. Also this
  * state is not logged. Typicaly thrown by invalid user input, etc.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 class NoticeException extends Exception implements IAppException {
@@ -51,11 +51,11 @@ class NoticeException extends Exception implements IAppException {
                     self::NOTICE_FILE_IS_NOT_DELETABLE => Translator::NOTICE_FILE_IS_NOT_DELETABLE 
     );
 
-    public function __construct($code = 0) {
+    public function __construct($code = 0, $message = null) {
         if (!array_key_exists($code, self::$notice)) {
             $code = 0;
         }
-        parent::__construct(null, $code);
+        parent::__construct($message, $code);
     }
 
     public function __toString() {

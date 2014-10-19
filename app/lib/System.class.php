@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  * */
 class System {
@@ -247,7 +247,7 @@ class System {
         if (isset($_SESSION[Config::SERVER_FQDN]["exception"]) && !empty($_SESSION[Config::SERVER_FQDN]["exception"])) {
             $class = "alert-success";
             $icon = "fa-info";
-            switch ($_SESSION[Config::SERVER_FQDN]["exception"]->getName()) {
+            switch (get_class($_SESSION[Config::SERVER_FQDN]["exception"])) {
                 case "NoticeException" :
                     $class = "alert-info";
                     $icon = "fa-info";
@@ -257,6 +257,10 @@ class System {
                     $icon = "fa-warning";
                     break;
                 case "FailureException" :
+                    $class = "alert-error";
+                    $icon = "fa-bolt";
+                    break;
+                default :
                     $class = "alert-error";
                     $icon = "fa-bolt";
                     break;
@@ -444,7 +448,7 @@ class System {
     public static function initSession() {
         if (!isset($_SESSION[Config::SERVER_FQDN]["user"])) {
             $_SESSION[Config::SERVER_FQDN]["user"]["uid"] = null;
-            $_SESSION[Config::SERVER_FQDN]["user"]["gid"] = array();
+            $_SESSION[Config::SERVER_FQDN]["user"]["gid"] = array ();
             $_SESSION[Config::SERVER_FQDN]["user"]["email"] = null;
             $_SESSION[Config::SERVER_FQDN]["user"]["first_name"] = null;
             $_SESSION[Config::SERVER_FQDN]["user"]["last_name"] = null;
@@ -464,13 +468,13 @@ class System {
         $_SESSION[Config::SERVER_FQDN]["exception"] = null;
         $_SESSION[Config::SERVER_FQDN]["view"] = true;
     }
-    
+
     /**
      * Check session inactivity timeout.
      * This method should be called after succesfull login.
      */
-    public static function checkSessionInactivity(){
-        if(Config::SESSION_INACTIVITY_ENABLED !== true){
+    public static function checkSessionInactivity() {
+        if (Config::SESSION_INACTIVITY_ENABLED !== true) {
             return;
         }
         
@@ -486,16 +490,16 @@ class System {
             }
         }
     }
-    
+
     /**
      * Session fixation detection.
      * This method should be called after succesfull login.
      */
-    public static function checkSessionFixation(){
-        if(Config::SESSION_FIXATION_DETECTION_ENABLED !== true){
+    public static function checkSessionFixation() {
+        if (Config::SESSION_FIXATION_DETECTION_ENABLED !== true) {
             return;
         }
-    
+        
         if (!isset($_SESSION[Config::SERVER_FQDN]["remote_addr"]) || !isset($_SESSION[Config::SERVER_FQDN]["http_user_agent"])) {
             $_SESSION[Config::SERVER_FQDN]["remote_addr"] = $_SERVER["REMOTE_ADDR"];
             $_SESSION[Config::SERVER_FQDN]["http_user_agent"] = $_SERVER["HTTP_USER_AGENT"];

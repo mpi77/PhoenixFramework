@@ -7,7 +7,7 @@
  * shutdown page, because it is impossible to continue witch prosessing.
  * Typicaly thrown by unavailable database, etc.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 class FailureException extends Exception implements IAppException {
@@ -24,11 +24,11 @@ class FailureException extends Exception implements IAppException {
                     self::FAILURE_UNABLE_SAVE_WARNING => Translator::FAILURE_UNABLE_SAVE_WARNING 
     );
 
-    public function __construct($code = 0) {
+    public function __construct($code = 0, $message = null) {
         if (!array_key_exists($code, self::$error)) {
             $code = 0;
         }
-        parent::__construct(null, $code);
+        parent::__construct($message, $code);
     }
 
     public function __toString() {
