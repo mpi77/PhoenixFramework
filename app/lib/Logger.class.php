@@ -3,7 +3,7 @@
 /**
  * Logger object
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class Logger {
@@ -27,8 +27,7 @@ class Logger {
                 Logger::saveIntoFile($e);
             }
         } catch (Exception $ex) {
-            header("Location: " . Config::SITE_PATH . Config::SHUTDOWN_PAGE);
-            exit();
+            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }
     }
 
@@ -49,8 +48,7 @@ class Logger {
         } catch (WarningException $ex) {
             self::saveIntoFile(new FailureException(FailureException::FAILURE_UNABLE_SAVE_WARNING));
             self::saveIntoFile($e);
-            header("Location: " . Config::SITE_PATH . Config::SHUTDOWN_PAGE);
-            exit();
+            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }
     }
 
