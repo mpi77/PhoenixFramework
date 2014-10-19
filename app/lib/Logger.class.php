@@ -12,53 +12,55 @@ class Logger {
     }
 
     /**
-     * Save Exception into db.
+     * Log Exception.
      *
      * @param Database $db
      *            database object
      * @param Exception $e
      *            Exception object
      */
-    public static function saveException(Database $db, Exception $e) {
+    public static function log(Exception $e, Database $db = null) {
+        try {
+            if (!is_null($db)) {
+                Logger::saveIntoDatabase($db, $e);
+            } else {
+                Logger::saveIntoFile($e);
+            }
+        } catch (Exception $ex) {
+            header("Location: " . Config::SITE_PATH . Config::SHUTDOWN_PAGE);
+            exit();
+        }
+    }
+
+    /**
+     * Save Exception into Databse.
+     *
+     * @param Database $db
+     *            database object
+     * @param Exception $e
+     *            Exception object
+     */
+    public static function saveIntoDatabase(Database $db, Exception $e) {
         try {
             $r = InternalLogEntity::insertRecord($db, get_class($e), $e->getCode(), $e->getTraceAsString(), $e->getMessage());
             if ($r != 1) {
                 throw new WarningException(WarningException::WARNING_INVALID_SQL_ACTION);
             }
-        } catch (WarningException $e) {
-            self::saveFailure(new FailureException(FailureException::FAILURE_UNABLE_SAVE_WARNING));
+        } catch (WarningException $ex) {
+            self::saveIntoFile(new FailureException(FailureException::FAILURE_UNABLE_SAVE_WARNING));
+            self::saveIntoFile($e);
             header("Location: " . Config::SITE_PATH . Config::SHUTDOWN_PAGE);
             exit();
         }
     }
 
     /**
-     * Save warning into db.
+     * Save Exception into log file.
      *
-     * @param Database $db
-     *            database object
-     * @param WarningException $e
-     *            WarningException object
+     * @param FailureException $e
+     *            Exception object
      */
-    public static function saveWarning(Database $db, WarningException $e) {
-        try {
-            $r = InternalLogEntity::insertRecord($db, "WarningException", $e->getCode(), $e->getTraceAsString(), $e->getMessage());
-            if ($r != 1) {
-                throw new WarningException(WarningException::WARNING_INVALID_SQL_ACTION);
-            }
-        } catch (WarningException $e) {
-            self::saveFailure(new FailureException(FailureException::FAILURE_UNABLE_SAVE_WARNING));
-            header("Location: " . Config::SITE_PATH . Config::SHUTDOWN_PAGE);
-            exit();
-        }
-    }
-
-    /**
-     * Save failure to log file.
-     *
-     * @param FailureException $e            
-     */
-    public static function saveFailure(FailureException $e) {
+    public static function saveIntoFile(Exception $e) {
         $files = System::findAllFiles(Config::LOG_DIR, array (
                         ".",
                         ".." 
@@ -78,7 +80,25 @@ class Logger {
         } else {
             $out_file .= "/" . $last . ".log";
         }
-        file_put_contents($out_file, sprintf("\n>> %s [%d] %s\n%s\n%s", $e->getName(), $e->getCode(), date("Y-m-d H:i:s"), $e->getTraceAsString(), $e->getMessage()), FILE_APPEND | LOCK_EX);
+        file_put_contents($out_file, sprintf("\n>> %s [%d] %s\n%s\n%s", get_class($e), $e->getCode(), date("Y-m-d H:i:s"), $e->getTraceAsString(), $e->getMessage()), FILE_APPEND | LOCK_EX);
+    }
+
+    /**
+     *
+     * @deprecated
+     *
+     */
+    public static function saveWarning(Database $db, WarningException $e) {
+        return;
+    }
+
+    /**
+     *
+     * @deprecated
+     *
+     */
+    public static function saveFailure(FailureException $e) {
+        return;
     }
 }
 ?>
