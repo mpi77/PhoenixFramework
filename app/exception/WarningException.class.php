@@ -8,10 +8,10 @@
  * state is logged. In normal running program, this type of exception 
  * should not be thrown. Typicaly thrown by incorect SQL query, bad ACL, etc. 
  * 
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
-class WarningException extends Exception{
+class WarningException extends Exception implements IAppException{
 	const WARNING_UNKNOWN = 0;
 	const WARNING_CLASS_NOT_FOUND = 1;
 	const WARNING_ACTION_IS_NOT_CALLABLE = 2;
@@ -40,24 +40,17 @@ class WarningException extends Exception{
 	}
 
 	public function __toString(){
-		return "[W{$this->code}]: " . self::getTextMessage($this->code) . "\n";
+		return "[W{$this->code}]: " . self::getTranslatedMessage($this->code) . "\n";
 	}
 
 	/**
-	 * Get message of exception.
-	 *
-	 * @param integer $code        	
-	 * @return string
-	 */
-	public static function getTextMessage($code){
-		return Translate::get(self::$error[$code]);
-	}
-
-	/**
-	 * Get name of this class.
-	 */
-	public function getName(){
-		return get_class($this);
-	}
+     * Get translated message of exception.
+     *
+     * @param integer $code            
+     * @return string
+     */
+    public static function getTranslatedMessage($code) {
+        return Translate::get(self::$error[$code]);
+    }
 }
 ?>
