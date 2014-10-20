@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.7
+ * @version 1.8
  * @author MPI
  * */
 class FrontController {
@@ -13,13 +13,13 @@ class FrontController {
     private $db;
     private $args = array ();
 
-    public function __construct(Database $db) {
+    public function __construct(Database $db, $args = null) {
         try {
             if ($db->getStatus() !== true) {
                 throw new FailureException(FailureException::FAILURE_UNABLE_CONNECT_DB);
             }
             $this->db = $db;
-            
+            $this->args = $args;
             $this->router = new Router();
             $this->router->addRoute("default", "IndexController", "IndexView", "IndexModel");
             $this->router->addRoute("user", "UserController", "UserView", "UserModel");
@@ -30,11 +30,6 @@ class FrontController {
             Logger::log($e);
             System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }
-        
-        // do not change (trim&slash) $_GET and $_POST
-        // trim&slash $_GET and $_POST to $this->args and this array give while calling functions
-        $this->args["GET"] = System::trimSlashArray1dAssociative($_GET, true, true);
-        $this->args["POST"] = System::trimSlashArray1dAssociative($_POST, true, true);
         
         $this->dispatch();
     }

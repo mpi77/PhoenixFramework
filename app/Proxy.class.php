@@ -3,11 +3,12 @@
 /**
  * Proxy gateway
  * 
- * @version 1.6
+ * @version 1.7
  * @author MPI
  * */
 class Proxy {
     private $db;
+    private $args;
     private $frontController;
     const FILE_DOWNLOAD_ROUTE = "file";
     const FILE_DOWNLOAD_ACTION = "download";
@@ -15,6 +16,11 @@ class Proxy {
     public function __construct() {
         try {
             $this->db = new Database(Config::getDatabaseConnectionParams(Config::DB_DEFAULT_POOL));
+            
+            // do not change (trim&slash) $_GET and $_POST
+            $this->args["GET"] = System::trimSlashArray1dAssociative($_GET, true, true);
+            $this->args["POST"] = System::trimSlashArray1dAssociative($_POST, true, true);
+            
             $this->runProxy();
         } catch (NoticeException $e) {
             System::redirect(Config::SITE_PATH . "404");
@@ -90,7 +96,7 @@ class Proxy {
 
     private function createAppFrontController() {
         header("Content-Type: text/html; charset=utf-8");
-        $this->frontController = new FrontController($this->db);
+        $this->frontController = new FrontController($this->db, $this->args);
     }
 
     private function isApp() {
