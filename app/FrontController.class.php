@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.8
+ * @version 1.9
  * @author MPI
  * */
 class FrontController {
@@ -66,17 +66,17 @@ class FrontController {
                 $this->controller = new $controller_name($model, $this->args);
                 $this->view = new $view_name($model, $this->args);
             } else {
-                throw new WarningException(WarningException::WARNING_CLASS_NOT_FOUND);
+                throw new WarningException(WarningException::WARNING_CLASS_NOT_FOUND, json_encode($this->args));
             }
             
             if (System::isCallable($this->controller, $action_name) === true) {
                 $this->controller->{$action_name}();
             } else {
-                throw new WarningException(WarningException::WARNING_ACTION_IS_NOT_CALLABLE);
+                throw new WarningException(WarningException::WARNING_ACTION_IS_NOT_CALLABLE, json_encode($this->args));
             }
             
             if ($this->router->isRoute($route_name) === false) {
-                throw new WarningException(WarningException::WARNING_INVALID_ROUTE);
+                throw new WarningException(WarningException::WARNING_INVALID_ROUTE, json_encode($this->args));
             }
         } catch (NoticeException $e) {
             $_SESSION[Config::SERVER_FQDN]["exception"] = $e;
