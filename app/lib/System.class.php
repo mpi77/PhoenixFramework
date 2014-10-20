@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
  * */
 class System {
@@ -440,6 +440,41 @@ class System {
             $a[$k] = $tmp;
         }
         return $a;
+    }
+
+    /**
+     * Trim&slash on multidimensional string indexed array.
+     * If item value is null, this item is added at the same place.
+     * Trim&slash are made also on string indexes.
+     *
+     * @param boolean $trim
+     *            (true = make trim)
+     * @param boolean $slash
+     *            (true = make addslashes)
+     * @return mixed array
+     */
+    public static function trimSlashMultidimAssocArray($array, $trim = false, $slash = false) {
+        $r = array ();
+        foreach ($array as $k => $v) {
+            $tmp_value = null;
+            $tmp_key = null;
+            if (is_array($v)) {
+                $tmp_value = self::trimSlashMultidimAssocArray($v, $trim, $slash);
+            } else {
+                if (!empty($v)) {
+                    if ($trim === true){
+                        $tmp_value = trim($v);
+                    }
+                    if ($slash === true){
+                        $tmp_value = addslashes($tmp_value);
+                    }
+                }
+            }
+            $tmp_key = ($trim ? trim($k) : $k);
+            $tmp_key = ($slash ? addslashes($tmp_key) : $tmp_key);
+            $r[$tmp_key] = $tmp_value;
+        }
+        return $r;
     }
 
     /**
