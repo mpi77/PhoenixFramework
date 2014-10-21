@@ -3,7 +3,7 @@
 /**
  * Proxy gateway
  * 
- * @version 1.7
+ * @version 1.8
  * @author MPI
  * */
 class Proxy {
@@ -18,8 +18,8 @@ class Proxy {
             $this->db = new Database(Config::getDatabaseConnectionParams(Config::DB_DEFAULT_POOL));
             
             // do not change (trim&slash) $_GET and $_POST
-            $this->args["GET"] = System::trimSlashArray1dAssociative($_GET, true, true);
-            $this->args["POST"] = System::trimSlashArray1dAssociative($_POST, true, true);
+            $this->args["GET"] = System::trimSlashMultidimAssocArray($_GET, true, true, true, true);
+            $this->args["POST"] = System::trimSlashMultidimAssocArray($_POST, true, true, true, true);
             
             $this->runProxy();
         } catch (NoticeException $e) {
