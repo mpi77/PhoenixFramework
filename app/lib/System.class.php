@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.8
+ * @version 1.9
  * @author MPI
  * */
 class System {
@@ -453,25 +453,25 @@ class System {
      *            (true = make addslashes)
      * @return mixed array
      */
-    public static function trimSlashMultidimAssocArray($array, $trim = false, $slash = false) {
+    public static function trimSlashMultidimAssocArray($array, $trim_key = false, $slash_key = false, $trim_value = false, $slash_value = false) {
         $r = array ();
         foreach ($array as $k => $v) {
             $tmp_value = null;
             $tmp_key = null;
             if (is_array($v)) {
-                $tmp_value = self::trimSlashMultidimAssocArray($v, $trim, $slash);
+                $tmp_value = self::trimSlashMultidimAssocArray($v, $trim_key, $slash_key, $trim_value, $slash_value);
             } else {
                 if (!empty($v)) {
-                    if ($trim === true){
+                    if ($trim_value === true){
                         $tmp_value = trim($v);
                     }
-                    if ($slash === true){
+                    if ($slash_value === true){
                         $tmp_value = addslashes($tmp_value);
                     }
                 }
             }
-            $tmp_key = ($trim ? trim($k) : $k);
-            $tmp_key = ($slash ? addslashes($tmp_key) : $tmp_key);
+            $tmp_key = ($trim_key ? trim($k) : $k);
+            $tmp_key = ($slash_key ? addslashes($tmp_key) : $tmp_key);
             $r[$tmp_key] = $tmp_value;
         }
         return $r;
