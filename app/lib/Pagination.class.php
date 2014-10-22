@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  *
  */
@@ -19,6 +19,28 @@ class Pagination{
     const KEY_CONFIG_DISABLE_SELECT = 8;
     const KEY_CONFIG_DISABLE_PAGINATION = 9;
     const KEY_CONFIG_DISABLE_SET_PAGE_SIZE = 10;
+    const KEY_URL_PAGE = 30;
+    const KEY_URL_HEADER_SORT = 31;
+    const KEY_URL_FORM_ACTION = 32;
+    const KEY_ROW_MENU_BODY = 50;
+    const KEY_ROW_MENU_TITLE = 51;
+    const KEY_ROW_MENU_URL = 52;
+    const KEY_ROW_MENU_CLASS = 53;
+    const KEY_SELECT_VALUE = 70;
+    const KEY_SELECT_TITLE = 71;
+    const KEY_STYLE_TABLE_ID = 100;
+    const KEY_STYLE_TABLE_CLASS = 101;
+    const KEY_STYLE_TABLE_HEADER_CLASS = 102;
+    const KEY_STYLE_TABLE_MARKED_ROW_CLASS = 103;
+    const KEY_STYLE_SUMMARY_BOX_ID = 104;
+    const KEY_STYLE_SUMMARY_BOX_CLASS = 105;
+    const KEY_STYLE_PAGINATION_BOX_ID = 106;
+    const KEY_STYLE_PAGINATION_BOX_CLASS = 107;
+    const KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS = 108;
+    const KEY_STYLE_SELECT_ID = 109;
+    const KEY_STYLE_SELECT_CLASS = 110;
+    const KEY_STYLE_PAGE_SIZE_BOX_ID = 111;
+    const KEY_STYLE_PAGE_SIZE_BOX_CLASS = 112;
     
 	private function __construct(){
 	}
