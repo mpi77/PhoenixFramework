@@ -1,14 +1,25 @@
 <?php
 
 /**
- * Paginator class makes list table string with support of paging.
+ * Pagination class makes list table string with support of paging.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  *
  */
 class Pagination{
-
+    
+    const KEY_CONFIG_PAGE_SIZE = 1;
+    const KEY_CONFIG_COLUMN = 2;
+    const KEY_CONFIG_PAGE = 3;
+    const KEY_CONFIG_SORT_DIRECTION = 4;
+    const KEY_CONFIG_DATA_COUNT = 5;
+    const KEY_CONFIG_PAGES_COUNT = 6;
+    const KEY_CONFIG_DISABLE_ROW_MENU = 7;
+    const KEY_CONFIG_DISABLE_SELECT = 8;
+    const KEY_CONFIG_DISABLE_PAGINATION = 9;
+    const KEY_CONFIG_DISABLE_SET_PAGE_SIZE = 10;
+    
 	private function __construct(){
 	}
 
