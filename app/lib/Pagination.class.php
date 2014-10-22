@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  *
  */
@@ -58,10 +58,22 @@ class Pagination{
      * @default false
      * */
     const KEY_CONFIG_DISABLE_SET_PAGE_SIZE = 10;
-    
+    /**
+     * @optional
+     * @default base-url{=$_SERVER["REQUEST_URI"] (to last /, without QS)}-%d-%d-%s
+     * */
     const KEY_URL_PAGE = 30;
+    /**
+     * @optional
+     * @default base-url{=$_SERVER["REQUEST_URI"] (to last /, without QS)}-%d-%d-%s
+     * */
     const KEY_URL_HEADER_SORT = 31;
+    /**
+     * @optional
+     * @default base-url{=$_SERVER["REQUEST_URI"] (to last /, without QS)}
+     * */
     const KEY_URL_FORM_ACTION = 32;
+    
     const KEY_ROW_MENU_BODY = 50;
     const KEY_ROW_MENU_TITLE = 51;
     const KEY_ROW_MENU_URL = 52;
@@ -88,6 +100,8 @@ class Pagination{
             throw new NoticeException(NoticeException::NOTICE_INVALID_PARAMETERS);
         }
         
+        $base_url = substr($_SERVER["REQUEST_URI"], 0, strrpos($_SERVER["REQUEST_URI"], "/") + 1);
+        
         // check optional arguments and set default values
         $config[self::KEY_CONFIG_PAGE_SIZE] = (isset($config[self::KEY_CONFIG_PAGE_SIZE]) && is_numeric($config[self::KEY_CONFIG_PAGE_SIZE])) ? $config[self::KEY_CONFIG_PAGE_SIZE] : System::PAGE_SIZE_DEFAULT;
         $config[self::KEY_CONFIG_PAGE] = (isset($config[self::KEY_CONFIG_PAGE]) && is_numeric($config[self::KEY_CONFIG_PAGE])) ? $config[self::KEY_CONFIG_PAGE] : System::PAGE_ACTUAL_DEFAULT;
@@ -100,6 +114,14 @@ class Pagination{
         $config[self::KEY_CONFIG_DISABLE_PAGINATION] = (isset($config[self::KEY_CONFIG_DISABLE_PAGINATION]) && is_bool($config[self::KEY_CONFIG_DISABLE_PAGINATION])) ? $config[self::KEY_CONFIG_DISABLE_PAGINATION] : false;
         $config[self::KEY_CONFIG_DISABLE_SET_PAGE_SIZE] = (isset($config[self::KEY_CONFIG_DISABLE_SET_PAGE_SIZE]) && is_bool($config[self::KEY_CONFIG_DISABLE_SET_PAGE_SIZE])) ? $config[self::KEY_CONFIG_DISABLE_SET_PAGE_SIZE] : false;
         
+        $config[self::KEY_URL_PAGE] = (isset($config[self::KEY_URL_PAGE]) && !empty($config[self::KEY_URL_PAGE])) ? $config[self::KEY_URL_PAGE] : $base_url . "-%d-%d-%s";
+        $config[self::KEY_URL_HEADER_SORT] = (isset($config[self::KEY_URL_HEADER_SORT]) && !empty($config[self::KEY_URL_HEADER_SORT])) ? $config[self::KEY_URL_HEADER_SORT] : $base_url . "-%d-%d-%s";
+        $config[self::KEY_URL_FORM_ACTION] = (isset($config[self::KEY_URL_FORM_ACTION]) && !empty($config[self::KEY_URL_FORM_ACTION])) ? $config[self::KEY_URL_FORM_ACTION] : $base_url;
+        
+        if($config[self::KEY_CONFIG_DISABLE_PAGINATION] === true){
+            $config[self::KEY_CONFIG_PAGES_COUNT] = 1;
+            $config[self::KEY_CONFIG_PAGE] = 1;
+        }
         
         return $config;
     }
