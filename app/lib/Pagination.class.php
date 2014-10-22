@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  *
  */
@@ -100,7 +100,7 @@ class Pagination{
             throw new NoticeException(NoticeException::NOTICE_INVALID_PARAMETERS);
         }
         
-        $base_url = substr($_SERVER["REQUEST_URI"], 0, strrpos($_SERVER["REQUEST_URI"], "/") + 1);
+        $base_url = self::getBaseUrl();
         
         // check optional arguments and set default values
         $config[self::KEY_CONFIG_PAGE_SIZE] = (isset($config[self::KEY_CONFIG_PAGE_SIZE]) && is_numeric($config[self::KEY_CONFIG_PAGE_SIZE])) ? $config[self::KEY_CONFIG_PAGE_SIZE] : System::PAGE_SIZE_DEFAULT;
@@ -222,6 +222,15 @@ class Pagination{
 	 */
 	public static function getStartRow($page, $page_size){
 		return ($page * $page_size) - $page_size;
+	}
+	
+	/**
+	 * Get base url.
+	 *
+	 * @return string
+	 */
+	public static function getBaseUrl(){
+	    return substr($_SERVER["REQUEST_URI"], 0, strrpos($_SERVER["REQUEST_URI"], "/") + 1);
 	}
 
 	/**
