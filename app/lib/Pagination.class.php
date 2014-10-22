@@ -3,22 +3,62 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  *
  */
 class Pagination{
-    
+    /**
+     * @optional
+     * @default System::PAGE_SIZE_DEFAULT
+     * */
     const KEY_CONFIG_PAGE_SIZE = 1;
+    /**
+     * @optional
+     * @default System::SORT_DEFAULT_COLUMN
+     * */
     const KEY_CONFIG_COLUMN = 2;
+    /**
+     * @optional
+     * @default System::PAGE_ACTUAL_DEFAULT
+     * */
     const KEY_CONFIG_PAGE = 3;
+    /**
+     * @optional
+     * @default System::SORT_DEFAULT_DIRECTION
+     * */
     const KEY_CONFIG_SORT_DIRECTION = 4;
+    /**
+     * @optional
+     * @default System::DATA_COUNT_DEFAULT
+     * */
     const KEY_CONFIG_DATA_COUNT = 5;
+    /**
+     * @optional
+     * @default 0
+     * */
     const KEY_CONFIG_PAGES_COUNT = 6;
+    /**
+     * @optional
+     * @default false
+     * */
     const KEY_CONFIG_DISABLE_ROW_MENU = 7;
+    /**
+     * @optional
+     * @default false
+     * */
     const KEY_CONFIG_DISABLE_SELECT = 8;
+    /**
+     * @optional
+     * @default false
+     * */
     const KEY_CONFIG_DISABLE_PAGINATION = 9;
+    /**
+     * @optional
+     * @default false
+     * */
     const KEY_CONFIG_DISABLE_SET_PAGE_SIZE = 10;
+    
     const KEY_URL_PAGE = 30;
     const KEY_URL_HEADER_SORT = 31;
     const KEY_URL_FORM_ACTION = 32;
@@ -41,6 +81,28 @@ class Pagination{
     const KEY_STYLE_SELECT_CLASS = 110;
     const KEY_STYLE_PAGE_SIZE_BOX_ID = 111;
     const KEY_STYLE_PAGE_SIZE_BOX_CLASS = 112;
+    
+    private static function validateConfig($config){
+        // check required arguments
+        if(empty($config)){
+            throw new NoticeException(NoticeException::NOTICE_INVALID_PARAMETERS);
+        }
+        
+        // check optional arguments and set default values
+        $config[self::KEY_CONFIG_PAGE_SIZE] = (isset($config[self::KEY_CONFIG_PAGE_SIZE]) && is_numeric($config[self::KEY_CONFIG_PAGE_SIZE])) ? $config[self::KEY_CONFIG_PAGE_SIZE] : System::PAGE_SIZE_DEFAULT;
+        $config[self::KEY_CONFIG_PAGE] = (isset($config[self::KEY_CONFIG_PAGE]) && is_numeric($config[self::KEY_CONFIG_PAGE])) ? $config[self::KEY_CONFIG_PAGE] : System::PAGE_ACTUAL_DEFAULT;
+        $config[self::KEY_CONFIG_COLUMN] = (isset($config[self::KEY_CONFIG_COLUMN]) && is_numeric($config[self::KEY_CONFIG_COLUMN])) ? $config[self::KEY_CONFIG_COLUMN] : System::SORT_DEFAULT_COLUMN;
+        $config[self::KEY_CONFIG_SORT_DIRECTION] = (isset($config[self::KEY_CONFIG_SORT_DIRECTION]) && ($config[self::KEY_CONFIG_SORT_DIRECTION] == System::SORT_ASC || $config[self::KEY_CONFIG_SORT_DIRECTION] == System::SORT_DES)) ? $config[self::KEY_CONFIG_SORT_DIRECTION] : System::SORT_DEFAULT_DIRECTION;
+        $config[self::KEY_CONFIG_DATA_COUNT] = (isset($config[self::KEY_CONFIG_DATA_COUNT]) && is_numeric($config[self::KEY_CONFIG_DATA_COUNT])) ? $config[self::KEY_CONFIG_DATA_COUNT] : System::DATA_COUNT_DEFAULT;
+        $config[self::KEY_CONFIG_PAGES_COUNT] = (isset($config[self::KEY_CONFIG_PAGES_COUNT]) && is_numeric($config[self::KEY_CONFIG_PAGES_COUNT])) ? $config[self::KEY_CONFIG_PAGES_COUNT] : 0;
+        $config[self::KEY_CONFIG_DISABLE_ROW_MENU] = (isset($config[self::KEY_CONFIG_DISABLE_ROW_MENU]) && is_bool($config[self::KEY_CONFIG_DISABLE_ROW_MENU])) ? $config[self::KEY_CONFIG_DISABLE_ROW_MENU] : false;
+        $config[self::KEY_CONFIG_DISABLE_SELECT] = (isset($config[self::KEY_CONFIG_DISABLE_SELECT]) && is_bool($config[self::KEY_CONFIG_DISABLE_SELECT])) ? $config[self::KEY_CONFIG_DISABLE_SELECT] : false;
+        $config[self::KEY_CONFIG_DISABLE_PAGINATION] = (isset($config[self::KEY_CONFIG_DISABLE_PAGINATION]) && is_bool($config[self::KEY_CONFIG_DISABLE_PAGINATION])) ? $config[self::KEY_CONFIG_DISABLE_PAGINATION] : false;
+        $config[self::KEY_CONFIG_DISABLE_SET_PAGE_SIZE] = (isset($config[self::KEY_CONFIG_DISABLE_SET_PAGE_SIZE]) && is_bool($config[self::KEY_CONFIG_DISABLE_SET_PAGE_SIZE])) ? $config[self::KEY_CONFIG_DISABLE_SET_PAGE_SIZE] : false;
+        
+        
+        return $config;
+    }
     
 	private function __construct(){
 	}
