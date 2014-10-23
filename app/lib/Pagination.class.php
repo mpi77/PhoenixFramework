@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
  *
  */
@@ -79,7 +79,7 @@ class Pagination{
      * */
     const KEY_ROW_MENU = 50;
     /**
-     * @required in ROW_MENU_ITEM
+     * @optional in ROW_MENU_ITEM
      * @default empty string
      * */
     const KEY_ROW_MENU_BODY = 51;
@@ -98,10 +98,22 @@ class Pagination{
      * @default empty string
      * */
     const KEY_ROW_MENU_CLASS = 54;
-    
+    /**
+     * @optional
+     * @default null; may contains array with following indexes
+     * */
     const KEY_SELECT = 70;
+    /**
+     * @optional in SELECT_ITEM
+     * @default empty string
+     * */
     const KEY_SELECT_VALUE = 71;
+    /**
+     * @optional in SELECT_ITEM
+     * @default empty string
+     * */
     const KEY_SELECT_TITLE = 72;
+    
     const KEY_STYLE_TABLE_ID = 100;
     const KEY_STYLE_TABLE_CLASS = 101;
     const KEY_STYLE_TABLE_HEADER_CLASS = 102;
@@ -146,6 +158,13 @@ class Pagination{
                 $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_TITLE] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_TITLE]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_TITLE])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_TITLE] : "";
                 $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_URL] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_URL]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_URL])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_URL] : "";
                 $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_CLASS] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_CLASS]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_CLASS])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_CLASS] : "";
+            }
+        }
+        
+        if(isset($config[self::KEY_SELECT]) && is_array($config[self::KEY_SELECT])){
+            for($i=0; $i<count($config[self::KEY_SELECT]); $i++){
+                $config[KEY_SELECT][$i][self::KEY_SELECT_VALUE] = (isset($config[KEY_SELECT][$i][self::KEY_SELECT_VALUE]) && !empty($config[KEY_SELECT][$i][self::KEY_SELECT_VALUE])) ? $config[KEY_SELECT][$i][self::KEY_SELECT_VALUE] : "";
+                $config[KEY_SELECT][$i][self::KEY_SELECT_TITLE] = (isset($config[KEY_SELECT][$i][self::KEY_SELECT_TITLE]) && !empty($config[KEY_SELECT][$i][self::KEY_SELECT_TITLE])) ? $config[KEY_SELECT][$i][self::KEY_SELECT_TITLE] : "";
             }
         }
         
