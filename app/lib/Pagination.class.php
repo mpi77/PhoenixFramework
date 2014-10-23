@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.8
+ * @version 1.9
  * @author MPI
  *
  */
@@ -113,20 +113,72 @@ class Pagination{
      * @default empty string
      * */
     const KEY_SELECT_TITLE = 72;
-    
+    /**
+     * @optional
+     * @default empty string
+     * */
     const KEY_STYLE_TABLE_ID = 100;
+    /**
+     * @optional
+     * @default table
+     * */
     const KEY_STYLE_TABLE_CLASS = 101;
+    /**
+     * @optional
+     * @default empty string
+     * */
     const KEY_STYLE_TABLE_HEADER_CLASS = 102;
+    /**
+     * @optional
+     * @default empty string
+     * */
     const KEY_STYLE_TABLE_MARKED_ROW_CLASS = 103;
+    /**
+     * @optional
+     * @default empty string
+     * */
     const KEY_STYLE_SUMMARY_BOX_ID = 104;
+    /**
+     * @optional
+     * @default empty string
+     * */
     const KEY_STYLE_SUMMARY_BOX_CLASS = 105;
+    /**
+     * @optional
+     * @default empty string
+     * */
     const KEY_STYLE_PAGINATION_BOX_ID = 106;
+    /**
+     * @optional
+     * @default empty string
+     * */
     const KEY_STYLE_PAGINATION_BOX_CLASS = 107;
+    /**
+     * @optional
+     * @default empty string
+     * */
     const KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS = 108;
+    /**
+     * @optional
+     * @default empty string
+     * */
     const KEY_STYLE_SELECT_ID = 109;
+    /**
+     * @optional
+     * @default empty string
+     * */
     const KEY_STYLE_SELECT_CLASS = 110;
+    /**
+     * @optional
+     * @default empty string
+     * */
     const KEY_STYLE_PAGE_SIZE_BOX_ID = 111;
+    /**
+     * @optional
+     * @default empty string
+     * */
     const KEY_STYLE_PAGE_SIZE_BOX_CLASS = 112;
+    
     
     private static function validateConfig($config){
         // check required arguments
@@ -151,6 +203,20 @@ class Pagination{
         $config[self::KEY_URL_PAGE] = (isset($config[self::KEY_URL_PAGE]) && !empty($config[self::KEY_URL_PAGE])) ? $config[self::KEY_URL_PAGE] : $base_url . "-%d-%d-%s";
         $config[self::KEY_URL_HEADER_SORT] = (isset($config[self::KEY_URL_HEADER_SORT]) && !empty($config[self::KEY_URL_HEADER_SORT])) ? $config[self::KEY_URL_HEADER_SORT] : $base_url . "-%d-%d-%s";
         $config[self::KEY_URL_FORM_ACTION] = (isset($config[self::KEY_URL_FORM_ACTION]) && !empty($config[self::KEY_URL_FORM_ACTION])) ? $config[self::KEY_URL_FORM_ACTION] : $base_url;
+        
+        $config[self::KEY_STYLE_TABLE_ID] = (isset($config[self::KEY_STYLE_TABLE_ID]) && !empty($config[self::KEY_STYLE_TABLE_ID])) ? $config[self::KEY_STYLE_TABLE_ID] : "";
+        $config[self::KEY_STYLE_TABLE_CLASS] = (isset($config[self::KEY_STYLE_TABLE_CLASS]) && !empty($config[self::KEY_STYLE_TABLE_CLASS])) ? $config[self::KEY_STYLE_TABLE_CLASS] : "table";
+        $config[self::KEY_STYLE_TABLE_HEADER_CLASS] = (isset($config[self::KEY_STYLE_TABLE_HEADER_CLASS]) && !empty($config[self::KEY_STYLE_TABLE_HEADER_CLASS])) ? $config[self::KEY_STYLE_TABLE_HEADER_CLASS] : "";
+        $config[self::KEY_STYLE_TABLE_MARKED_ROW_CLASS] = (isset($config[self::KEY_STYLE_TABLE_MARKED_ROW_CLASS]) && !empty($config[self::KEY_STYLE_TABLE_MARKED_ROW_CLASS])) ? $config[self::KEY_STYLE_TABLE_MARKED_ROW_CLASS] : "";
+        $config[self::KEY_STYLE_SUMMARY_BOX_ID] = (isset($config[self::KEY_STYLE_SUMMARY_BOX_ID]) && !empty($config[self::KEY_STYLE_SUMMARY_BOX_ID])) ? $config[self::KEY_STYLE_SUMMARY_BOX_ID] : "";
+        $config[self::KEY_STYLE_SUMMARY_BOX_CLASS] = (isset($config[self::KEY_STYLE_SUMMARY_BOX_CLASS]) && !empty($config[self::KEY_STYLE_SUMMARY_BOX_CLASS])) ? $config[self::KEY_STYLE_SUMMARY_BOX_CLASS] : "";
+        $config[self::KEY_STYLE_PAGINATION_BOX_ID] = (isset($config[self::KEY_STYLE_PAGINATION_BOX_ID]) && !empty($config[self::KEY_STYLE_PAGINATION_BOX_ID])) ? $config[self::KEY_STYLE_PAGINATION_BOX_ID] : "";
+        $config[self::KEY_STYLE_PAGINATION_BOX_CLASS] = (isset($config[self::KEY_STYLE_PAGINATION_BOX_CLASS]) && !empty($config[self::KEY_STYLE_PAGINATION_BOX_CLASS])) ? $config[self::KEY_STYLE_PAGINATION_BOX_CLASS] : "";
+        $config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS] = (isset($config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS]) && !empty($config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS])) ? $config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS] : "";
+        $config[self::KEY_STYLE_SELECT_ID] = (isset($config[self::KEY_STYLE_SELECT_ID]) && !empty($config[self::KEY_STYLE_SELECT_ID])) ? $config[self::KEY_STYLE_SELECT_ID] : "";
+        $config[self::KEY_STYLE_SELECT_CLASS] = (isset($config[self::KEY_STYLE_SELECT_CLASS]) && !empty($config[self::KEY_STYLE_SELECT_CLASS])) ? $config[self::KEY_STYLE_SELECT_CLASS] : "";
+        $config[self::KEY_STYLE_PAGE_SIZE_BOX_ID] = (isset($config[self::KEY_STYLE_PAGE_SIZE_BOX_ID]) && !empty($config[self::KEY_STYLE_PAGE_SIZE_BOX_ID])) ? $config[self::KEY_STYLE_PAGE_SIZE_BOX_ID] : "";
+        $config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS] = (isset($config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS]) && !empty($config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS])) ? $config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS] : "";
         
         if(isset($config[self::KEY_ROW_MENU]) && is_array($config[self::KEY_ROW_MENU])){
             for($i=0; $i<count($config[self::KEY_ROW_MENU]); $i++){
