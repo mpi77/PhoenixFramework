@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.10
+ * @version 1.11
  * @author MPI
  *
  */
@@ -269,14 +269,14 @@ class Pagination{
 	    //System::trace($config);
 	    
 		// validation
-		if((!empty($config["config"]["column"]) && !empty($config["config"]["page"])) && (!array_key_exists($config["config"]["column"], $header) || $config["config"]["page"] < System::PAGE_MIN_PAGE || $config["config"]["page"] > $sum_pages)){
+		if((!empty($config[self::KEY_CONFIG_COLUMN]) && !empty($config[self::KEY_CONFIG_PAGE])) && (!array_key_exists($config[self::KEY_CONFIG_COLUMN], $header) || $config[self::KEY_CONFIG_PAGE] < System::PAGE_MIN_PAGE || $config[self::KEY_CONFIG_PAGE] > $config[self::KEY_CONFIG_PAGES_COUNT])){
 			throw new NoticeException(NoticeException::NOTICE_INVALID_PARAMETERS);
 		}
 		
-		if(!empty($header) && !empty($data) && $data != Database::EMPTY_RESULT && count($header) > 0 && count($data) > 0 && $data_count > 0 && count($header) == count($data[0])){
+		if(!empty($header) && !empty($data) && $data != Database::EMPTY_RESULT && count($header) > 0 && count($data) > 0 && $config[self::KEY_CONFIG_DATA_COUNT] == count($data) && count($header) == count($data[0])){
 			return self::makeListTableString($header, $data, $config);
 		}else{
-			return sprintf("<div class=\"%s\">%s</div>", "empty_result_box", Translate::get(Translator::NOTHING_TO_DISPLAY));
+			return sprintf("<div class=\"%s\">%s</div>", $config[self::KEY_STYLE_EMPTY_RESULT_CLASS], Translate::get(Translator::NOTHING_TO_DISPLAY));
 		}
 	}
 
