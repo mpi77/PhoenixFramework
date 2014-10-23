@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *
  */
@@ -178,6 +178,11 @@ class Pagination{
      * @default empty string
      * */
     const KEY_STYLE_PAGE_SIZE_BOX_CLASS = 112;
+    /**
+     * @optional
+     * @default empty-result-box
+     * */
+    const KEY_STYLE_EMPTY_RESULT_CLASS = 114;
     
     
     private static function validateConfig($config){
@@ -194,7 +199,7 @@ class Pagination{
         $config[self::KEY_CONFIG_COLUMN] = (isset($config[self::KEY_CONFIG_COLUMN]) && is_numeric($config[self::KEY_CONFIG_COLUMN])) ? $config[self::KEY_CONFIG_COLUMN] : System::SORT_DEFAULT_COLUMN;
         $config[self::KEY_CONFIG_SORT_DIRECTION] = (isset($config[self::KEY_CONFIG_SORT_DIRECTION]) && ($config[self::KEY_CONFIG_SORT_DIRECTION] == System::SORT_ASC || $config[self::KEY_CONFIG_SORT_DIRECTION] == System::SORT_DES)) ? $config[self::KEY_CONFIG_SORT_DIRECTION] : System::SORT_DEFAULT_DIRECTION;
         $config[self::KEY_CONFIG_DATA_COUNT] = (isset($config[self::KEY_CONFIG_DATA_COUNT]) && is_numeric($config[self::KEY_CONFIG_DATA_COUNT])) ? $config[self::KEY_CONFIG_DATA_COUNT] : System::DATA_COUNT_DEFAULT;
-        $config[self::KEY_CONFIG_PAGES_COUNT] = (isset($config[self::KEY_CONFIG_PAGES_COUNT]) && is_numeric($config[self::KEY_CONFIG_PAGES_COUNT])) ? $config[self::KEY_CONFIG_PAGES_COUNT] : 0;
+        $config[self::KEY_CONFIG_PAGES_COUNT] = (isset($config[self::KEY_CONFIG_PAGES_COUNT]) && is_numeric($config[self::KEY_CONFIG_PAGES_COUNT])) ? $config[self::KEY_CONFIG_PAGES_COUNT] : self::getCountPages($config[self::KEY_CONFIG_PAGE_SIZE], $config[self::KEY_CONFIG_DATA_COUNT]);
         $config[self::KEY_CONFIG_DISABLE_ROW_MENU] = (isset($config[self::KEY_CONFIG_DISABLE_ROW_MENU]) && is_bool($config[self::KEY_CONFIG_DISABLE_ROW_MENU])) ? $config[self::KEY_CONFIG_DISABLE_ROW_MENU] : false;
         $config[self::KEY_CONFIG_DISABLE_SELECT] = (isset($config[self::KEY_CONFIG_DISABLE_SELECT]) && is_bool($config[self::KEY_CONFIG_DISABLE_SELECT])) ? $config[self::KEY_CONFIG_DISABLE_SELECT] : false;
         $config[self::KEY_CONFIG_DISABLE_PAGINATION] = (isset($config[self::KEY_CONFIG_DISABLE_PAGINATION]) && is_bool($config[self::KEY_CONFIG_DISABLE_PAGINATION])) ? $config[self::KEY_CONFIG_DISABLE_PAGINATION] : false;
@@ -217,6 +222,7 @@ class Pagination{
         $config[self::KEY_STYLE_SELECT_CLASS] = (isset($config[self::KEY_STYLE_SELECT_CLASS]) && !empty($config[self::KEY_STYLE_SELECT_CLASS])) ? $config[self::KEY_STYLE_SELECT_CLASS] : "";
         $config[self::KEY_STYLE_PAGE_SIZE_BOX_ID] = (isset($config[self::KEY_STYLE_PAGE_SIZE_BOX_ID]) && !empty($config[self::KEY_STYLE_PAGE_SIZE_BOX_ID])) ? $config[self::KEY_STYLE_PAGE_SIZE_BOX_ID] : "";
         $config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS] = (isset($config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS]) && !empty($config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS])) ? $config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS] : "";
+        $config[self::KEY_STYLE_EMPTY_RESULT_CLASS] = (isset($config[self::KEY_STYLE_EMPTY_RESULT_CLASS]) && !empty($config[self::KEY_STYLE_EMPTY_RESULT_CLASS])) ? $config[self::KEY_STYLE_EMPTY_RESULT_CLASS] : "empty-result-box";
         
         if(isset($config[self::KEY_ROW_MENU]) && is_array($config[self::KEY_ROW_MENU])){
             for($i=0; $i<count($config[self::KEY_ROW_MENU]); $i++){
@@ -251,80 +257,27 @@ class Pagination{
 	 * @param array $header
 	 *        	1D with name of columns
 	 * @param array $data
-	 *        	2D with data to show
+	 *        	2D with data to present
 	 * @param array $config
-	 *        	xD witch config values
-	 *        	"config" => array(
-	 *        	"page" => string,
-	 *        	"column" => string,
-	 *          "data_count" => int,
-	 *        	"direction" => string,
-	 *        	"actual_pagesize" => string,
-	 *        	"disable_menu" => bool,
-	 *        	"disable_select" => bool,
-	 *        	"disable_pagging" => bool,
-	 *        	"disable_set_pagesize" => bool
-	 *        	),
-	 *        	"form_url" => array(
-	 *        	"page" => string,
-	 *        	"header_sort" => string,
-	 *        	"form_action" => string
-	 *        	),
-	 *        	"item_menu" => array(
-	 *        	0 => array("body"=>string,"title"=>string,"url"=>string, "class"=>string)
-	 *        	),
-	 *        	"select_item_action" => array(
-	 *        	0 => array("value"=>string,"title"=>string)
-	 *        	),
-	 *        	"style" => array(
-	 *        	"marked_row_class" => string,
-	 *        	"count_box_class" => string,
-	 *        	"pagging_box_class" => string,
-	 *        	"actual_page_class" => string,
-	 *        	"table_header_class" => string,
-	 *        	"table_id" => string,
-	 *        	"table_class" => string,
-	 *        	"select_form_id" => string,
-	 *        	"pagesize_form_id" => string,
-	 *        	"list_footer_id" => string
-	 *        	)
+	 *         array with defined keys
+	 *         
 	 * @throws NoticeException
 	 * @return string
 	 */
 	public static function generatePage($header, $data, $config){
-		$s = "";
-		
-		$page_size = (isset($config["config"]["actual_pagesize"]) && is_numeric($config["config"]["actual_pagesize"])) ? $config["config"]["actual_pagesize"] : System::PAGE_SIZE_DEFAULT;
-		$data_count = (isset($config["config"]["data_count"]) && is_numeric($config["config"]["data_count"])) ? $config["config"]["data_count"] : System::DATA_COUNT_DEFAULT;
-		$sum_pages = self::getCountPages($page_size, $data_count);
+	    $config = self::validateConfig($config);
+	    //System::trace($config);
+	    
 		// validation
 		if((!empty($config["config"]["column"]) && !empty($config["config"]["page"])) && (!array_key_exists($config["config"]["column"], $header) || $config["config"]["page"] < System::PAGE_MIN_PAGE || $config["config"]["page"] > $sum_pages)){
 			throw new NoticeException(NoticeException::NOTICE_INVALID_PARAMETERS);
 		}
 		
 		if(!empty($header) && !empty($data) && $data != Database::EMPTY_RESULT && count($header) > 0 && count($data) > 0 && $data_count > 0 && count($header) == count($data[0])){
-			// check and set config vars
-			$config["config"]["sum_pages"] = $sum_pages;
-			$config["config"]["data_count"] = $data_count;
-			$config["config"]["actual_pagesize"] = $page_size;
-			$config["config"]["page"] = (isset($config["config"]["page"]) && is_numeric($config["config"]["page"])) ? $config["config"]["page"] : System::PAGE_ACTUAL_DEFAULT;
-			$config["config"]["column"] = (isset($config["config"]["column"])) ? $config["config"]["column"] : System::SORT_DEFAULT_COLUMN;
-			$config["config"]["direction"] = (isset($config["config"]["direction"])) ? $config["config"]["direction"] : System::SORT_DEFAULT_DIRECTION;
-			$config["config"]["disable_menu"] = (isset($config["config"]["disable_menu"])) ? $config["config"]["disable_menu"] : false;
-			$config["config"]["disable_select"] = (isset($config["config"]["disable_select"])) ? $config["config"]["disable_select"] : false;
-			$config["config"]["disable_pagging"] = (isset($config["config"]["disable_pagging"])) ? $config["config"]["disable_pagging"] : false;
-			$config["config"]["disable_set_pagesize"] = (isset($config["config"]["disable_set_pagesize"])) ? $config["config"]["disable_set_pagesize"] : false;
-			
-			if($config["config"]["disable_pagging"] === true){
-				$config["config"]["sum_pages"] = "1";
-				$config["config"]["page"] = "1";
-			}
-			// System::trace($config);
-			$s .= self::makeListTableString($header, $data, $config);
+			return self::makeListTableString($header, $data, $config);
 		}else{
-			$s .= sprintf("<div class=\"%s\">%s</div>", "empty_result_box", Translate::get(Translator::NOTHING_TO_DISPLAY));
+			return sprintf("<div class=\"%s\">%s</div>", "empty_result_box", Translate::get(Translator::NOTHING_TO_DISPLAY));
 		}
-		return $s;
 	}
 
 	/**
@@ -336,7 +289,7 @@ class Pagination{
 	 *        	with actual index of page
 	 * @return integer
 	 */
-	public static function getStartRow($page, $page_size){
+	private static function getStartRow($page, $page_size){
 		return ($page * $page_size) - $page_size;
 	}
 	
@@ -363,144 +316,6 @@ class Pagination{
 	}
 
 	/**
-	 * Get list table string on unsorted data.
-	 * All data are given in $data and function sorts all of data. Then generates table string.
-	 *
-	 * @param array $header
-	 *        	1D with name of columns
-	 * @param array $data
-	 *        	2D with data to show
-	 * @param array $config
-	 *        	xD witch config values
-	 *        	"config" => array(
-	 *        	"page" => string,
-	 *        	"column" => string,
-	 *        	"data_count" => int,
-	 *        	"direction" => string,
-	 *        	"actual_pagesize" => string,
-	 *        	"disable_menu" => bool,
-	 *        	"disable_select" => bool,
-	 *        	"disable_pagging" => bool,
-	 *        	"disable_set_pagesize" => bool
-	 *        	),
-	 *        	"form_url" => array(
-	 *        	"page" => string,
-	 *        	"header_sort" => string,
-	 *        	"form_action" => string
-	 *        	),
-	 *        	"item_menu" => array(
-	 *        	0 => array("body"=>string,"title"=>string,"url"=>string, "class"=>string)
-	 *        	),
-	 *        	"select_item_action" => array(
-	 *        	0 => array("value"=>string,"title"=>string)
-	 *        	),
-	 *        	"style" => array(
-	 *        	"marked_row_class" => string,
-	 *        	"count_box_class" => string,
-	 *        	"pagging_box_class" => string,
-	 *        	"actual_page_class" => string,
-	 *        	"table_header_class" => string,
-	 *        	"table_id" => string,
-	 *        	"table_class" => string,
-	 *        	"select_form_id" => string,
-	 *        	"pagesize_form_id" => string,
-	 *        	"list_footer_id" => string
-	 *        	)
-	 * @throws NoticeException
-	 * @return string
-	 */
-	public static function generatePageWithUnsortedData($header, $data, $config){
-		$s = "";
-		$page_size = (isset($config["config"]["actual_pagesize"]) && is_numeric($config["config"]["actual_pagesize"])) ? $config["config"]["actual_pagesize"] : System::PAGE_SIZE_DEFAULT;
-		$sum_pages = self::getCountPagesData($page_size, $data);
-		// validation
-		if((!empty($config["config"]["column"]) && !empty($config["config"]["page"])) && (!array_key_exists($config["config"]["column"], $header) || $config["config"]["page"] < System::PAGE_MIN_PAGE || $config["config"]["page"] > $sum_pages)){
-			throw new NoticeException(NoticeException::NOTICE_INVALID_PARAMETERS);
-		}
-		
-		if(!empty($header) && !empty($data) && $data != Database::EMPTY_RESULT && count($header) > 0 && count($data) > 0 && count($header) == count($data[0])){
-			// check and set config vars
-			$config["config"]["sum_pages"] = $sum_pages;
-			$config["config"]["data_count"] = count($data);
-			$config["config"]["actual_pagesize"] = $page_size;
-			$config["config"]["page"] = (isset($config["config"]["page"]) && is_numeric($config["config"]["page"])) ? $config["config"]["page"] : System::PAGE_ACTUAL_DEFAULT;
-			$config["config"]["column"] = (isset($config["config"]["column"])) ? $config["config"]["column"] : System::SORT_DEFAULT_COLUMN;
-			$config["config"]["direction"] = (isset($config["config"]["direction"])) ? $config["config"]["direction"] : System::SORT_DEFAULT_DIRECTION;
-			$config["config"]["disable_menu"] = (isset($config["config"]["disable_menu"])) ? $config["config"]["disable_menu"] : false;
-			$config["config"]["disable_select"] = (isset($config["config"]["disable_select"])) ? $config["config"]["disable_select"] : false;
-			$config["config"]["disable_pagging"] = (isset($config["config"]["disable_pagging"])) ? $config["config"]["disable_pagging"] : false;
-			$config["config"]["disable_set_pagesize"] = (isset($config["config"]["disable_set_pagesize"])) ? $config["config"]["disable_set_pagesize"] : false;
-			
-			/* set sorting */
-			switch($config["config"]["direction"]){
-				case System::SORT_ASC:
-					System::$usort["xm"] = -1;
-					System::$usort["xv"] = 1;
-					break;
-				case System::SORT_DES:
-					System::$usort["xm"] = 1;
-					System::$usort["xv"] = -1;
-					break;
-			}
-			$time_format = null;
-			$cmp_function = "System::usortCallbackCmpCzechCi";
-			if(is_numeric($data[0][$config["config"]["column"]])){
-				$cmp_function = "System::usortCallbackCmpNumbers";
-			}else if(($time_format = System::getDateFormat($data[0][$config["config"]["column"]])) != null && System::isDateValid($data[0][$config["config"]["column"]], $time_format)){
-				$cmp_function = "System::usortCallbackCmpTime";
-				System::$usort["time_format"] = $time_format;
-			}
-			System::$usort["sorting_index"] = $config["config"]["column"];
-			usort($data, $cmp_function);
-			
-			if($config["config"]["disable_pagging"] === true){
-				$config["config"]["sum_pages"] = "1";
-				$config["config"]["page"] = "1";
-			}else{
-				$data = self::getPage($page_size, $config["config"]["page"], $data);
-			}
-			$s .= self::makeListTableString($header, $data, $config);
-		}else{
-			$s .= sprintf("<div class=\"%s\">%s</div>", "empty_result_box", Translate::get(Translator::NOTHING_TO_DISPLAY));
-		}
-		return $s;
-	}
-
-	/**
-	 * Get data on selected page.
-	 *
-	 * @param integer $page_size
-	 *        	with count rows per page
-	 * @param array $data
-	 *        	2D with data
-	 * @param integer $page_number
-	 *        	with page index of selected page
-	 * @return array 2D
-	 */
-	private static function getPage($page_size, $page_number, $data){
-		$a = array();
-		$start_pos = (count($data) > $page_size) ? (($page_size * $page_number) - $page_size) : 0;
-		$final_pos = (($t = (count($data) - ($page_size * $page_number))) > 0) ? ($page_size * $page_number) : (($page_size * $page_number) - abs($t));
-		for($i = $start_pos; $i < $final_pos; $i++){
-			$a[] = $data[$i];
-		}
-		return $a;
-	}
-
-	/**
-	 * Get count pages of data.
-	 *
-	 * @param int $page_size
-	 *        	with count rows per page
-	 * @param array $data
-	 *        	2D with data
-	 * @return integer
-	 */
-	private static function getCountPagesData($page_size, $data){
-		return ceil(count($data) / $page_size);
-	}
-
-	/**
 	 * Make string of list HTML TABLE if data and header are not empty
 	 *
 	 * @param $tbl_header array
@@ -508,40 +323,7 @@ class Pagination{
 	 * @param $tbl_data array
 	 *        	2D with data to show in table
 	 * @param $config array
-	 *        	xD witch config values
-	 *        	"config" => array(
-	 *        	"page" => string,
-	 *        	"column" => string,
-	 *        	"direction" => string,
-	 *        	"actual_pagesize" => string,
-	 *        	"disable_menu" => bool,
-	 *        	"disable_select" => bool,
-	 *        	"disable_pagging" => bool,
-	 *        	"disable_set_pagesize" => bool
-	 *        	),
-	 *        	"form_url" => array(
-	 *        	"page" => string,
-	 *        	"header_sort" => string,
-	 *        	"form_action" => string
-	 *        	),
-	 *        	"item_menu" => array(
-	 *        	0 => array("body"=>string,"title"=>string,"url"=>string, "class"=>string)
-	 *        	),
-	 *        	"select_item_action" => array(
-	 *        	0 => array("value"=>string,"title"=>string)
-	 *        	),
-	 *        	"style" => array(
-	 *        	"marked_row_class" => string,
-	 *        	"count_box_class" => string,
-	 *        	"pagging_box_class" => string,
-	 *        	"actual_page_class" => string,
-	 *        	"table_header_class" => string,
-	 *        	"table_id" => string,
-	 *        	"table_class" => string,
-	 *        	"select_form_id" => string,
-	 *        	"pagesize_form_id" => string,
-	 *        	"list_footer_id" => string
-	 *        	)
+	 *        	array with defined keys
 	 * @return string
 	 */
 	private static function makeListTableString($header, $data, $config){
