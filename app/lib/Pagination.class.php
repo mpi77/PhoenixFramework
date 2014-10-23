@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.5
+ * @version 1.7
  * @author MPI
  *
  */
@@ -73,13 +73,35 @@ class Pagination{
      * @default base-url{=$_SERVER["REQUEST_URI"] (to last /, without QS)}
      * */
     const KEY_URL_FORM_ACTION = 32;
+    /**
+     * @optional
+     * @default null; may contains array with following indexes
+     * */
+    const KEY_ROW_MENU = 50;
+    /**
+     * @required in ROW_MENU_ITEM
+     * @default empty string
+     * */
+    const KEY_ROW_MENU_BODY = 51;
+    /**
+     * @optional in ROW_MENU_ITEM
+     * @default empty string
+     * */
+    const KEY_ROW_MENU_TITLE = 52;
+    /**
+     * @optional in ROW_MENU_ITEM
+     * @default empty string
+     * */
+    const KEY_ROW_MENU_URL = 53;
+    /**
+     * @optional in ROW_MENU_ITEM
+     * @default empty string
+     * */
+    const KEY_ROW_MENU_CLASS = 54;
     
-    const KEY_ROW_MENU_BODY = 50;
-    const KEY_ROW_MENU_TITLE = 51;
-    const KEY_ROW_MENU_URL = 52;
-    const KEY_ROW_MENU_CLASS = 53;
-    const KEY_SELECT_VALUE = 70;
-    const KEY_SELECT_TITLE = 71;
+    const KEY_SELECT = 70;
+    const KEY_SELECT_VALUE = 71;
+    const KEY_SELECT_TITLE = 72;
     const KEY_STYLE_TABLE_ID = 100;
     const KEY_STYLE_TABLE_CLASS = 101;
     const KEY_STYLE_TABLE_HEADER_CLASS = 102;
@@ -117,6 +139,15 @@ class Pagination{
         $config[self::KEY_URL_PAGE] = (isset($config[self::KEY_URL_PAGE]) && !empty($config[self::KEY_URL_PAGE])) ? $config[self::KEY_URL_PAGE] : $base_url . "-%d-%d-%s";
         $config[self::KEY_URL_HEADER_SORT] = (isset($config[self::KEY_URL_HEADER_SORT]) && !empty($config[self::KEY_URL_HEADER_SORT])) ? $config[self::KEY_URL_HEADER_SORT] : $base_url . "-%d-%d-%s";
         $config[self::KEY_URL_FORM_ACTION] = (isset($config[self::KEY_URL_FORM_ACTION]) && !empty($config[self::KEY_URL_FORM_ACTION])) ? $config[self::KEY_URL_FORM_ACTION] : $base_url;
+        
+        if(isset($config[self::KEY_ROW_MENU]) && is_array($config[self::KEY_ROW_MENU])){
+            for($i=0; $i<count($config[self::KEY_ROW_MENU]); $i++){
+                $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_BODY] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_BODY]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_BODY])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_BODY] : "";
+                $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_TITLE] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_TITLE]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_TITLE])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_TITLE] : "";
+                $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_URL] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_URL]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_URL])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_URL] : "";
+                $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_CLASS] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_CLASS]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_CLASS])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_CLASS] : "";
+            }
+        }
         
         if($config[self::KEY_CONFIG_DISABLE_PAGINATION] === true){
             $config[self::KEY_CONFIG_PAGES_COUNT] = 1;
