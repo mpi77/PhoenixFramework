@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.11
+ * @version 1.12
  * @author MPI
  *
  */
@@ -184,7 +184,56 @@ class Pagination{
      * */
     const KEY_STYLE_EMPTY_RESULT_CLASS = 114;
     
+    private function __construct(){
+    }
     
+    /**
+     * Get list table string on sorted data.
+     *
+     * @param array $header
+     *        	1D with name of columns
+     * @param array $data
+     *        	2D with data to present
+     * @param array $config
+     *         array with defined keys
+     *
+     * @throws NoticeException
+     * @return string
+     */
+    public static function generatePage($header, $data, $config){
+        $config = self::validateConfig($config);
+        //System::trace($config);
+         
+        // validation
+        if((!empty($config[self::KEY_CONFIG_COLUMN]) && !empty($config[self::KEY_CONFIG_PAGE])) && (!array_key_exists($config[self::KEY_CONFIG_COLUMN], $header) || $config[self::KEY_CONFIG_PAGE] < System::PAGE_MIN_PAGE || $config[self::KEY_CONFIG_PAGE] > $config[self::KEY_CONFIG_PAGES_COUNT])){
+            throw new NoticeException(NoticeException::NOTICE_INVALID_PARAMETERS);
+        }
+    
+        if(!empty($header) && !empty($data) && $data != Database::EMPTY_RESULT && count($header) > 0 && count($data) > 0 && $config[self::KEY_CONFIG_DATA_COUNT] == count($data) && count($header) == count($data[0])){
+            return self::makeListTableString($header, $data, $config);
+        }else{
+            return sprintf("<div class=\"%s\">%s</div>", $config[self::KEY_STYLE_EMPTY_RESULT_CLASS], Translate::get(Translator::NOTHING_TO_DISPLAY));
+        }
+    }
+    
+    /**
+     * Get base url.
+     *
+     * @return string
+     */
+    public static function getBaseUrl(){
+        return substr($_SERVER["REQUEST_URI"], 0, strrpos($_SERVER["REQUEST_URI"], "/") + 1);
+    }
+    
+    /**
+     * Validate config array.
+     *
+     * @param array $config
+     *        	multidim array with defined keys
+     *
+     * @throws NoticeException
+     * @return array
+     */
     private static function validateConfig($config){
         // check required arguments
         if(empty($config)){
@@ -247,38 +296,6 @@ class Pagination{
         
         return $config;
     }
-    
-	private function __construct(){
-	}
-
-	/**
-	 * Get list table string on sorted data.
-	 *
-	 * @param array $header
-	 *        	1D with name of columns
-	 * @param array $data
-	 *        	2D with data to present
-	 * @param array $config
-	 *         array with defined keys
-	 *         
-	 * @throws NoticeException
-	 * @return string
-	 */
-	public static function generatePage($header, $data, $config){
-	    $config = self::validateConfig($config);
-	    //System::trace($config);
-	    
-		// validation
-		if((!empty($config[self::KEY_CONFIG_COLUMN]) && !empty($config[self::KEY_CONFIG_PAGE])) && (!array_key_exists($config[self::KEY_CONFIG_COLUMN], $header) || $config[self::KEY_CONFIG_PAGE] < System::PAGE_MIN_PAGE || $config[self::KEY_CONFIG_PAGE] > $config[self::KEY_CONFIG_PAGES_COUNT])){
-			throw new NoticeException(NoticeException::NOTICE_INVALID_PARAMETERS);
-		}
-		
-		if(!empty($header) && !empty($data) && $data != Database::EMPTY_RESULT && count($header) > 0 && count($data) > 0 && $config[self::KEY_CONFIG_DATA_COUNT] == count($data) && count($header) == count($data[0])){
-			return self::makeListTableString($header, $data, $config);
-		}else{
-			return sprintf("<div class=\"%s\">%s</div>", $config[self::KEY_STYLE_EMPTY_RESULT_CLASS], Translate::get(Translator::NOTHING_TO_DISPLAY));
-		}
-	}
 
 	/**
 	 * Get start row of data.
@@ -291,15 +308,6 @@ class Pagination{
 	 */
 	private static function getStartRow($page, $page_size){
 		return ($page * $page_size) - $page_size;
-	}
-	
-	/**
-	 * Get base url.
-	 *
-	 * @return string
-	 */
-	public static function getBaseUrl(){
-	    return substr($_SERVER["REQUEST_URI"], 0, strrpos($_SERVER["REQUEST_URI"], "/") + 1);
 	}
 
 	/**
