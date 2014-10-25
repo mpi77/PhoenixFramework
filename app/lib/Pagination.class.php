@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.16
+ * @version 1.17
  * @author MPI
  *
  */
@@ -75,29 +75,29 @@ class Pagination{
     const KEY_URL_FORM_ACTION = 32;
     /**
      * @optional
-     * @default null; may contains array with following indexes
+     * @default null; may contains array with following *ITEM* indexes
      * */
     const KEY_ROW_MENU = 50;
     /**
      * @optional in ROW_MENU_ITEM
      * @default empty string
      * */
-    const KEY_ROW_MENU_BODY = 51;
+    const KEY_ROW_MENU_ITEM_BODY = 51;
     /**
      * @optional in ROW_MENU_ITEM
      * @default empty string
      * */
-    const KEY_ROW_MENU_TITLE = 52;
+    const KEY_ROW_MENU_ITEM_TITLE = 52;
     /**
      * @optional in ROW_MENU_ITEM
      * @default empty string
      * */
-    const KEY_ROW_MENU_URL = 53;
+    const KEY_ROW_MENU_ITEM_URL = 53;
     /**
      * @optional in ROW_MENU_ITEM
      * @default empty string
      * */
-    const KEY_ROW_MENU_CLASS = 54;
+    const KEY_ROW_MENU_ITEM_CLASS = 54;
     /**
      * @optional
      * @default null; may contains array with following indexes
@@ -190,12 +190,18 @@ class Pagination{
     const KEY_STYLE_PAGE_SIZE_SELECT_NAME = 114;
     /**
      * @optional
+     * @default empty string
+     * */
+    const KEY_STYLE_ROW_MENU_CLASS = 115;
+    /**
+     * @optional
      * @default empty-result-box
      * */
-    const KEY_STYLE_EMPTY_RESULT_CLASS = 115;
+    const KEY_STYLE_EMPTY_RESULT_CLASS = 116;
     
     const COLUMN_PREFIX = "col_";
     const COLUMN_SELECT_ACTION_SUFFIX = "select";
+    const ROW_PREFIX = "row_";
     
     private function __construct(){
     }
@@ -286,14 +292,15 @@ class Pagination{
         $config[self::KEY_STYLE_PAGE_SIZE_BOX_ID] = (isset($config[self::KEY_STYLE_PAGE_SIZE_BOX_ID]) && !empty($config[self::KEY_STYLE_PAGE_SIZE_BOX_ID])) ? $config[self::KEY_STYLE_PAGE_SIZE_BOX_ID] : "";
         $config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS] = (isset($config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS]) && !empty($config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS])) ? $config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS] : "";
         $config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME] = (isset($config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME]) && !empty($config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME])) ? $config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME] : "sel_page_size";
+        $config[self::KEY_STYLE_ROW_MENU_CLASS] = (isset($config[self::KEY_STYLE_ROW_MENU_CLASS]) && !empty($config[self::KEY_STYLE_ROW_MENU_CLASS])) ? $config[self::KEY_STYLE_ROW_MENU_CLASS] : "";
         $config[self::KEY_STYLE_EMPTY_RESULT_CLASS] = (isset($config[self::KEY_STYLE_EMPTY_RESULT_CLASS]) && !empty($config[self::KEY_STYLE_EMPTY_RESULT_CLASS])) ? $config[self::KEY_STYLE_EMPTY_RESULT_CLASS] : "empty-result-box";
         
         if(isset($config[self::KEY_ROW_MENU]) && is_array($config[self::KEY_ROW_MENU])){
             for($i=0; $i<count($config[self::KEY_ROW_MENU]); $i++){
-                $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_BODY] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_BODY]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_BODY])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_BODY] : "";
-                $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_TITLE] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_TITLE]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_TITLE])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_TITLE] : "";
-                $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_URL] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_URL]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_URL])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_URL] : "";
-                $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_CLASS] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_CLASS]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_CLASS])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_CLASS] : "";
+                $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_BODY] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_BODY]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_BODY])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_BODY] : "";
+                $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_TITLE] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_TITLE]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_TITLE])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_TITLE] : "";
+                $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_URL] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_URL]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_URL])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_URL] : "";
+                $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_CLASS] = (isset($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_CLASS]) && !empty($config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_CLASS])) ? $config[KEY_ROW_MENU][$i][self::KEY_ROW_MENU_ITEM_CLASS] : "";
             }
         }
         
@@ -394,31 +401,31 @@ class Pagination{
 				// add empty columns for ROW_MENU_ITEM
 				if($j == (count($header) - 1) && $config[self::KEY_CONFIG_DISABLE_ROW_MENU] === false){
 					foreach($config[self::KEY_ROW_MENU] as $k => $v){
-						$s .= sprintf("<th class=\"%s\">&nbsp;</th>", $v[self::KEY_ROW_MENU_CLASS]);
+						$s .= sprintf("<th class=\"%s\">&nbsp;</th>", $v[self::KEY_STYLE_ROW_MENU_CLASS]);
 					}
 				}
 				++$j;
 			}
-			$s .= sprintf("</tr></thead>");
+			$s .= sprintf("</tr></thead><tbody>");
 			// table data rows
 			for($i = 0; $i < count($data); $i++){
-				$s .= sprintf("<tr%s>", ($i % 2 == 0 ? sprintf(" class=\"%s\"", (!empty($config["style"]["marked_row_class"]) ? $config["style"]["marked_row_class"] : "")) : ""));
+				$s .= sprintf("<tr%s>", ($i % 2 == 0 ? sprintf(" class=\"%s\"", (!empty($config[self::KEY_STYLE_TABLE_MARKED_ROW_CLASS]) ? $config[self::KEY_STYLE_TABLE_MARKED_ROW_CLASS] : "")) : ""));
 				for($j = 0; $j < count($data[$i]); $j++){
-					if($config["config"]["disable_select"] === false && $j == 0){
-						$s .= sprintf("<td class=\"%s\"><input type=\"checkbox\" name=\"%s\" /></th>", "col_select", "row_" . $i . "_" . $data[$i][$j]);
+					if($config[self::KEY_CONFIG_DISABLE_SELECT_ACTION] === false && $j == 0){
+						$s .= sprintf("<td class=\"%s\"><input type=\"checkbox\" name=\"%s\" /></th>", self::COLUMN_PREFIX.self::COLUMN_SELECT_ACTION_SUFFIX, self::ROW_PREFIX . $i . "_" . $data[$i][$j]);
 					}
-					$s .= sprintf("<td class=\"%s\">%s</td>", "col_" . $j, $data[$i][$j]);
+					$s .= sprintf("<td class=\"%s\">%s</td>", self::COLUMN_PREFIX . $j, $data[$i][$j]);
 					// add item_menu columns
-					if($j == count($data[$i]) - 1 && $config["config"]["disable_menu"] === false){
-						foreach($config["item_menu"] as $k => $v){
-							$s .= sprintf("<td class=\"%s\"><a%shref=\"%s\"%s>%s</a></td>", $v["class"], (!empty($v["title"]) ? " title=\"" . $v["title"] . "\"" : " "), sprintf($v["url"], $data[$i][0]), (!empty($v["link_class"]) ? " class=\"" . $v["link_class"] . "\"" : " "), "<span>" . $v["body"] . "</span>");
+					if($j == count($data[$i]) - 1 && $config[self::KEY_CONFIG_DISABLE_ROW_MENU] === false){
+						foreach($config[self::KEY_ROW_MENU] as $k => $v){
+							$s .= sprintf("<td class=\"%s\"><a%shref=\"%s\"%s>%s</a></td>", $config[self::KEY_STYLE_ROW_MENU_CLASS], (!empty($v[self::KEY_ROW_MENU_ITEM_TITLE]) ? " title=\"" . $v[self::KEY_ROW_MENU_ITEM_TITLE] . "\"" : " "), sprintf($v[self::KEY_ROW_MENU_ITEM_URL], $data[$i][0]), (!empty($v[self::KEY_ROW_MENU_ITEM_CLASS]) ? " class=\"" . $v[self::KEY_ROW_MENU_ITEM_CLASS] . "\"" : " "), "<span>" . $v[self::KEY_ROW_MENU_ITEM_BODY] . "</span>");
 						}
 					}
 				}
 				$s .= sprintf("</tr>");
 			}
-			$s .= sprintf("</table>");
-			if($config["config"]["disable_select"] === false){
+			$s .= sprintf("</tbody></table>");
+			if($config[self::KEY_CONFIG_DISABLE_SELECT_ACTION] === false){
 				$s .= sprintf("</form>");
 			}
 			// pagging box
