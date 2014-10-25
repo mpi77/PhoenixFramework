@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.17
+ * @version 1.18
  * @author MPI
  *
  */
@@ -150,12 +150,17 @@ class Pagination{
     const KEY_STYLE_PAGINATION_BOX_ID = 106;
     /**
      * @optional
-     * @default empty string
+     * @default col-md-12 text-center
      * */
     const KEY_STYLE_PAGINATION_BOX_CLASS = 107;
     /**
      * @optional
-     * @default empty string
+     * @default pagination
+     * */
+    const KEY_STYLE_PAGINATION_UL_CLASS = 117;
+    /**
+     * @optional
+     * @default active
      * */
     const KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS = 108;
     /**
@@ -198,10 +203,12 @@ class Pagination{
      * @default empty-result-box
      * */
     const KEY_STYLE_EMPTY_RESULT_CLASS = 116;
+    // next in *STYLE* 118
     
     const COLUMN_PREFIX = "col_";
     const COLUMN_SELECT_ACTION_SUFFIX = "select";
     const ROW_PREFIX = "row_";
+    const PAGINATION_PAGE_COUNT_LIMIT = 10;
     
     private function __construct(){
     }
@@ -284,8 +291,9 @@ class Pagination{
         $config[self::KEY_STYLE_SUMMARY_BOX_ID] = (isset($config[self::KEY_STYLE_SUMMARY_BOX_ID]) && !empty($config[self::KEY_STYLE_SUMMARY_BOX_ID])) ? $config[self::KEY_STYLE_SUMMARY_BOX_ID] : "";
         $config[self::KEY_STYLE_SUMMARY_BOX_CLASS] = (isset($config[self::KEY_STYLE_SUMMARY_BOX_CLASS]) && !empty($config[self::KEY_STYLE_SUMMARY_BOX_CLASS])) ? $config[self::KEY_STYLE_SUMMARY_BOX_CLASS] : "";
         $config[self::KEY_STYLE_PAGINATION_BOX_ID] = (isset($config[self::KEY_STYLE_PAGINATION_BOX_ID]) && !empty($config[self::KEY_STYLE_PAGINATION_BOX_ID])) ? $config[self::KEY_STYLE_PAGINATION_BOX_ID] : "";
-        $config[self::KEY_STYLE_PAGINATION_BOX_CLASS] = (isset($config[self::KEY_STYLE_PAGINATION_BOX_CLASS]) && !empty($config[self::KEY_STYLE_PAGINATION_BOX_CLASS])) ? $config[self::KEY_STYLE_PAGINATION_BOX_CLASS] : "";
-        $config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS] = (isset($config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS]) && !empty($config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS])) ? $config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS] : "";
+        $config[self::KEY_STYLE_PAGINATION_BOX_CLASS] = (isset($config[self::KEY_STYLE_PAGINATION_BOX_CLASS]) && !empty($config[self::KEY_STYLE_PAGINATION_BOX_CLASS])) ? $config[self::KEY_STYLE_PAGINATION_BOX_CLASS] : "col-md-12 text-center";
+        $config[self::KEY_STYLE_PAGINATION_UL_CLASS] = (isset($config[self::KEY_STYLE_PAGINATION_UL_CLASS]) && !empty($config[self::KEY_STYLE_PAGINATION_UL_CLASS])) ? $config[self::KEY_STYLE_PAGINATION_UL_CLASS] : "pagination";
+        $config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS] = (isset($config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS]) && !empty($config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS])) ? $config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS] : "active";
         $config[self::KEY_STYLE_SELECT_ACTION_ID] = (isset($config[self::KEY_STYLE_SELECT_ACTION_ID]) && !empty($config[self::KEY_STYLE_SELECT_ACTION_ID])) ? $config[self::KEY_STYLE_SELECT_ACTION_ID] : "";
         $config[self::KEY_STYLE_SELECT_ACTION_CLASS] = (isset($config[self::KEY_STYLE_SELECT_ACTION_CLASS]) && !empty($config[self::KEY_STYLE_SELECT_ACTION_CLASS])) ? $config[self::KEY_STYLE_SELECT_ACTION_CLASS] : "";
         $config[self::KEY_STYLE_SELECT_ACTION_NAME] = (isset($config[self::KEY_STYLE_SELECT_ACTION_NAME]) && !empty($config[self::KEY_STYLE_SELECT_ACTION_NAME])) ? $config[self::KEY_STYLE_SELECT_ACTION_NAME] : "sel_action";
@@ -406,7 +414,7 @@ class Pagination{
 				}
 				++$j;
 			}
-			$s .= sprintf("</tr></thead><tbody>");
+			$s .= "</tr></thead><tbody>";
 			// table data rows
 			for($i = 0; $i < count($data); $i++){
 				$s .= sprintf("<tr%s>", ($i % 2 == 0 ? sprintf(" class=\"%s\"", (!empty($config[self::KEY_STYLE_TABLE_MARKED_ROW_CLASS]) ? $config[self::KEY_STYLE_TABLE_MARKED_ROW_CLASS] : "")) : ""));
@@ -415,63 +423,40 @@ class Pagination{
 						$s .= sprintf("<td class=\"%s\"><input type=\"checkbox\" name=\"%s\" /></th>", self::COLUMN_PREFIX.self::COLUMN_SELECT_ACTION_SUFFIX, self::ROW_PREFIX . $i . "_" . $data[$i][$j]);
 					}
 					$s .= sprintf("<td class=\"%s\">%s</td>", self::COLUMN_PREFIX . $j, $data[$i][$j]);
-					// add item_menu columns
+					// add ROW_MENU_ITEM columns
 					if($j == count($data[$i]) - 1 && $config[self::KEY_CONFIG_DISABLE_ROW_MENU] === false){
 						foreach($config[self::KEY_ROW_MENU] as $k => $v){
 							$s .= sprintf("<td class=\"%s\"><a%shref=\"%s\"%s>%s</a></td>", $config[self::KEY_STYLE_ROW_MENU_CLASS], (!empty($v[self::KEY_ROW_MENU_ITEM_TITLE]) ? " title=\"" . $v[self::KEY_ROW_MENU_ITEM_TITLE] . "\"" : " "), sprintf($v[self::KEY_ROW_MENU_ITEM_URL], $data[$i][0]), (!empty($v[self::KEY_ROW_MENU_ITEM_CLASS]) ? " class=\"" . $v[self::KEY_ROW_MENU_ITEM_CLASS] . "\"" : " "), "<span>" . $v[self::KEY_ROW_MENU_ITEM_BODY] . "</span>");
 						}
 					}
 				}
-				$s .= sprintf("</tr>");
+				$s .= "</tr>";
 			}
-			$s .= sprintf("</tbody></table>");
+			$s .= "</tbody></table>";
 			if($config[self::KEY_CONFIG_DISABLE_SELECT_ACTION] === false){
-				$s .= sprintf("</form>");
+				$s .= "</form>";
 			}
-			// pagging box
-			$s .= sprintf("<div%s>", (!empty($config["style"]["list_footer_id"]) ? " id=\"" . $config["style"]["list_footer_id"] . "\"" : ""));
-			$s .= sprintf("<div%s><span>%s: %d | %s: %d | %s: %d/%d</span></div>", (!empty($config["style"]["count_box_class"]) ? sprintf(" class=\"%s\"", $config["style"]["count_box_class"]) : ""), Translate::get(Translator::LIST_DISPLAYED_ROWS), count($data), Translate::get(Translator::LIST_FOUND_ROWS), $config["config"]["data_count"], Translate::get(Translator::LIST_PAGE), $config["config"]["page"], $config["config"]["sum_pages"]);
+			// pagination box
+			$s .= "<div>";
+			$s .= sprintf("<div%s%s><span>%s: %d | %s: %d | %s: %d/%d</span></div>", (!empty($config[self::KEY_STYLE_SUMMARY_BOX_ID]) ? sprintf(" id=\"%s\"", $config[self::KEY_STYLE_SUMMARY_BOX_ID]) : ""), (!empty($config[self::KEY_STYLE_SUMMARY_BOX_CLASS]) ? sprintf(" class=\"%s\"", $config[self::KEY_STYLE_SUMMARY_BOX_CLASS]) : ""), Translate::get(Translator::LIST_DISPLAYED_ROWS), count($data), Translate::get(Translator::LIST_FOUND_ROWS), $config[self::KEY_CONFIG_DATA_COUNT], Translate::get(Translator::LIST_PAGE), $config[self::KEY_CONFIG_PAGE], $config[self::KEY_CONFIG_PAGES_COUNT]);
 			// box with page numbers
-			$s .= sprintf("<div%s><div class=\"col-md-12 text-center\"><ul class=\"pagination\">", (isset($config["style"]["pagging_box_class"]) ? sprintf(" class=\"%s\"", $config["style"]["pagging_box_class"]) : ""));
-			if($config["config"]["sum_pages"] > 5){
-				$sp = isset($config["form_url"]["page"]);
-				$ap = isset($config["style"]["actual_page_class"]);
-				$url = (!empty($sp) ? sprintf($config["form_url"]["page"], System::PAGE_MIN_PAGE, $config["config"]["column"], $config["config"]["direction"]) : "");
-				$s .= sprintf("<li><a href=\"%s\"%s>%d</a>,</li>", $url, (($ap && System::PAGE_MIN_PAGE == $config["config"]["page"]) ? sprintf(" class=\"%s\"", $config["style"]["actual_page_class"]) : ""), System::PAGE_MIN_PAGE);
-				if($config["config"]["page"] - 1 > 2){
-					$url = (isset($sp) ? sprintf($config["form_url"]["page"], $config["config"]["page"] - 1, $config["config"]["column"], $config["config"]["direction"]) : "");
-					$s .= sprintf("...,<li><a href=\"%s\"%s>%d</a>,</li>", $url, (($ap && $config["config"]["page"] - 1 == $config["config"]["page"]) ? sprintf(" class=\"%s\"", $config["style"]["actual_page_class"]) : ""), $config["config"]["page"] - 1);
-				}else if($config["config"]["page"] - 1 > 1 && $config["config"]["page"] - 1 < 2){
-					$url = (isset($sp) ? sprintf($config["form_url"]["page"], $config["config"]["page"] - 1, $config["config"]["column"], $config["config"]["direction"]) : "");
-					$s .= sprintf("<li><a href=\"%s\"%s>%d</a>,</li>", $url, (($ap && $config["config"]["page"] - 1 == $config["config"]["page"]) ? sprintf(" class=\"%s\"", $config["style"]["actual_page_class"]) : ""), $config["config"]["page"] - 1);
-				}else if($config["config"]["page"] > 2){
-					$url = (isset($sp) ? sprintf($config["form_url"]["page"], $config["config"]["page"] - 1, $config["config"]["column"], $config["config"]["direction"]) : "");
-					$s .= sprintf("<li><a href=\"%s\"%s>%d</a>,</li>", $url, (($ap && $config["config"]["page"] - 1 == $config["config"]["page"]) ? sprintf(" class=\"%s\"", $config["style"]["actual_page_class"]) : ""), $config["config"]["page"] - 1);
-				}
-				if($config["config"]["page"] + 1 < $config["config"]["sum_pages"] && $config["config"]["page"] > System::PAGE_MIN_PAGE){
-					$url = (isset($sp) ? sprintf($config["form_url"]["page"], $config["config"]["page"], $config["config"]["column"], $config["config"]["direction"]) : "");
-					$s .= sprintf("<li><a href=\"%s\"%s>%d</a>,</li>", $url, (($ap && $config["config"]["page"] == $config["config"]["page"]) ? sprintf(" class=\"%s\"", $config["style"]["actual_page_class"]) : ""), $config["config"]["page"]);
-				}
-				if($config["config"]["page"] + 2 < $config["config"]["sum_pages"]){
-					$url = (isset($sp) ? sprintf($config["form_url"]["page"], $config["config"]["page"] + 1, $config["config"]["column"], $config["config"]["direction"]) : "");
-					$s .= sprintf("<li><a href=\"%s\"%s>%d</a>,...,</li>", $url, (($ap && $config["config"]["page"] + 1 == $config["config"]["page"]) ? sprintf(" class=\"%s\"", $config["style"]["actual_page_class"]) : ""), $config["config"]["page"] + 1);
-				}else if($config["config"]["page"] + 1 < $config["config"]["sum_pages"]){
-					$url = (isset($sp) ? sprintf($config["form_url"]["page"], $config["config"]["page"] + 1, $config["config"]["column"], $config["config"]["direction"]) : "");
-					$s .= sprintf("<li><a href=\"%s\"%s>%d</a>,</li>", $url, (($ap && $config["config"]["page"] + 1 == $config["config"]["page"]) ? sprintf(" class=\"%s\"", $config["style"]["actual_page_class"]) : ""), $config["config"]["page"] + 1);
-				}else if($config["config"]["page"] < $config["config"]["sum_pages"]){
-					$url = (isset($sp) ? sprintf($config["form_url"]["page"], $config["config"]["page"], $config["config"]["column"], $config["config"]["direction"]) : "");
-					$s .= sprintf("<li><a href=\"%s\"%s>%d</a>,</li>", $url, (($ap && $config["config"]["page"] == $config["config"]["page"]) ? sprintf(" class=\"%s\"", $config["style"]["actual_page_class"]) : ""), $config["config"]["page"]);
-				}
-				$url = (isset($sp) ? sprintf($config["form_url"]["page"], $config["config"]["sum_pages"], $config["config"]["column"], $config["config"]["direction"]) : "");
-				$s .= sprintf("<li><a href=\"%s\"%s>%d</a></li>", $url, (($ap && $config["config"]["sum_pages"] == $config["config"]["page"]) ? sprintf(" class=\"%s\"", $config["style"]["actual_page_class"]) : ""), $config["config"]["sum_pages"]);
-			}else{
-				for($i = 1; $i <= $config["config"]["sum_pages"]; $i++){
-					$url = (!empty($config["form_url"]["page"]) ? sprintf($config["form_url"]["page"], $i, $config["config"]["column"], $config["config"]["direction"]) : "");
-					$s .= sprintf("<li><a href=\"%s\"%s>%d</a>%s</li>", $url, ((!empty($config["style"]["actual_page_class"]) && $i == $config["config"]["page"]) ? sprintf(" class=\"%s\"", $config["style"]["actual_page_class"]) : ""), $i, ($i < $config["config"]["sum_pages"] ? "," : ""));
-				}
+			$s .= sprintf("<div%s%s><ul%s>", (!empty($config[self::KEY_STYLE_PAGINATION_BOX_ID]) ? sprintf(" id=\"%s\"", $config[self::KEY_STYLE_PAGINATION_BOX_ID]) : ""), (!empty($config[self::KEY_STYLE_PAGINATION_BOX_CLASS]) ? sprintf(" class=\"%s\"", $config[self::KEY_STYLE_PAGINATION_BOX_CLASS]) : ""), (!empty($config[self::KEY_STYLE_PAGINATION_UL_CLASS]) ? sprintf(" class=\"%s\"", $config[self::KEY_STYLE_PAGINATION_UL_CLASS]) : ""));
+			// to first page
+			$s .= sprintf("<li><a href=\"%s\">&laquo;</a></li>", sprintf($config[self::KEY_URL_PAGE], System::PAGE_MIN_PAGE, $config[self::KEY_CONFIG_COLUMN], $config[self::KEY_CONFIG_SORT_DIRECTION]));
+			// 1 step back
+			$s .= sprintf("<li><a href=\"%s\">&lsaquo;</a></li>", sprintf($config[self::KEY_URL_PAGE], ($config[self::KEY_CONFIG_PAGE] > System::PAGE_MIN_PAGE) ? $config[self::KEY_CONFIG_PAGE]-1 : System::PAGE_MIN_PAGE, $config[self::KEY_CONFIG_COLUMN], $config[self::KEY_CONFIG_SORT_DIRECTION]));
+			$start = ($config[self::KEY_CONFIG_PAGES_COUNT] > self::PAGINATION_PAGE_COUNT_LIMIT) ? (($m=($config[self::KEY_CONFIG_PAGE]-self::PAGINATION_PAGE_COUNT_LIMIT/2)) > 1 ? $m : 1) : 1;
+			$end = ($config[self::KEY_CONFIG_PAGES_COUNT] > self::PAGINATION_PAGE_COUNT_LIMIT) ? (($m=($config[self::KEY_CONFIG_PAGE]+self::PAGINATION_PAGE_COUNT_LIMIT/2)) < $config[self::KEY_CONFIG_PAGES_COUNT] ? $m : $config[self::KEY_CONFIG_PAGES_COUNT]) : $config[self::KEY_CONFIG_PAGES_COUNT];
+			for($i = $start; $i <= $end; $i++){
+				$url = (!empty($config[self::KEY_URL_PAGE]) ? sprintf($config[self::KEY_URL_PAGE], $i, $config[self::KEY_CONFIG_COLUMN], $config[self::KEY_CONFIG_SORT_DIRECTION]) : "");
+				$s .= sprintf("<li><a href=\"%s\"%s>%d</a></li>", $url, ((!empty($config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS]) && $i == $config[self::KEY_CONFIG_PAGE]) ? sprintf(" class=\"%s\"", $config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS]) : ""), $i);
 			}
-			$s .= sprintf("</ul></div></div>");
-			$s .= sprintf("</div>");
+			// 1 step forward
+			$s .= sprintf("<li><a href=\"%s\">&rsaquo;</a></li>", sprintf($config[self::KEY_URL_PAGE], ($config[self::KEY_CONFIG_PAGE] < $config[self::KEY_CONFIG_PAGES_COUNT]) ? $config[self::KEY_CONFIG_PAGE]+1 : $config[self::KEY_CONFIG_PAGES_COUNT], $config[self::KEY_CONFIG_COLUMN], $config[self::KEY_CONFIG_SORT_DIRECTION]));
+			// to last page
+			$s .= sprintf("<li><a href=\"%s\">&raquo;</a></li>", sprintf($config[self::KEY_URL_PAGE], $config[self::KEY_CONFIG_PAGES_COUNT], $config[self::KEY_CONFIG_COLUMN], $config[self::KEY_CONFIG_SORT_DIRECTION]));
+			$s .= "</ul></div>";
+			$s .= "</div>";
 		}
 		return $s;
 	}
