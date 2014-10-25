@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.12
+ * @version 1.13
  * @author MPI
  *
  */
@@ -180,6 +180,11 @@ class Pagination{
     const KEY_STYLE_PAGE_SIZE_BOX_CLASS = 112;
     /**
      * @optional
+     * @default sel_page_size
+     * */
+    const KEY_STYLE_PAGE_SIZE_SELECT_NAME = 113;
+    /**
+     * @optional
      * @default empty-result-box
      * */
     const KEY_STYLE_EMPTY_RESULT_CLASS = 114;
@@ -271,6 +276,7 @@ class Pagination{
         $config[self::KEY_STYLE_SELECT_CLASS] = (isset($config[self::KEY_STYLE_SELECT_CLASS]) && !empty($config[self::KEY_STYLE_SELECT_CLASS])) ? $config[self::KEY_STYLE_SELECT_CLASS] : "";
         $config[self::KEY_STYLE_PAGE_SIZE_BOX_ID] = (isset($config[self::KEY_STYLE_PAGE_SIZE_BOX_ID]) && !empty($config[self::KEY_STYLE_PAGE_SIZE_BOX_ID])) ? $config[self::KEY_STYLE_PAGE_SIZE_BOX_ID] : "";
         $config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS] = (isset($config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS]) && !empty($config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS])) ? $config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS] : "";
+        $config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME] = (isset($config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME]) && !empty($config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME])) ? $config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME] : "sel_page_size";
         $config[self::KEY_STYLE_EMPTY_RESULT_CLASS] = (isset($config[self::KEY_STYLE_EMPTY_RESULT_CLASS]) && !empty($config[self::KEY_STYLE_EMPTY_RESULT_CLASS])) ? $config[self::KEY_STYLE_EMPTY_RESULT_CLASS] : "empty-result-box";
         
         if(isset($config[self::KEY_ROW_MENU]) && is_array($config[self::KEY_ROW_MENU])){
@@ -326,54 +332,23 @@ class Pagination{
 	/**
 	 * Make string of list HTML TABLE if data and header are not empty
 	 *
-	 * @param $tbl_header array
+	 * @param $header array
 	 *        	1D with name of columns
-	 * @param $tbl_data array
+	 * @param $data array
 	 *        	2D with data to show in table
 	 * @param $config array
-	 *        	array with defined keys
+	 *        	array with defined keys and validated by self::validateConfig
 	 * @return string
 	 */
 	private static function makeListTableString($header, $data, $config){
 		$s = "";
-		$config["form_url"]["page"] = (isset($config["form_url"]["page"])) ? $config["form_url"]["page"] : "";
-		$config["form_url"]["header_sort"] = (isset($config["form_url"]["header_sort"])) ? $config["form_url"]["header_sort"] : "";
-		$config["form_url"]["form_action"] = (isset($config["form_url"]["form_action"])) ? $config["form_url"]["form_action"] : "";
-		$config["style"]["pagesize_form_id"] = (isset($config["style"]["pagesize_form_id"])) ? $config["style"]["pagesize_form_id"] : "";
-		$config["style"]["select_form_id"] = (isset($config["style"]["select_form_id"])) ? $config["style"]["select_form_id"] : "";
-		$config["style"]["table_id"] = (isset($config["style"]["table_id"])) ? $config["style"]["table_id"] : "";
-		$config["style"]["table_class"] = (isset($config["style"]["table_class"])) ? $config["style"]["table_class"] : "";
-		$config["style"]["table_header_class"] = (isset($config["style"]["table_header_class"])) ? $config["style"]["table_header_class"] : "";
-		$config["style"]["actual_page_class"] = (isset($config["style"]["actual_page_class"])) ? $config["style"]["actual_page_class"] : "";
-		$config["style"]["pagging_box_class"] = (isset($config["style"]["pagging_box_class"])) ? $config["style"]["pagging_box_class"] : "";
-		$config["style"]["count_box_class"] = (isset($config["style"]["count_box_class"])) ? $config["style"]["count_box_class"] : "";
-		$config["style"]["marked_row_class"] = (isset($config["style"]["marked_row_class"])) ? $config["style"]["marked_row_class"] : "";
-		$config["style"]["list_footer_id"] = (isset($config["style"]["list_footer_id"])) ? $config["style"]["list_footer_id"] : "";
-		$config["item_menu"] = (isset($config["item_menu"])) ? $config["item_menu"] : array();
-		$config["select_item_action"] = (isset($config["select_item_action"])) ? $config["select_item_action"] : array();
-		// validation $config["item_menu"] and $config["select_item_action"]
-		if($config["config"]["disable_menu"] === false && is_array($config["item_menu"]) && !empty($config["item_menu"])){
-			for($i = 0; $i < count($config["item_menu"]); $i++){
-				$config["item_menu"][$i]["body"] = (isset($config["item_menu"][$i]["body"])) ? $config["item_menu"][$i]["body"] : "";
-				$config["item_menu"][$i]["title"] = (isset($config["item_menu"][$i]["title"])) ? $config["item_menu"][$i]["title"] : "";
-				$config["item_menu"][$i]["url"] = (isset($config["item_menu"][$i]["url"])) ? $config["item_menu"][$i]["url"] : "";
-				$config["item_menu"][$i]["class"] = (isset($config["item_menu"][$i]["class"])) ? $config["item_menu"][$i]["class"] : "";
-			}
-		}
-		if($config["config"]["disable_select"] === false && is_array($config["select_item_action"]) && !empty($config["select_item_action"])){
-			for($i = 0; $i < count($config["select_item_action"]); $i++){
-				$config["select_item_action"][$i]["value"] = (isset($config["select_item_action"][$i]["value"])) ? $config["select_item_action"][$i]["value"] : "";
-				$config["select_item_action"][$i]["title"] = (isset($config["select_item_action"][$i]["title"])) ? $config["select_item_action"][$i]["title"] : "";
-			}
-		}
-		
 		if(count($header) > 0 && count($data) > 0 && count($header) == count($data[0])){
-			// pagesize box
-			if($config["config"]["disable_set_pagesize"] === false){
-				$s .= sprintf("<form method=\"post\" enctype=\"application/x-www-form-urlencoded\" action=\"%s\" %s>", $config["form_url"]["form_action"], !empty($config["style"]["pagesize_form_id"]) ? " id=\"" . $config["style"]["pagesize_form_id"] . "\"" : "");
-				$s .= sprintf("<div><span>%s</span><select name=\"action_pagesize\">", Translate::get(Translator::LIST_PAGE_SIZE));
+			// page size box
+			if($config[self::KEY_CONFIG_DISABLE_SET_PAGE_SIZE] === false){
+				$s .= sprintf("<form method=\"post\" enctype=\"application/x-www-form-urlencoded\" action=\"%s\" %s %s>", $config[self::KEY_URL_FORM_ACTION], !empty($config[self::KEY_STYLE_PAGE_SIZE_BOX_ID]) ? " id=\"" . $config[self::KEY_STYLE_PAGE_SIZE_BOX_ID] . "\"" : "", !empty($config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS]) ? " class=\"" . $config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS] . "\"" : "");
+				$s .= sprintf("<div><span>%s</span><select name=\"%s\">", Translate::get(Translator::LIST_PAGE_SIZE), $config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME]);
 				foreach(System::$page_size as $v){
-					$s .= sprintf("<option value=\"%d\"%s>%d</option>", $v, ($v == $config["config"]["actual_pagesize"] ? " selected=\"selected\"" : ""), $v);
+					$s .= sprintf("<option value=\"%d\"%s>%d</option>", $v, ($v == $config[self::KEY_CONFIG_PAGE_SIZE] ? " selected=\"selected\"" : ""), $v);
 				}
 				$s .= sprintf("</select><input type=\"submit\" value=\"%s\"/><div class=\"cleaner_micro\">&nbsp;</div></div></form>", Translate::get(Translator::BTN_SEND));
 			}
