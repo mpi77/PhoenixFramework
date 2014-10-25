@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.13
+ * @version 1.15
  * @author MPI
  *
  */
@@ -47,7 +47,7 @@ class Pagination{
      * @optional
      * @default false
      * */
-    const KEY_CONFIG_DISABLE_SELECT = 8;
+    const KEY_CONFIG_DISABLE_SELECT_ACTION = 8;
     /**
      * @optional
      * @default false
@@ -102,17 +102,17 @@ class Pagination{
      * @optional
      * @default null; may contains array with following indexes
      * */
-    const KEY_SELECT = 70;
+    const KEY_SELECT_ACTION = 70;
     /**
-     * @optional in SELECT_ITEM
+     * @optional in SELECT_ACTION_ITEM
      * @default empty string
      * */
-    const KEY_SELECT_VALUE = 71;
+    const KEY_SELECT_ACTION_VALUE = 71;
     /**
-     * @optional in SELECT_ITEM
+     * @optional in SELECT_ACTION_ITEM
      * @default empty string
      * */
-    const KEY_SELECT_TITLE = 72;
+    const KEY_SELECT_ACTION_TITLE = 72;
     /**
      * @optional
      * @default empty string
@@ -162,32 +162,37 @@ class Pagination{
      * @optional
      * @default empty string
      * */
-    const KEY_STYLE_SELECT_ID = 109;
+    const KEY_STYLE_SELECT_ACTION_ID = 109;
     /**
      * @optional
      * @default empty string
      * */
-    const KEY_STYLE_SELECT_CLASS = 110;
+    const KEY_STYLE_SELECT_ACTION_CLASS = 110;
+    /**
+     * @optional
+     * @default sel_action
+     * */
+    const KEY_STYLE_SELECT_ACTION_NAME = 111;
     /**
      * @optional
      * @default empty string
      * */
-    const KEY_STYLE_PAGE_SIZE_BOX_ID = 111;
+    const KEY_STYLE_PAGE_SIZE_BOX_ID = 112;
     /**
      * @optional
      * @default empty string
      * */
-    const KEY_STYLE_PAGE_SIZE_BOX_CLASS = 112;
+    const KEY_STYLE_PAGE_SIZE_BOX_CLASS = 113;
     /**
      * @optional
      * @default sel_page_size
      * */
-    const KEY_STYLE_PAGE_SIZE_SELECT_NAME = 113;
+    const KEY_STYLE_PAGE_SIZE_SELECT_NAME = 114;
     /**
      * @optional
      * @default empty-result-box
      * */
-    const KEY_STYLE_EMPTY_RESULT_CLASS = 114;
+    const KEY_STYLE_EMPTY_RESULT_CLASS = 115;
     
     private function __construct(){
     }
@@ -255,7 +260,7 @@ class Pagination{
         $config[self::KEY_CONFIG_DATA_COUNT] = (isset($config[self::KEY_CONFIG_DATA_COUNT]) && is_numeric($config[self::KEY_CONFIG_DATA_COUNT])) ? $config[self::KEY_CONFIG_DATA_COUNT] : System::DATA_COUNT_DEFAULT;
         $config[self::KEY_CONFIG_PAGES_COUNT] = (isset($config[self::KEY_CONFIG_PAGES_COUNT]) && is_numeric($config[self::KEY_CONFIG_PAGES_COUNT])) ? $config[self::KEY_CONFIG_PAGES_COUNT] : self::getCountPages($config[self::KEY_CONFIG_PAGE_SIZE], $config[self::KEY_CONFIG_DATA_COUNT]);
         $config[self::KEY_CONFIG_DISABLE_ROW_MENU] = (isset($config[self::KEY_CONFIG_DISABLE_ROW_MENU]) && is_bool($config[self::KEY_CONFIG_DISABLE_ROW_MENU])) ? $config[self::KEY_CONFIG_DISABLE_ROW_MENU] : false;
-        $config[self::KEY_CONFIG_DISABLE_SELECT] = (isset($config[self::KEY_CONFIG_DISABLE_SELECT]) && is_bool($config[self::KEY_CONFIG_DISABLE_SELECT])) ? $config[self::KEY_CONFIG_DISABLE_SELECT] : false;
+        $config[self::KEY_CONFIG_DISABLE_SELECT_ACTION] = (isset($config[self::KEY_CONFIG_DISABLE_SELECT_ACTION]) && is_bool($config[self::KEY_CONFIG_DISABLE_SELECT_ACTION])) ? $config[self::KEY_CONFIG_DISABLE_SELECT_ACTION] : false;
         $config[self::KEY_CONFIG_DISABLE_PAGINATION] = (isset($config[self::KEY_CONFIG_DISABLE_PAGINATION]) && is_bool($config[self::KEY_CONFIG_DISABLE_PAGINATION])) ? $config[self::KEY_CONFIG_DISABLE_PAGINATION] : false;
         $config[self::KEY_CONFIG_DISABLE_SET_PAGE_SIZE] = (isset($config[self::KEY_CONFIG_DISABLE_SET_PAGE_SIZE]) && is_bool($config[self::KEY_CONFIG_DISABLE_SET_PAGE_SIZE])) ? $config[self::KEY_CONFIG_DISABLE_SET_PAGE_SIZE] : false;
         
@@ -272,8 +277,9 @@ class Pagination{
         $config[self::KEY_STYLE_PAGINATION_BOX_ID] = (isset($config[self::KEY_STYLE_PAGINATION_BOX_ID]) && !empty($config[self::KEY_STYLE_PAGINATION_BOX_ID])) ? $config[self::KEY_STYLE_PAGINATION_BOX_ID] : "";
         $config[self::KEY_STYLE_PAGINATION_BOX_CLASS] = (isset($config[self::KEY_STYLE_PAGINATION_BOX_CLASS]) && !empty($config[self::KEY_STYLE_PAGINATION_BOX_CLASS])) ? $config[self::KEY_STYLE_PAGINATION_BOX_CLASS] : "";
         $config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS] = (isset($config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS]) && !empty($config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS])) ? $config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS] : "";
-        $config[self::KEY_STYLE_SELECT_ID] = (isset($config[self::KEY_STYLE_SELECT_ID]) && !empty($config[self::KEY_STYLE_SELECT_ID])) ? $config[self::KEY_STYLE_SELECT_ID] : "";
-        $config[self::KEY_STYLE_SELECT_CLASS] = (isset($config[self::KEY_STYLE_SELECT_CLASS]) && !empty($config[self::KEY_STYLE_SELECT_CLASS])) ? $config[self::KEY_STYLE_SELECT_CLASS] : "";
+        $config[self::KEY_STYLE_SELECT_ACTION_ID] = (isset($config[self::KEY_STYLE_SELECT_ACTION_ID]) && !empty($config[self::KEY_STYLE_SELECT_ACTION_ID])) ? $config[self::KEY_STYLE_SELECT_ACTION_ID] : "";
+        $config[self::KEY_STYLE_SELECT_ACTION_CLASS] = (isset($config[self::KEY_STYLE_SELECT_ACTION_CLASS]) && !empty($config[self::KEY_STYLE_SELECT_ACTION_CLASS])) ? $config[self::KEY_STYLE_SELECT_ACTION_CLASS] : "";
+        $config[self::KEY_STYLE_SELECT_ACTION_NAME] = (isset($config[self::KEY_STYLE_SELECT_ACTION_NAME]) && !empty($config[self::KEY_STYLE_SELECT_ACTION_NAME])) ? $config[self::KEY_STYLE_SELECT_ACTION_NAME] : "sel_action";
         $config[self::KEY_STYLE_PAGE_SIZE_BOX_ID] = (isset($config[self::KEY_STYLE_PAGE_SIZE_BOX_ID]) && !empty($config[self::KEY_STYLE_PAGE_SIZE_BOX_ID])) ? $config[self::KEY_STYLE_PAGE_SIZE_BOX_ID] : "";
         $config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS] = (isset($config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS]) && !empty($config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS])) ? $config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS] : "";
         $config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME] = (isset($config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME]) && !empty($config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME])) ? $config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME] : "sel_page_size";
@@ -288,10 +294,10 @@ class Pagination{
             }
         }
         
-        if(isset($config[self::KEY_SELECT]) && is_array($config[self::KEY_SELECT])){
-            for($i=0; $i<count($config[self::KEY_SELECT]); $i++){
-                $config[KEY_SELECT][$i][self::KEY_SELECT_VALUE] = (isset($config[KEY_SELECT][$i][self::KEY_SELECT_VALUE]) && !empty($config[KEY_SELECT][$i][self::KEY_SELECT_VALUE])) ? $config[KEY_SELECT][$i][self::KEY_SELECT_VALUE] : "";
-                $config[KEY_SELECT][$i][self::KEY_SELECT_TITLE] = (isset($config[KEY_SELECT][$i][self::KEY_SELECT_TITLE]) && !empty($config[KEY_SELECT][$i][self::KEY_SELECT_TITLE])) ? $config[KEY_SELECT][$i][self::KEY_SELECT_TITLE] : "";
+        if(isset($config[self::KEY_SELECT_ACTION]) && is_array($config[self::KEY_SELECT_ACTION])){
+            for($i=0; $i<count($config[self::KEY_SELECT_ACTION]); $i++){
+                $config[KEY_SELECT_ACTION][$i][self::KEY_SELECT_ACTION_VALUE] = (isset($config[KEY_SELECT_ACTION][$i][self::KEY_SELECT_ACTION_VALUE]) && !empty($config[KEY_SELECT_ACTION][$i][self::KEY_SELECT_ACTION_VALUE])) ? $config[KEY_SELECT_ACTION][$i][self::KEY_SELECT_ACTION_VALUE] : "";
+                $config[KEY_SELECT_ACTION][$i][self::KEY_SELECT_ACTION_TITLE] = (isset($config[KEY_SELECT_ACTION][$i][self::KEY_SELECT_ACTION_TITLE]) && !empty($config[KEY_SELECT_ACTION][$i][self::KEY_SELECT_ACTION_TITLE])) ? $config[KEY_SELECT_ACTION][$i][self::KEY_SELECT_ACTION_TITLE] : "";
             }
         }
         
@@ -353,11 +359,11 @@ class Pagination{
 				$s .= sprintf("</select><input type=\"submit\" value=\"%s\"/><div class=\"cleaner_micro\">&nbsp;</div></div></form>", Translate::get(Translator::BTN_SEND));
 			}
 			// select action box
-			if($config["config"]["disable_select"] === false){
-				$s .= sprintf("<form method=\"post\" enctype=\"application/x-www-form-urlencoded\" action=\"%s\" %s>", $config["form_url"]["form_action"], !empty($config["style"]["select_form_id"]) ? " id=\"" . $config["style"]["select_form_id"] . "\"" : "");
-				$s .= sprintf("<div><select name=\"action_select\">");
-				foreach($config["select_item_action"] as $k => $v){
-					$s .= sprintf("<option value=\"%s\">%s</option>", $v["value"], $v["title"]);
+			if($config[self::KEY_CONFIG_DISABLE_SELECT_ACTION] === false){
+				$s .= sprintf("<form method=\"post\" enctype=\"application/x-www-form-urlencoded\" action=\"%s\" %s %s>", $config[self::KEY_URL_FORM_ACTION], !empty($config[self::KEY_STYLE_SELECT_ACTION_ID]) ? " id=\"" . $config[self::KEY_STYLE_SELECT_ACTION_ID] . "\"" : "", !empty($config[self::KEY_STYLE_SELECT_ACTION_CLASS]) ? " class=\"" . $config[self::KEY_STYLE_SELECT_ACTION_CLASS] . "\"" : "");
+				$s .= sprintf("<div><select name=\"%s\">", $config[self::KEY_STYLE_SELECT_ACTION_NAME]);
+				foreach($config[self::KEY_SELECT_ACTION] as $k => $v){
+					$s .= sprintf("<option value=\"%s\">%s</option>", $v[self::KEY_SELECT_ACTION_VALUE], $v[self::KEY_SELECT_ACTION_TITLE]);
 				}
 				$s .= sprintf("</select><input type=\"submit\" value=\"%s\"/><div class=\"cleaner_micro\">&nbsp;</div></div>", Translate::get(Translator::BTN_SEND));
 			}
