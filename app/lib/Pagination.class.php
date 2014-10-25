@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.15
+ * @version 1.16
  * @author MPI
  *
  */
@@ -194,6 +194,9 @@ class Pagination{
      * */
     const KEY_STYLE_EMPTY_RESULT_CLASS = 115;
     
+    const COLUMN_PREFIX = "col_";
+    const COLUMN_SELECT_ACTION_SUFFIX = "select";
+    
     private function __construct(){
     }
     
@@ -368,17 +371,17 @@ class Pagination{
 				$s .= sprintf("</select><input type=\"submit\" value=\"%s\"/><div class=\"cleaner_micro\">&nbsp;</div></div>", Translate::get(Translator::BTN_SEND));
 			}
 			// data table
-			$s .= sprintf("<table%s%s>", !empty($config["style"]["table_id"]) ? " id=\"" . $config["style"]["table_id"] . "\"" : "", !empty($config["style"]["table_class"]) ? " class=\"" . $config["style"]["table_class"] . "\"" : "");
-			$s .= sprintf("<thead><tr%s>", !empty($config["style"]["table_header_class"]) ? " class=\"" . $config["style"]["table_header_class"] . "\"" : "");
-			if($config["config"]["disable_select"] === false){
-				// add select column
-				$s .= sprintf("<th class=\"%s\">&nbsp;</th>", "col_select");
+			$s .= sprintf("<table%s%s>", !empty($config[self::KEY_STYLE_TABLE_ID]) ? " id=\"" . $config[self::KEY_STYLE_TABLE_ID] . "\"" : "", !empty($config[self::KEY_STYLE_TABLE_CLASS]) ? " class=\"" . $config[self::KEY_STYLE_TABLE_CLASS] . "\"" : "");
+			$s .= sprintf("<thead><tr%s>", !empty($config[self::KEY_STYLE_TABLE_HEADER_CLASS]) ? " class=\"" . $config[self::KEY_STYLE_TABLE_HEADER_CLASS] . "\"" : "");
+			if($config[self::KEY_CONFIG_DISABLE_SELECT_ACTION] === false){
+				// add select action column
+				$s .= sprintf("<th class=\"%s\">&nbsp;</th>", self::COLUMN_PREFIX.self::COLUMN_SELECT_ACTION_SUFFIX);
 			}
 			// table header
 			$j = 0;
 			foreach($header as $k => $v){
-				$sort_next_direction = ($k == $config["config"]["column"] ? ($config["config"]["direction"] == System::SORT_ASC ? System::SORT_DES : ($config["config"]["direction"] == System::SORT_DES ? System::SORT_ASC : "")) : System::SORT_ASC);
-				$sort_show = ($k == $config["config"]["column"] ? ($config["config"]["direction"] == System::SORT_ASC ? System::SORT_ASC : ($config["config"]["direction"] == System::SORT_DES ? System::SORT_DES : "")) : "");
+				$sort_next_direction = ($k == $config[self::KEY_CONFIG_COLUMN] ? ($config[self::KEY_CONFIG_SORT_DIRECTION] == System::SORT_ASC ? System::SORT_DES : ($config[self::KEY_CONFIG_SORT_DIRECTION] == System::SORT_DES ? System::SORT_ASC : "")) : System::SORT_ASC);
+				$sort_show = ($k == $config[self::KEY_CONFIG_COLUMN] ? ($config[self::KEY_CONFIG_SORT_DIRECTION] == System::SORT_ASC ? System::SORT_ASC : ($config[self::KEY_CONFIG_SORT_DIRECTION] == System::SORT_DES ? System::SORT_DES : "")) : "");
 				switch($sort_show){
 					case System::SORT_ASC:
 						$sort_show = "&#x2206;";
@@ -387,11 +390,11 @@ class Pagination{
 						$sort_show = "&#x2207;";
 						break;
 				}
-				$s .= sprintf("<th class=\"%s\"><a href=\"%s\">%s</a></th>", "col_" . $j, sprintf($config["form_url"]["header_sort"], $config["config"]["page"], $k, $sort_next_direction), $v . "&nbsp;" . $sort_show);
-				// add empty columns for item_menu
-				if($j == (count($header) - 1) && $config["config"]["disable_menu"] === false){
-					foreach($config["item_menu"] as $k => $v){
-						$s .= sprintf("<th class=\"%s\">&nbsp;</th>", $v["class"]);
+				$s .= sprintf("<th class=\"%s\"><a href=\"%s\">%s</a></th>", self::COLUMN_PREFIX . $j, sprintf($config[self::KEY_URL_HEADER_SORT], $config[self::KEY_CONFIG_PAGE], $k, $sort_next_direction), $v . "&nbsp;" . $sort_show);
+				// add empty columns for ROW_MENU_ITEM
+				if($j == (count($header) - 1) && $config[self::KEY_CONFIG_DISABLE_ROW_MENU] === false){
+					foreach($config[self::KEY_ROW_MENU] as $k => $v){
+						$s .= sprintf("<th class=\"%s\">&nbsp;</th>", $v[self::KEY_ROW_MENU_CLASS]);
 					}
 				}
 				++$j;
