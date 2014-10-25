@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.18
+ * @version 1.19
  * @author MPI
  *
  */
@@ -229,7 +229,7 @@ class Pagination{
     public static function generatePage($header, $data, $config){
         $config = self::validateConfig($config);
         //System::trace($config);
-         
+        
         // validation
         if((!empty($config[self::KEY_CONFIG_COLUMN]) && !empty($config[self::KEY_CONFIG_PAGE])) && (!array_key_exists($config[self::KEY_CONFIG_COLUMN], $header) || $config[self::KEY_CONFIG_PAGE] < System::PAGE_MIN_PAGE || $config[self::KEY_CONFIG_PAGE] > $config[self::KEY_CONFIG_PAGES_COUNT])){
             throw new NoticeException(NoticeException::NOTICE_INVALID_PARAMETERS);
@@ -370,7 +370,7 @@ class Pagination{
 			// page size box
 			if($config[self::KEY_CONFIG_DISABLE_SET_PAGE_SIZE] === false){
 				$s .= sprintf("<form method=\"post\" enctype=\"application/x-www-form-urlencoded\" action=\"%s\" %s %s>", $config[self::KEY_URL_FORM_ACTION], !empty($config[self::KEY_STYLE_PAGE_SIZE_BOX_ID]) ? " id=\"" . $config[self::KEY_STYLE_PAGE_SIZE_BOX_ID] . "\"" : "", !empty($config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS]) ? " class=\"" . $config[self::KEY_STYLE_PAGE_SIZE_BOX_CLASS] . "\"" : "");
-				$s .= sprintf("<div><span>%s</span><select name=\"%s\">", Translate::get(Translator::LIST_PAGE_SIZE), $config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME]);
+				$s .= sprintf("<div><span>%s</span><select name=\"%s\">", Translate::get(Translator::PAGINATION_PAGE_SIZE), $config[self::KEY_STYLE_PAGE_SIZE_SELECT_NAME]);
 				foreach(System::$page_size as $v){
 					$s .= sprintf("<option value=\"%d\"%s>%d</option>", $v, ($v == $config[self::KEY_CONFIG_PAGE_SIZE] ? " selected=\"selected\"" : ""), $v);
 				}
@@ -438,7 +438,7 @@ class Pagination{
 			}
 			// pagination box
 			$s .= "<div>";
-			$s .= sprintf("<div%s%s><span>%s: %d | %s: %d | %s: %d/%d</span></div>", (!empty($config[self::KEY_STYLE_SUMMARY_BOX_ID]) ? sprintf(" id=\"%s\"", $config[self::KEY_STYLE_SUMMARY_BOX_ID]) : ""), (!empty($config[self::KEY_STYLE_SUMMARY_BOX_CLASS]) ? sprintf(" class=\"%s\"", $config[self::KEY_STYLE_SUMMARY_BOX_CLASS]) : ""), Translate::get(Translator::LIST_DISPLAYED_ROWS), count($data), Translate::get(Translator::LIST_FOUND_ROWS), $config[self::KEY_CONFIG_DATA_COUNT], Translate::get(Translator::LIST_PAGE), $config[self::KEY_CONFIG_PAGE], $config[self::KEY_CONFIG_PAGES_COUNT]);
+			$s .= sprintf("<div%s%s><span>%s: %d | %s: %d | %s: %d/%d</span></div>", (!empty($config[self::KEY_STYLE_SUMMARY_BOX_ID]) ? sprintf(" id=\"%s\"", $config[self::KEY_STYLE_SUMMARY_BOX_ID]) : ""), (!empty($config[self::KEY_STYLE_SUMMARY_BOX_CLASS]) ? sprintf(" class=\"%s\"", $config[self::KEY_STYLE_SUMMARY_BOX_CLASS]) : ""), Translate::get(Translator::PAGINATION_DISPLAYED_ROWS), count($data), Translate::get(Translator::PAGINATION_FOUND_ROWS), $config[self::KEY_CONFIG_DATA_COUNT], Translate::get(Translator::PAGINATION_ACTUAL_PAGE), $config[self::KEY_CONFIG_PAGE], $config[self::KEY_CONFIG_PAGES_COUNT]);
 			// box with page numbers
 			$s .= sprintf("<div%s%s><ul%s>", (!empty($config[self::KEY_STYLE_PAGINATION_BOX_ID]) ? sprintf(" id=\"%s\"", $config[self::KEY_STYLE_PAGINATION_BOX_ID]) : ""), (!empty($config[self::KEY_STYLE_PAGINATION_BOX_CLASS]) ? sprintf(" class=\"%s\"", $config[self::KEY_STYLE_PAGINATION_BOX_CLASS]) : ""), (!empty($config[self::KEY_STYLE_PAGINATION_UL_CLASS]) ? sprintf(" class=\"%s\"", $config[self::KEY_STYLE_PAGINATION_UL_CLASS]) : ""));
 			// to first page

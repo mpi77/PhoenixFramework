@@ -2,7 +2,7 @@
 /**
  * English translator.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 class EnglishTranslator extends Translator{
@@ -38,7 +38,11 @@ class EnglishTranslator extends Translator{
 			Translator::NOTICE_USER_CREATE_EMAIL_SENDED => "Email with instructions for create user was sended.",
 			Translator::NOTICE_USER_ACTIVATED => "User account was created.",
 			Translator::NOTICE_NOTHING_TO_DISPLAY => "Nothing to display.",
-			Translator::NOTICE_FILE_IS_NOT_DELETABLE => "File was not deleted."
+			Translator::NOTICE_FILE_IS_NOT_DELETABLE => "File was not deleted.",
+	        Translator::PAGINATION_PAGE_SIZE => "Page size",
+	        Translator::PAGINATION_DISPLAYED_ROWS => "Displayed rows",
+	        Translator::PAGINATION_FOUND_ROWS => "Found rows",
+	        Translator::PAGINATION_ACTUAL_PAGE => "Page"
 	);
 
 	public function __construct(){

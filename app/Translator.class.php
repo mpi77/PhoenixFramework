@@ -3,7 +3,7 @@
 /**
  * Root translator object.
  * 
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 abstract class Translator{
@@ -89,7 +89,12 @@ abstract class Translator{
 	const LOG_USER_PASSWORD_CHANGED = 503;
 	const LOG_USER_ACCOUNT_DATA_CHANGED = 504;
 	const LOG_USER_REQUEST = 505;
-
+	
+	const PAGINATION_PAGE_SIZE = 900;
+	const PAGINATION_DISPLAYED_ROWS = 901;
+	const PAGINATION_FOUND_ROWS = 902;
+	const PAGINATION_ACTUAL_PAGE = 903;
+	
 	const PAGE_NAME_INDEX = 1000;
 	const PAGE_NAME_INDEX_UNLOG = 1001;
 	const PAGE_NAME_USER_LOG_LIST = 1002;
@@ -110,5 +115,7 @@ abstract class Translator{
 	const MENU_USER_MY_ACCOUNT = 1106;
 	const MENU_USER_ACCESS_DATA = 1107;
 	const MENU_USER_LOG = 1108;
+	
+	const BTN_SEND = 2000;
 }
 ?>

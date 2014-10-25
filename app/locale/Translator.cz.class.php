@@ -2,7 +2,7 @@
 /**
  * Czech translator.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 class CzechTranslator extends Translator{
@@ -38,7 +38,11 @@ class CzechTranslator extends Translator{
 			Translator::NOTICE_USER_CREATE_EMAIL_SENDED => "Na zadaný email byl odeslán email s instrukcemi pro aktivaci účtu.",
 			Translator::NOTICE_USER_ACTIVATED => "Aktivovali jste váš nový účet. Nyní se můžete přihlásit.",
 			Translator::NOTICE_NOTHING_TO_DISPLAY => "Nebylo nalezeno nic ke zobrazení.",
-			Translator::NOTICE_FILE_IS_NOT_DELETABLE => "Požadovaný soubor nebylo možné smazat."
+			Translator::NOTICE_FILE_IS_NOT_DELETABLE => "Požadovaný soubor nebylo možné smazat.",
+	        Translator::PAGINATION_PAGE_SIZE => "Velikost stránky",
+	        Translator::PAGINATION_DISPLAYED_ROWS => "Zobrazeno řádků",
+	        Translator::PAGINATION_FOUND_ROWS => "Nalezeno řádků",
+	        Translator::PAGINATION_ACTUAL_PAGE => "Aktuální stránka"
 	);
 
 	public function __construct(){
