@@ -30,5 +30,9 @@ class Template {
     public function set($key, $value){
         $this->data[$key] = $value;
     }
+    
+    public function has($key){
+        return array_key_exists($key, $this->data);
+    }
 }
 ?>
