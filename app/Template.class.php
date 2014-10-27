@@ -3,12 +3,11 @@
 /**
  * Root template object.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 class Template {
     const NOT_FOUND = null;
-    
     private $data;
 
     public function __construct($data = null) {
@@ -18,20 +17,47 @@ class Template {
             $this->data = $data;
         }
     }
-    
-    public function get($key){
-        if(array_key_exists($key, $this->data)){
-            return $this->data[$key];
-        } else{
-            return self::NOT_FOUND;
+
+    /**
+     * Get value from this template object.
+     *
+     * @param string $key
+     *            if key is NULL, all data will be returned
+     *            
+     * @return mixed
+     */
+    public function get($key = null) {
+        if (is_null($key)) {
+            return $this->data;
+        } else {
+            if (array_key_exists($key, $this->data)) {
+                return $this->data[$key];
+            } else {
+                return self::NOT_FOUND;
+            }
         }
     }
-    
-    public function set($key, $value){
-        $this->data[$key] = $value;
+
+    /**
+     * Set value into this template object.
+     *
+     * @param string $key            
+     * @param mixed $value            
+     */
+    public function set($key, $value) {
+        if (!empty($key)) {
+            $this->data[$key] = $value;
+        }
     }
-    
-    public function has($key){
+
+    /**
+     * Checks if this template object has given key.
+     *
+     * @param string $key            
+     *
+     * @return boolean
+     */
+    public function has($key) {
         return array_key_exists($key, $this->data);
     }
 }
