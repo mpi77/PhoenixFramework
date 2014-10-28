@@ -3,7 +3,7 @@
 /**
  * init file includes all required classes
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 
@@ -20,6 +20,9 @@ $m = System::findAllFiles("app", array (
 ));
 sort($m);
 autoload($m);
+
+/* disable registering new routes */
+Router::disableRegistration();
 
 /* init session */
 session_start();
