@@ -7,7 +7,7 @@
 <?php /* end of loggedin user*/ } else {?>
 <div class="container" role="main">
 	<div class="page-header">
-		<h1>Welcome page</h1>
+		<h1><?php $tpd->es("greeting");?></h1>
 	</div>
 	<div class="col-md-12">
 		<div class="row">

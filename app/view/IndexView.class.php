@@ -2,13 +2,13 @@
 /**
  * Index view.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 class IndexView extends View{
-
-	public function __construct(Model $model, $args){
-		parent::__construct($model, $args);
+    
+	public function __construct(Model $model, $args, TemplateData $templateData = null){
+		parent::__construct($model, $args, $templateData);
 	}
 
 	public function getName(){
@@ -19,6 +19,8 @@ class IndexView extends View{
 	}
 
 	public function outputHtml(){
+	    $tpd = $this->getTemplateData();
+	    $tpd->set("greeting", "<Welcome page>");
 		include 'gui/template/IndexTemplate.php';
 	}
 }
