@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Root template object.
+ * Root template data object.
  *
  * @version 1.3
  * @author MPI
  * */
-class Template {
+class TemplateData {
     const NOT_FOUND = null;
     private $data;
 
