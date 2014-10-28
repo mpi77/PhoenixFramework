@@ -3,13 +3,12 @@
 /**
  * FrontController
  * 
- * @version 1.9
+ * @version 1.10
  * @author MPI
  * */
 class FrontController {
     private $controller;
     private $view;
-    private $router;
     private $db;
     private $args = array ();
 
@@ -20,10 +19,6 @@ class FrontController {
             }
             $this->db = $db;
             $this->args = $args;
-            $this->router = new Router();
-            $this->router->addRoute("default", "IndexController", "IndexView", "IndexModel");
-            $this->router->addRoute("user", "UserController", "UserView", "UserModel");
-            
             System::setViewEnabled();
             System::clearException();
         } catch (FailureException $e) {
@@ -46,36 +41,35 @@ class FrontController {
      * Dispatch user request.
      */
     private function dispatch() {
-        $route_name = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : "default";
-        $action_name = isset($this->args["GET"]["action"]) ? $this->args["GET"]["action"] : "index";
+        $routeName = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : Router::DEFAULT_EMPTY_ROUTE;
+        $actionName = isset($this->args["GET"]["action"]) ? $this->args["GET"]["action"] : Router::DEFAULT_EMPTY_ACTION;
         
         try {
-            // if route is invalid, redirect to index (route=default, action=index)
-            if ($this->router->isRoute($route_name) === false) {
-                $action_name = "index";
+            // if route is invalid, redirect to index
+            if (Router::isRoute($routeName) === false) {
+                $routeName = Router::DEFAULT_EMPTY_ROUTE;
+                $actionName = Router::DEFAULT_EMPTY_ACTION;
             }
-            $route = $this->router->getRoute($route_name);
-            $model_name = $route->getModelName();
-            $controller_name = $route->getControllerName();
-            $view_name = $route->getViewName();
+            $route = Router::getRoute($routeName);
+            $modelName = $route->getModelName();
+            $controllerName = $route->getControllerName();
+            $viewName = $route->getViewName();
             
-            // var_dump($model_name . " " . $controller_name . " " . $view_name . " " . $action_name);
-            
-            if (class_exists($model_name) && class_exists($controller_name) && class_exists($view_name)) {
-                $model = new $model_name($this->db);
-                $this->controller = new $controller_name($model, $this->args);
-                $this->view = new $view_name($model, $this->args);
+            if (class_exists($modelName) && class_exists($controllerName) && class_exists($viewName)) {
+                $model = new $modelName($this->db);
+                $this->controller = new $controllerName($model, $this->args);
+                $this->view = new $viewName($model, $this->args);
             } else {
                 throw new WarningException(WarningException::WARNING_CLASS_NOT_FOUND, json_encode($this->args));
             }
             
-            if (System::isCallable($this->controller, $action_name) === true) {
-                $this->controller->{$action_name}();
+            if (System::isCallable($this->controller, $actionName) === true) {
+                $this->controller->{$actionName}();
             } else {
                 throw new WarningException(WarningException::WARNING_ACTION_IS_NOT_CALLABLE, json_encode($this->args));
             }
             
-            if ($this->router->isRoute($route_name) === false) {
+            if (Router::isRoute($routeName) === false) {
                 throw new WarningException(WarningException::WARNING_INVALID_ROUTE, json_encode($this->args));
             }
         } catch (NoticeException $e) {
