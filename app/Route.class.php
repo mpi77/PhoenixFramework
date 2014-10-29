@@ -3,7 +3,7 @@
 /**
  * Route object.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 class Route {
@@ -11,12 +11,18 @@ class Route {
 	private $view;
 	private $controller;
 	private $actions;
+	private $linkUrl;
+	private $linkBody;
+	private $linkTitle;
 
-	public function __construct($model, $view, $controller, $actions = null) {
+	public function __construct($model, $view, $controller, $actions = null, $linkUrl = null, $linkBody = null, $linkTitle = null) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->controller = $controller;
 		$this->actions = !is_null($actions) ? $actions : array();
+		$this->linkUrl = $linkUrl;
+		$this->linkBody = $linkBody;
+		$this->linkTitle = $linkTitle;
 	}
 
 	/**
@@ -79,6 +85,33 @@ class Route {
 	 */
 	public function isAction($actionName) {
 	    return array_key_exists(strtolower($actionName), $this->actions);
+	}
+	
+	/**
+	 * Get this linkUrl.
+	 *
+	 * @return string
+	 */
+	public function getLinkUrl() {
+	    return $this->linkUrl;
+	}
+	
+	/**
+	 * Get this linkBody.
+	 *
+	 * @return string
+	 */
+	public function getLinkBody() {
+	    return $this->linkBody;
+	}
+	
+	/**
+	 * Get this linkTitle.
+	 *
+	 * @return string
+	 */
+	public function getLinkTitle() {
+	    return $this->linkTitle;
 	}
 }
 ?>
