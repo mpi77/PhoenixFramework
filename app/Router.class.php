@@ -3,7 +3,7 @@
 /**
  * Router 
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 class Router {
@@ -69,7 +69,7 @@ class Router {
      * Check if route exists.
      *
      * @param string $routeName            
-     * @return boolean => true (id route exists) | false (if route doesn't exist)
+     * @return boolean => true (if route exists) | false (if route doesn't exist)
      */
     public static function isRoute($routeName) {
         return array_key_exists(strtolower($routeName), self::$table);
