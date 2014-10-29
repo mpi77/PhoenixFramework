@@ -3,7 +3,7 @@
 /**
  * Route object.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 class Route {
@@ -55,7 +55,6 @@ class Route {
 	public function getAction($actionName) {
 	    $actionName = strtolower($actionName);
         
-        // return a default route if no route is found
         if ($this->isAction($actionName) === false) {
             return null;
         }
