@@ -1,10 +1,10 @@
 <?php
-Router::register("user", new Route("UserModel", "UserView", "UserController"));
+Router::register("user", new Route("UserModel", "UserView", "UserController", array ()));
 
 /**
  * User controller.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  *        
  */

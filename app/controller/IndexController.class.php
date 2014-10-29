@@ -1,10 +1,12 @@
 <?php
-Router::register("index", new Route("IndexModel", "IndexView", "IndexController"));
+Router::register("index", new Route("IndexModel", "IndexView", "IndexController", array (
+                "index" => new RouteAction("index", Config::SITE_PATH, "Home") 
+)));
 
 /**
  * Index controller.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  *        
  */

@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.10
+ * @version 1.11
  * @author MPI
  * */
 class FrontController {
@@ -63,8 +63,8 @@ class FrontController {
                 throw new WarningException(WarningException::WARNING_CLASS_NOT_FOUND, json_encode($this->args));
             }
             
-            if (System::isCallable($this->controller, $actionName) === true) {
-                $this->controller->{$actionName}();
+            if (Router::getRoute($routeName)->isAction($actionName) === true && System::isCallable($this->controller, Router::getRoute($routeName)->getAction($actionName)->getRunFunctionName()) === true) {
+                $this->controller->{Router::getRoute($routeName)->getAction($actionName)->getRunFunctionName()}();
             } else {
                 throw new WarningException(WarningException::WARNING_ACTION_IS_NOT_CALLABLE, json_encode($this->args));
             }
