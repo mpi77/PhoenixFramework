@@ -3,7 +3,7 @@
 /**
  * Proxy gateway
  * 
- * @version 1.9
+ * @version 1.10
  * @author MPI
  * */
 class Proxy {
@@ -90,7 +90,9 @@ class Proxy {
                 $_GET["action"] = $proxyItem->getAction();
                 if (!is_null($proxyItem->getData())) {
                     // decode json data and put into GET
+                    // TODO
                 }
+                $this->args["GET"] = System::trimSlashMultidimAssocArray($_GET, true, true, true, true);
                 $this->createAppFrontController();
                 return;
             }
