@@ -3,7 +3,7 @@
 /**
  * Proxy gateway
  * 
- * @version 1.10
+ * @version 1.11
  * @author MPI
  * */
 class Proxy {
@@ -18,8 +18,8 @@ class Proxy {
             $this->db = new Database(Config::getDatabaseConnectionParams(Config::DB_DEFAULT_POOL));
             
             // do not change (trim&slash) $_GET and $_POST
-            $this->args["GET"] = System::trimSlashMultidimAssocArray($_GET, true, true, true, true);
-            $this->args["POST"] = System::trimSlashMultidimAssocArray($_POST, true, true, true, true);
+            $this->args["GET"] = System::trimSlashMultidimAssocArray($_GET);
+            $this->args["POST"] = System::trimSlashMultidimAssocArray($_POST);
             
             $this->runProxy();
         } catch (NoticeException $e) {
@@ -92,7 +92,7 @@ class Proxy {
                     // decode json data and put into GET
                     // TODO
                 }
-                $this->args["GET"] = System::trimSlashMultidimAssocArray($_GET, true, true, true, true);
+                $this->args["GET"] = System::trimSlashMultidimAssocArray($_GET);
                 $this->createAppFrontController();
                 return;
             }
