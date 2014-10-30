@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `proxy` (
   `token` varchar(100) NOT NULL,
   `valid_from` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `valid_to` datetime DEFAULT NULL,
-  `link` varchar(255) DEFAULT NULL,
+  `data` text,
   `route` varchar(50) DEFAULT NULL,
   `action` varchar(50) DEFAULT NULL,
   `only_authenticated` tinyint(1) unsigned DEFAULT NULL,

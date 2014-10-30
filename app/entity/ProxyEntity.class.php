@@ -2,7 +2,7 @@
 /**
  * Proxy entity.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class ProxyEntity extends Entity {
@@ -10,7 +10,7 @@ class ProxyEntity extends Entity {
     private $token;
     private $valid_from;
     private $valid_to;
-    private $link;
+    private $data;
     private $route;
     private $action;
     private $only_authenticated;
@@ -32,45 +32,50 @@ class ProxyEntity extends Entity {
     public function getId() {
         return $this->id;
     }
-    
-    public function getToken(){
+
+    public function getToken() {
         return $this->token;
     }
-    
-    public function getValidFrom(){
+
+    public function getValidFrom() {
         return $this->valid_from;
     }
-    
-    public function getValidTo(){
+
+    public function getValidTo() {
         return $this->valid_to;
     }
-    
-    public function getLink(){
-        return $this->link;
+
+    /**
+     * data = url [in case of external link, route and action are null]
+     * data = query string part of url saved as json [in case of internal rewrite link, route and action are NOT null]
+     * data = string-id [in case of file get action, route and action are appropriate constants defined in Proxy]
+     */
+    public function getData() {
+        return $this->data;
     }
-    
-    public function getRoute(){
+
+    public function getRoute() {
         return $this->route;
     }
-    
-    public function getAction(){
+
+    public function getAction() {
         return $this->action;
     }
-    
-    public function getOnlyAuthenticated(){
+
+    public function getOnlyAuthenticated() {
         return $this->only_authenticated;
     }
-    
-    public function getOnlyUid(){
+
+    public function getOnlyUid() {
         return $this->only_uid;
     }
-    
-    public function getOnlyGid(){
+
+    public function getOnlyGid() {
         return $this->only_gid;
     }
 
     public static function getProxyItemByValidToken(Database $db, $token) {
-        $query = "SELECT id, token, valid_from, valid_to, link, route, action, only_authenticated, only_uid, only_gid FROM proxy WHERE (token=:token AND valid_from<=NOW() AND (valid_to IS NULL OR valid_to>NOW()))";
+        $query = "SELECT id, token, valid_from, valid_to, data, route, action, only_authenticated, only_uid, only_gid FROM proxy WHERE (token=:token AND valid_from<=NOW() AND (valid_to IS NULL OR valid_to>NOW()))";
         $queryArgs = array (
                         ":token" => $token 
         );

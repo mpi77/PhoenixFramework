@@ -3,7 +3,7 @@
 /**
  * Proxy gateway
  * 
- * @version 1.8
+ * @version 1.9
  * @author MPI
  * */
 class Proxy {
@@ -76,19 +76,24 @@ class Proxy {
         }
         
         // detect type of request
-        if (is_null($proxyItem->getRoute()) && is_null($proxyItem->getAction()) && !is_null($proxyItem->getLink())) {
-            // external link to redirect on
-            System::redirect($proxyItem->getLink());
-        } else if (!is_null($proxyItem->getRoute()) && !is_null($proxyItem->getAction()) && is_null($proxyItem->getLink())) {
-            // internal rewrite link to app
-            $_GET["route"] = $proxyItem->getRoute();
-            $_GET["action"] = $proxyItem->getAction();
-            $this->createAppFrontController();
-            return;
-        } else if ($proxyItem->getRoute() == self::FILE_DOWNLOAD_ROUTE && $proxyItem->getAction() == self::FILE_DOWNLOAD_ACTION && !is_null($proxyItem->getLink())) {
-            // file download
-            // TODO
-            exit();
+        if (is_null($proxyItem->getRoute()) && is_null($proxyItem->getAction()) && !is_null($proxyItem->getData())) {
+            // external link to redirect on (data=url)
+            System::redirect($proxyItem->getData());
+        } else if (!is_null($proxyItem->getRoute()) && !is_null($proxyItem->getAction())) {
+            if ($proxyItem->getRoute() == self::FILE_DOWNLOAD_ROUTE && $proxyItem->getAction() == self::FILE_DOWNLOAD_ACTION && !is_null($proxyItem->getData())) {
+                // file download
+                // TODO
+                exit();
+            } else {
+                // internal rewrite link to app (data=query string part of url saved as json)
+                $_GET["route"] = $proxyItem->getRoute();
+                $_GET["action"] = $proxyItem->getAction();
+                if (!is_null($proxyItem->getData())) {
+                    // decode json data and put into GET
+                }
+                $this->createAppFrontController();
+                return;
+            }
         } else {
             throw new NoticeException(NoticeException::NOTICE_INVALID_TOKEN);
         }
