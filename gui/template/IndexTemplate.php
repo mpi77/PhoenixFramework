@@ -9,6 +9,7 @@
 	<div class="page-header">
 		<h1><?php $tpd->es("greeting");?></h1>
 	</div>
+	<?php echo Breadcrumbs::get();?>
 	<div class="col-md-12">
 		<div class="row">
 			<div class="col-md-1"></div>
