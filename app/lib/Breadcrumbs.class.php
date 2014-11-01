@@ -2,7 +2,7 @@
 /**
  * Breadcrumbs class.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  *
  */
@@ -26,9 +26,9 @@ class Breadcrumbs {
      * @return string
      */
     public static function get($routeName = null, $actionName = null, $appendBefore = null, $appendAfter = null) {
-        return self::makeBreadcrumbString(!is_null($routeName) ? $routeName : $_GET["route"], !is_null($actionName) ? $actionName : $_GET["action"], $appendBefore, $appendAfter);
+        return self::makeBreadcrumbString(!is_null($routeName) ? $routeName : (isset($_GET["route"])?$_GET["route"] : null), !is_null($actionName) ? $actionName : (isset($_GET["action"])?$_GET["action"] : null), $appendBefore, $appendAfter);
     }
-    
+
     /**
      * Print breadcrumbs string.
      *
@@ -40,10 +40,10 @@ class Breadcrumbs {
      *            default empty
      * @param string $appendAfter
      *            default empty
-     *
+     *            
      * @return string
      */
-    public static function e($routeName = null, $actionName = null, $appendBefore = null, $appendAfter = null){
+    public static function e($routeName = null, $actionName = null, $appendBefore = null, $appendAfter = null) {
         echo self::get($routeName, $actionName, $appendBefore, $appendAfter);
     }
 
@@ -73,8 +73,10 @@ class Breadcrumbs {
         $r .= sprintf("<li><a href=\"%s\">%s</a></li>", Config::SITE_PATH, "Home");
         if (!empty($routeName) && !empty($actionName) && Router::isRoute($routeName) && $routeName != Router::DEFAULT_EMPTY_ROUTE) {
             $route = Router::getRoute($routeName);
-            $r .= sprintf("<li><a href=\"%s\">%s</a></li>", $route->getLinkUrl(), $route->getLinkBody());
-            if ($route->isAction($actionName)) {
+            if (!is_null($route->getLinkBody())) {
+                $r .= sprintf("<li><a href=\"%s\">%s</a></li>", $route->getLinkUrl(), $route->getLinkBody());
+            }
+            if ($route->isAction($actionName) && !is_null($route->getAction($actionName)->getLinkBody())) {
                 $r .= sprintf("<li><a href=\"%s\" class=\"%s\">%s</a></li>", $route->getAction($actionName)->getLinkUrl(), $styleActiveClass, $route->getAction($actionName)->getLinkBody());
             }
         }

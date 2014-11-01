@@ -3,12 +3,15 @@
 /**
  * Route action object.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 class RouteAction {
 	private $runFunctionName;
 	private $linkUrl;
+	/**
+	 * if is null, item will be excluded from breadcrumbs
+	 */
 	private $linkBody;
 	private $linkTitle;
 

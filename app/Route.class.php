@@ -3,7 +3,7 @@
 /**
  * Route object.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class Route {
@@ -12,6 +12,9 @@ class Route {
 	private $controller;
 	private $actions;
 	private $linkUrl;
+	/**
+	 * if is null, item will be excluded from breadcrumbs
+	 */
 	private $linkBody;
 	private $linkTitle;
 
