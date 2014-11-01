@@ -2,7 +2,7 @@
 /**
  * Breadcrumbs class.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  *
  */
@@ -27,6 +27,24 @@ class Breadcrumbs {
      */
     public static function get($routeName = null, $actionName = null, $appendBefore = null, $appendAfter = null) {
         return self::makeBreadcrumbString(!is_null($routeName) ? $routeName : $_GET["route"], !is_null($actionName) ? $actionName : $_GET["action"], $appendBefore, $appendAfter);
+    }
+    
+    /**
+     * Print breadcrumbs string.
+     *
+     * @param string $routeName
+     *            default empty, GET[route] if this arg is null
+     * @param string $actionName
+     *            default empty, GET[action] if this arg is null
+     * @param string $appendBefore
+     *            default empty
+     * @param string $appendAfter
+     *            default empty
+     *
+     * @return string
+     */
+    public static function e($routeName = null, $actionName = null, $appendBefore = null, $appendAfter = null){
+        echo self::get($routeName, $actionName, $appendBefore, $appendAfter);
     }
 
     /**
