@@ -2,7 +2,7 @@
 /**
  * Czech translator.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 class CzechTranslator extends Translator{
@@ -20,6 +20,8 @@ class CzechTranslator extends Translator{
 			Translator::WARNING_INVALID_SQL_ACTION => "Nesprávný SQL action dotaz.",
 			Translator::WARNING_UNABLE_VERIFY_RESULT => "Akce se nezdařila.",
 			Translator::WARNING_UNABLE_COMPLETE_TRANSACTION => "Transakce se nezdařila.",
+	        Translator::WARNING_ROUTER_ROUTE_INVALID => "Neplatný objekt cesty v routeru.",
+	        Translator::WARNING_ROUTER_ROUTE_ACTION_INVALID => "Neplatná akce v objektu cesty routeru.",
 			Translator::NOTICE_UNKNOWN => "Neznámé upozornění.",
 			Translator::NOTICE_LOGIN_FAILED => "Přihlášení selhalo. Zkuste to prosím znovu.",
 			Translator::NOTICE_INVALID_PARAMETERS => "Nepodařilo se obnovit seznam. Zadali jste špatné parametry.",

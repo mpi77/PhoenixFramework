@@ -2,7 +2,7 @@
 /**
  * English translator.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 class EnglishTranslator extends Translator{
@@ -20,6 +20,8 @@ class EnglishTranslator extends Translator{
 			Translator::WARNING_INVALID_SQL_ACTION => "Incorrect SQL action query.",
 			Translator::WARNING_UNABLE_VERIFY_RESULT => "Unable to verify result.",
 			Translator::WARNING_UNABLE_COMPLETE_TRANSACTION => "Unable to complete transaction.",
+	        Translator::WARNING_ROUTER_ROUTE_INVALID => "Invalid route in router.",
+	        Translator::WARNING_ROUTER_ROUTE_ACTION_INVALID => "Invalid route action in route.",
 			Translator::NOTICE_UNKNOWN => "Unknow notice exception.",
 			Translator::NOTICE_LOGIN_FAILED => "Login failed. Please try it again.",
 			Translator::NOTICE_INVALID_PARAMETERS => "List actualisation failed due to invalid parameters.",

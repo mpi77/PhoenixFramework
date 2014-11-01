@@ -3,7 +3,7 @@
 /**
  * Root translator object.
  * 
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 abstract class Translator{
@@ -62,6 +62,8 @@ abstract class Translator{
 	const WARNING_INVALID_SQL_ACTION = 205;
 	const WARNING_UNABLE_VERIFY_RESULT = 206;
 	const WARNING_UNABLE_COMPLETE_TRANSACTION = 207;
+	const WARNING_ROUTER_ROUTE_INVALID = 208;
+	const WARNING_ROUTER_ROUTE_ACTION_INVALID = 209;
 	
 	const NOTICE_UNKNOWN = 300;
 	const NOTICE_LOGIN_FAILED = 301;
