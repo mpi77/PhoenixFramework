@@ -2,13 +2,54 @@
 /**
  * Breadcrumbs class.
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
  *
  */
 class Breadcrumbs {
+    private $url;
+    private $body;
+    private $title;
 
-    private function __construct() {
+    /**
+     *
+     * @param string $url            
+     * @param integer $body
+     *            translate constant for body
+     * @param integer $title
+     *            translate constant for title
+     */
+    public function __construct($url, $body, $title = null) {
+        $this->url = $url;
+        $this->body = $body;
+        $this->title = $title;
+    }
+
+    /**
+     * Get this url.
+     *
+     * @return string
+     */
+    public function getUrl() {
+        return $this->url;
+    }
+
+    /**
+     * Get this body.
+     *
+     * @return integer
+     */
+    public function getBody() {
+        return $this->body;
+    }
+
+    /**
+     * Get this title.
+     *
+     * @return string
+     */
+    public function getTitle() {
+        return $this->title;
     }
 
     /**
@@ -26,7 +67,7 @@ class Breadcrumbs {
      * @return string
      */
     public static function get($routeName = null, $actionName = null, $appendBefore = null, $appendAfter = null) {
-        return self::makeBreadcrumbString(!is_null($routeName) ? $routeName : (isset($_GET["route"])?$_GET["route"] : null), !is_null($actionName) ? $actionName : (isset($_GET["action"])?$_GET["action"] : null), $appendBefore, $appendAfter);
+        return self::makeBreadcrumbsString(!is_null($routeName) ? $routeName : (isset($_GET["route"]) ? $_GET["route"] : null), !is_null($actionName) ? $actionName : (isset($_GET["action"]) ? $_GET["action"] : null), $appendBefore, $appendAfter);
     }
 
     /**
@@ -67,22 +108,35 @@ class Breadcrumbs {
      *            
      * @return string
      */
-    private static function makeBreadcrumbString($routeName = null, $actionName = null, $appendBefore = null, $appendAfter = null, $styleBoxId = "page-breadcrumb", $styleOlClass = "breadcrumb", $styleActiveClass = "active") {
+    private static function makeBreadcrumbsString($routeName = null, $actionName = null, $appendBefore = null, $appendAfter = null, $styleBoxId = "page-breadcrumb", $styleOlClass = "breadcrumb", $styleActiveClass = "active") {
         $r = sprintf("<div id=\"%s\"><ol class=\"%s\">", $styleBoxId, $styleOlClass);
         $r .= !is_null($appendBefore) ? $appendBefore : "";
         $r .= sprintf("<li><a href=\"%s\">%s</a></li>", Config::SITE_PATH, "Home");
         if (!empty($routeName) && !empty($actionName) && Router::isRoute($routeName) && $routeName != Router::DEFAULT_EMPTY_ROUTE) {
             $route = Router::getRoute($routeName);
-            if (!is_null($route->getLinkBody())) {
-                $r .= sprintf("<li><a href=\"%s\">%s</a></li>", $route->getLinkUrl(), $route->getLinkBody());
+            if (!is_null($route->getBreadcrumbsItem())) {
+                $r .= self::makeBreadcrumbsItemString($route->getBreadcrumbsItem()->getUrl(), $route->getBreadcrumbsItem()->getBody(), $route->getBreadcrumbsItem()->getTitle(), null);
             }
-            if ($route->isAction($actionName) && !is_null($route->getAction($actionName)->getLinkBody())) {
-                $r .= sprintf("<li><a href=\"%s\" class=\"%s\">%s</a></li>", $route->getAction($actionName)->getLinkUrl(), $styleActiveClass, $route->getAction($actionName)->getLinkBody());
+            if ($route->isAction($actionName) && !is_null($route->getAction($actionName)->getBreadcrumbsItem())) {
+                $r .= self::makeBreadcrumbsItemString($route->getAction($actionName)->getBreadcrumbsItem()->getUrl(), $route->getAction($actionName)->getBreadcrumbsItem()->getBody(), $route->getAction($actionName)->getBreadcrumbsItem()->getTitle(), $styleActiveClass);
             }
         }
         $r .= !is_null($appendAfter) ? $appendAfter : "";
         $r .= "</ol></div>";
         return $r;
+    }
+
+    /**
+     * Make breadcrumbs item string.
+     *
+     * @param string $url            
+     * @param string $body            
+     * @param string $title            
+     * @param string $activeClass            
+     * @return string
+     */
+    private static function makeBreadcrumbsItemString($url, $body, $title, $activeClass) {
+        return sprintf("<li><a href=\"%s\">%s</a></li>", $url, $body);
     }
 }
 ?>
