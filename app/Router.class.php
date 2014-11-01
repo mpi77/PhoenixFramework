@@ -3,10 +3,11 @@
 /**
  * Router 
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 class Router {
+    const DISABLE_ROUTE_OVERWRITING = true;
     const DEFAULT_EMPTY_ROUTE = "index";
     const DEFAULT_EMPTY_ACTION = "index";
     
@@ -24,8 +25,11 @@ class Router {
      */
     public static function register($routeName, Route $route) {
         if (self::$registrationEnabled === true) {
+            $routeName = strtolower($routeName);
             self::initRouter();
-            self::$table[$routeName] = $route;
+            if((self::DISABLE_ROUTE_OVERWRITING !== true) || (self::DISABLE_ROUTE_OVERWRITING === true && self::isRoute($routeName) === false)){
+                self::$table[$routeName] = $route;
+            }
         }
     }
 

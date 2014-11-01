@@ -3,7 +3,7 @@
 /**
  * Route object.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  * */
 class Route {
@@ -23,7 +23,7 @@ class Route {
      */
     public function __construct($model, $view, $controller, $actions = null, Breadcrumbs $breadcrumbsItem = null) {
         if(empty($model) || empty($view) || empty($controller)){
-            throw new WarningException(WarningException::WARNING_ROUTER_ROUTE_INVALID, sprintf("Route{model=%s, view=%s, controller=%s}", $model, $view, $controller));
+            return;
         }
         $this->model = $model;
         $this->view = $view;

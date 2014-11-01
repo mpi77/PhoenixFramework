@@ -3,7 +3,7 @@
 /**
  * Route action object.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class RouteAction {
@@ -17,7 +17,7 @@ class RouteAction {
      */
     public function __construct($runFunctionName, Breadcrumbs $breadcrumbsItem = null) {
         if (empty($runFunctionName)) {
-            throw new WarningException(WarningException::WARNING_ROUTER_ROUTE_ACTION_INVALID, "RouteAction{runFunctionName=" + $runFunctionName + "}");
+            return;
         }
         $this->runFunctionName = $runFunctionName;
         $this->breadcrumbsItem = $breadcrumbsItem;
