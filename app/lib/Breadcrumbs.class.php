@@ -2,7 +2,7 @@
 /**
  * Breadcrumbs class.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *
  */
@@ -114,13 +114,15 @@ class Breadcrumbs {
         $r .= sprintf("<li><a href=\"%s\">%s</a></li>", Config::SITE_PATH, "Home");
         if (!empty($routeName) && !empty($actionName) && Router::isRoute($routeName) && $routeName != Router::DEFAULT_EMPTY_ROUTE) {
             $route = Router::getRoute($routeName);
-            if (!is_null($route->getBreadcrumbsItem())) {
-                $r .= self::makeBreadcrumbsItemString($route->getBreadcrumbsItem()->getUrl(), $route->getBreadcrumbsItem()->getBody(), $route->getBreadcrumbsItem()->getTitle(), null);
+            if ($route instanceof Route) {
+                if ($route->getBreadcrumbsItem() instanceof Breadcrumbs) {
+                    $r .= self::makeBreadcrumbsItemString($route->getBreadcrumbsItem()->getUrl(), $route->getBreadcrumbsItem()->getBody(), $route->getBreadcrumbsItem()->getTitle(), null);
+                }
+                if ($route->isAction($actionName) && ($route->getAction($actionName) instanceof RouteAction) && ($route->getAction($actionName)->getBreadcrumbsItem() instanceof Breadcrumbs)) {
+                    $r .= self::makeBreadcrumbsItemString($route->getAction($actionName)->getBreadcrumbsItem()->getUrl(), $route->getAction($actionName)->getBreadcrumbsItem()->getBody(), $route->getAction($actionName)->getBreadcrumbsItem()->getTitle(), $styleActiveClass);
+                }
             }
-            if ($route->isAction($actionName) && !is_null($route->getAction($actionName)->getBreadcrumbsItem())) {
-                $r .= self::makeBreadcrumbsItemString($route->getAction($actionName)->getBreadcrumbsItem()->getUrl(), $route->getAction($actionName)->getBreadcrumbsItem()->getBody(), $route->getAction($actionName)->getBreadcrumbsItem()->getTitle(), $styleActiveClass);
-            }
-        }
+        }      
         $r .= !is_null($appendAfter) ? $appendAfter : "";
         $r .= "</ol></div>";
         return $r;
