@@ -3,7 +3,7 @@
 /**
  * Route object.
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
  * */
 class Route {
@@ -22,7 +22,7 @@ class Route {
      * @param Breadcrumbs $breadcrumbsItem            
      */
     public function __construct($model, $view, $controller, $actions = null, Breadcrumbs $breadcrumbsItem = null) {
-        if(empty($model) || empty($view) || empty($controller)){
+        if (empty($model) || empty($view) || empty($controller)) {
             return;
         }
         $this->model = $model;
@@ -101,6 +101,10 @@ class Route {
      */
     public function getBreadcrumbsItem() {
         return $this->breadcrumbsItem;
+    }
+
+    public function __toString() {
+        return "Route{model=" . $this->model . ", view=" . $this->view . ", controller=" . $this->controller . "}";
     }
 }
 ?>

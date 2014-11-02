@@ -2,7 +2,7 @@
 /**
  * Breadcrumbs class.
  *
- * @version 1.10
+ * @version 1.11
  * @author MPI
  *
  */
@@ -50,6 +50,10 @@ class Breadcrumbs {
      */
     public function getTitle() {
         return $this->title;
+    }
+
+    public function __toString() {
+        return "Breadcrumbs{url=" . $this->url . ", body=" . $this->body . ", title=" . $this->title . "}";
     }
 
     /**
@@ -122,7 +126,7 @@ class Breadcrumbs {
                     $r .= self::makeBreadcrumbsItemString($route->getAction($actionName)->getBreadcrumbsItem()->getUrl(), $route->getAction($actionName)->getBreadcrumbsItem()->getBody(), $route->getAction($actionName)->getBreadcrumbsItem()->getTitle(), $styleActiveClass);
                 }
             }
-        }      
+        }
         $r .= !is_null($appendAfter) ? $appendAfter : "";
         $r .= "</ol></div>";
         return $r;

@@ -3,7 +3,7 @@
 /**
  * Route action object.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 class RouteAction {
@@ -39,6 +39,10 @@ class RouteAction {
      */
     public function getBreadcrumbsItem() {
         return $this->breadcrumbsItem;
+    }
+
+    public function __toString() {
+        return "RouteAction{runFunctionName=" . $this->runFunctionName . "}";
     }
 }
 ?>
