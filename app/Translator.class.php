@@ -3,7 +3,7 @@
 /**
  * Root translator object.
  * 
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 abstract class Translator{
@@ -119,5 +119,8 @@ abstract class Translator{
 	const MENU_USER_LOG = 1108;
 	
 	const BTN_SEND = 2000;
+	
+	const BREADCRUMBS_INDEX = 3000;
+	const BREADCRUMBS_INDEX_INDEX = 3001;
 }
 ?>
