@@ -3,7 +3,7 @@
 /**
  * Proxy gateway
  * 
- * @version 1.12
+ * @version 1.13
  * @author MPI
  * */
 class Proxy {
@@ -30,7 +30,10 @@ class Proxy {
         } catch (FailureException $e) {
             Logger::log($e);
             System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
-        }
+        } catch (Exception $e) {
+            Logger::log($e);
+            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
+        } 
     }
 
     public function __destruct() {

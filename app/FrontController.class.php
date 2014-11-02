@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.11
+ * @version 1.12
  * @author MPI
  * */
 class FrontController {
@@ -21,12 +21,14 @@ class FrontController {
             $this->args = $args;
             System::setViewEnabled();
             System::clearException();
+            $this->dispatch();
         } catch (FailureException $e) {
             Logger::log($e);
             System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
+        } catch (Exception $e) {
+            Logger::log($e);
+            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }
-        
-        $this->dispatch();
     }
 
     public function __destruct() {
@@ -51,6 +53,9 @@ class FrontController {
                 $actionName = Router::DEFAULT_EMPTY_ACTION;
             }
             $route = Router::getRoute($routeName);
+            if (!($route instanceof Route)) {
+                throw new WarningException(WarningException::WARNING_ROUTER_ROUTE_INVALID, json_encode($this->args));
+            }
             $modelName = $route->getModelName();
             $controllerName = $route->getControllerName();
             $viewName = $route->getViewName();
@@ -63,7 +68,10 @@ class FrontController {
                 throw new WarningException(WarningException::WARNING_CLASS_NOT_FOUND, json_encode($this->args));
             }
             
-            if (Router::getRoute($routeName)->isAction($actionName) === true && System::isCallable($this->controller, Router::getRoute($routeName)->getAction($actionName)->getRunFunctionName()) === true) {
+            if (!(Router::getRoute($routeName)->isAction($actionName) === true && (Router::getRoute($routeName)->getAction($actionName) instanceof RouteAction))) {
+                throw new WarningException(WarningException::WARNING_ROUTER_ROUTE_ACTION_INVALID, json_encode($this->args));
+            }
+            if (System::isCallable($this->controller, Router::getRoute($routeName)->getAction($actionName)->getRunFunctionName()) === true) {
                 $this->controller->{Router::getRoute($routeName)->getAction($actionName)->getRunFunctionName()}();
             } else {
                 throw new WarningException(WarningException::WARNING_ACTION_IS_NOT_CALLABLE, json_encode($this->args));
@@ -103,6 +111,9 @@ class FrontController {
             $_SESSION[Config::SERVER_FQDN]["exception"] = $e;
             System::makeExceptionCont();
         } catch (FailureException $e) {
+            Logger::log($e);
+            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
+        } catch (Exception $e) {
             Logger::log($e);
             System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }
