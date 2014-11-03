@@ -2,7 +2,7 @@
 /**
  * Breadcrumbs class.
  *
- * @version 1.11
+ * @version 1.12
  * @author MPI
  *
  */
@@ -142,7 +142,7 @@ class Breadcrumbs {
      * @return string
      */
     private static function makeBreadcrumbsItemString($url, $body, $title, $activeClass) {
-        return sprintf("<li><a href=\"%s\"%s%s>%s</a></li>", $url, (!empty($title) ? " title=\"" . $title . "\"" : ""), (!empty($activeClass) ? " class=\"" . $activeClass . "\"" : ""), $body);
+        return sprintf("<li><a href=\"%s\"%s%s>%s</a></li>", $url, (!empty($title) ? " title=\"" . Translate::get($title) . "\"" : ""), (!empty($activeClass) ? " class=\"" . $activeClass . "\"" : ""), Translate::get($body));
     }
 }
 ?>
