@@ -4,7 +4,7 @@
  * Database provides interaction between this program
  * and db server.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  *        
  */
@@ -13,7 +13,7 @@ class Database {
     private $connectionParams = null;
     private $status = null;
     const EMPTY_RESULT = -1;
-    
+
     /**
      * Initialize connection with db server.
      *
@@ -29,7 +29,7 @@ class Database {
             $this->connect();
         }
     }
-    
+
     /**
      * Ask SELECT query on db.
      *
@@ -71,7 +71,7 @@ class Database {
             throw new WarningException(WarningException::WARNING_INVALID_SQL_SELECT);
         }
     }
-    
+
     /**
      * Ask INSERT, UPDATE, DELETE query on db.
      *
@@ -94,7 +94,7 @@ class Database {
             throw new WarningException(WarningException::WARNING_INVALID_SQL_ACTION);
         }
     }
-    
+
     /**
      * Get the ID of the last inserted row or sequence value.
      *
@@ -105,7 +105,7 @@ class Database {
     public function lastInsertId($name = null) {
         return $this->link->lastInsertId($name);
     }
-    
+
     /**
      * Get quoted input string.
      *
@@ -119,7 +119,7 @@ class Database {
     public function quote($text, $parameter_type = null) {
         return $this->link->quote($text, $parameter_type);
     }
-    
+
     /**
      * Start transaction.
      *
@@ -129,7 +129,7 @@ class Database {
     public function beginTransaction() {
         return $this->link->beginTransaction();
     }
-    
+
     /**
      * Commit current transaction.
      *
@@ -139,7 +139,7 @@ class Database {
     public function commitTransaction() {
         return $this->link->commit();
     }
-    
+
     /**
      * Rollback current transaction.
      *
@@ -149,7 +149,7 @@ class Database {
     public function rollbackTransaction() {
         return $this->link->rollback();
     }
-    
+
     /**
      * Checks if inside a transaction
      *
@@ -159,16 +159,16 @@ class Database {
     public function inTransaction() {
         return $this->link->inTransaction();
     }
-    
+
     /**
      * Get current status of db connection.
      *
      * @return boolean (true if conn is up | false if conn is down)
      */
-    public function getStatus(){
+    public function getStatus() {
         return $this->status;
     }
-    
+
     /**
      * Test connection to db server.
      *
@@ -192,7 +192,7 @@ class Database {
         }
         return true;
     }
-    
+
     /**
      * Connect to db server.
      *
