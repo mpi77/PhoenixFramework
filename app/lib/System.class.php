@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.10
+ * @version 1.11
  * @author MPI
  * */
 class System {
@@ -241,6 +241,23 @@ class System {
     }
 
     /**
+     * Load classes in given list.
+     *
+     * @param array $fileList
+     *            1D with files to include
+     * @param string $rootDir            
+     *
+     */
+    public static function autoload($rootDir, $fileList) {
+        $rootDir .= (preg_match("/\/$/i", $rootDir) !== 1) ? "/" : "";
+        foreach ($fileList as $file) {
+            if (file_exists($rootDir . $file)) {
+                require $rootDir . $file;
+            }
+        }
+    }
+
+    /**
      * Detect runtime exception and show it's message box.
      */
     public static function makeExceptionCont() {
@@ -462,10 +479,10 @@ class System {
                 $tmp_value = self::trimSlashMultidimAssocArray($v, $trim_key, $slash_key, $trim_value, $slash_value);
             } else {
                 if (!empty($v)) {
-                    if ($trim_value === true){
+                    if ($trim_value === true) {
                         $tmp_value = trim($v);
                     }
-                    if ($slash_value === true){
+                    if ($slash_value === true) {
                         $tmp_value = addslashes($tmp_value);
                     }
                 }
