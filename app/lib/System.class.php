@@ -3,13 +3,18 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.12
+ * @version 1.13
  * @author MPI
  * */
 class System {
     
     /* uncategorized */
     const NL = "\r\n";
+    
+    /* environment error reporting */
+    const ENV_DEVELOPMENT = 1;
+    const ENV_TESTING = 2;
+    const ENV_PRODUCTION = 3;
     
     /* date */
     const DATE_ADD_DAYS = 1;
@@ -36,6 +41,25 @@ class System {
     );
 
     private function __construct() {
+    }
+
+    /**
+     * Set application environment.
+     *
+     * @param integer $environment            
+     */
+    public static function setAppEnvironment($environment) {
+        switch ($environment) {
+            case self::ENV_DEVELOPMENT :
+                error_reporting(E_ALL);
+                break;
+            case self::ENV_TESTING :
+            case self::ENV_PRODUCTION :
+                error_reporting(0);
+                break;
+            default :
+                exit('The application environment is not set correctly.');
+        }
     }
     
     /**

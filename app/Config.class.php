@@ -2,10 +2,11 @@
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  * */
 class Config {
+    const APP_ENVIRONMENT = System::ENV_DEVELOPMENT;
     const SITE_PATH = "http://localhost/phoenix/";
     const SITE_BASE = "/phoenix/";
     const SHUTDOWN_PAGE = "500"; // code for an error page
