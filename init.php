@@ -5,6 +5,7 @@
  *
  * @version 1.3
  * @author MPI
+ * @deprecated
  * */
 
 /* load required files */
@@ -21,7 +22,7 @@ $m = System::findAllFiles("app", array (
                 "Breadcrumbs.class.php"
 ));
 sort($m);
-autoload($m);
+System::autoload(__DIR__, $m);
 
 /* disable registering new routes */
 Router::disableRegistration();
@@ -29,19 +30,4 @@ Router::disableRegistration();
 /* init session */
 session_start();
 System::initSession();
-
-/**
- * Load classes in given list.
- *
- * @param array $file_list
- *            1D with files for include
- *            
- */
-function autoload($file_list) {
-    foreach ($file_list as $file) {
-        if (file_exists($file)) {
-            require __DIR__ . "/" . $file;
-        }
-    }
-}
 ?>

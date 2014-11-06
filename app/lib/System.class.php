@@ -3,10 +3,13 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.11
+ * @version 1.12
  * @author MPI
  * */
 class System {
+    
+    /* uncategorized */
+    const NL = "\r\n";
     
     /* date */
     const DATE_ADD_DAYS = 1;
