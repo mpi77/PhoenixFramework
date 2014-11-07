@@ -2,7 +2,7 @@
 /**
  * Index page.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 
@@ -45,7 +45,7 @@ $proxy = new Proxy();
 
 /* proxy detected app request, continue with app (frontcontroller) */
 $f = $proxy->getFrontController();
-require 'gui/template/PageTemplate.php';
+require 'gui/template/MasterTemplate.php';
 
 exit();
 ?>
