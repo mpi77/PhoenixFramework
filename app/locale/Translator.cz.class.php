@@ -2,7 +2,7 @@
 /**
  * Czech translator.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class CzechTranslator extends Translator {
@@ -46,7 +46,12 @@ class CzechTranslator extends Translator {
                     Translator::PAGINATION_FOUND_ROWS => "Nalezeno řádků",
                     Translator::PAGINATION_ACTUAL_PAGE => "Aktuální stránka",
                     Translator::BREADCRUMBS_BODY_INDEX => "Index",
-                    Translator::BREADCRUMBS_BODY_INDEX_INDEX => "index" 
+                    Translator::BREADCRUMBS_BODY_INDEX_INDEX => "index",
+                    Translator::SITE_TITLE => "PhoenixFramework",
+                    Translator::SITE_TITLE_HIDDEN => "PhoenixFramework",
+                    Translator::SITE_AUTHORS => "MPi",
+                    Translator::SITE_DESCRIPTION => "PhoenixFramework",
+                    Translator::SITE_KEYWORDS => "Phoenix,framework"
     );
 
     public function __construct() {
