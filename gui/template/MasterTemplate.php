@@ -3,10 +3,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <base href="<?php echo htmlspecialchars(Config::SITE_BASE);?>">
-<title><?php Translate::display(Translator::SITE_TITLE);?></title>
-<meta name="description" content="<?php Translate::display(Translator::SITE_DESCRIPTION);?>">
-<meta name="keywords" content="<?php Translate::display(Translator::SITE_KEYWORDS);?>">
-<meta name="author" content="<?php Translate::display(Translator::SITE_AUTHORS);?>">
+<title><?php Translate::es(Translator::SITE_TITLE);?></title>
+<meta name="description" content="<?php Translate::es(Translator::SITE_DESCRIPTION);?>">
+<meta name="keywords" content="<?php Translate::es(Translator::SITE_KEYWORDS);?>">
+<meta name="author" content="<?php Translate::es(Translator::SITE_AUTHORS);?>">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
 <meta name="format-detection" content="telephone=no">

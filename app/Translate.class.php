@@ -2,7 +2,7 @@
 /**
  * Translate is Translator singleton wrapper.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 class Translate {
@@ -26,17 +26,29 @@ class Translate {
     }
 
     /**
-     * Print string from actual Translator.
+     * Print htmlspecialchars(string) from actual Translator.
      *
      * @param string $key
      *            string index (constant defined in Translator root object) to index item
-     * @return nothing
      */
-    public static function display($key) {
+    public static function es($key) {
         if (empty(self::$translator)) {
             self::initTranslator($_SESSION[Config::SERVER_FQDN]["user"]["lang"]);
         }
         echo htmlspecialchars(self::$translator->get($key));
+    }
+    
+    /**
+     * Print string from actual Translator.
+     *
+     * @param string $key
+     *            string index (constant defined in Translator root object) to index item
+     */
+    public static function e($key) {
+        if (empty(self::$translator)) {
+            self::initTranslator($_SESSION[Config::SERVER_FQDN]["user"]["lang"]);
+        }
+        echo self::$translator->get($key);
     }
 
     /**
