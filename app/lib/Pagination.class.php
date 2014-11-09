@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.20
+ * @version 1.21
  * @author MPI
  *
  */
@@ -207,6 +207,12 @@ class Pagination {
     const COLUMN_PREFIX = "col_";
     const COLUMN_SELECT_ACTION_SUFFIX = "select";
     const ROW_PREFIX = "row_";
+    const SYMBOL_BEGIN = "&laquo;";
+    const SYMBOL_STEP_BACK = "&lsaquo;";
+    const SYMBOL_STEP_FWD = "&rsaquo;";
+    const SYMBOL_END = "&raquo;";
+    const SYMBOL_SORT_ASC = "&#x2206;";
+    const SYMBOL_SORT_DES = "&#x2207;";
     const PAGINATION_PAGE_COUNT_LIMIT = 10;
 
     private function __construct() {
@@ -382,14 +388,8 @@ class Pagination {
             foreach ($header as $k => $v) {
                 $sort_next_direction = ($k == $config[self::KEY_CONFIG_COLUMN] ? ($config[self::KEY_CONFIG_SORT_DIRECTION] == System::SORT_ASC ? System::SORT_DES : ($config[self::KEY_CONFIG_SORT_DIRECTION] == System::SORT_DES ? System::SORT_ASC : "")) : System::SORT_ASC);
                 $sort_show = ($k == $config[self::KEY_CONFIG_COLUMN] ? ($config[self::KEY_CONFIG_SORT_DIRECTION] == System::SORT_ASC ? System::SORT_ASC : ($config[self::KEY_CONFIG_SORT_DIRECTION] == System::SORT_DES ? System::SORT_DES : "")) : "");
-                switch ($sort_show) {
-                    case System::SORT_ASC :
-                        $sort_show = "&#x2206;";
-                        break;
-                    case System::SORT_DES :
-                        $sort_show = "&#x2207;";
-                        break;
-                }
+                $sort_show = ($sort_show == System::SORT_ASC) ? self::SYMBOL_SORT_ASC : self::SYMBOL_SORT_DES;
+                
                 $s .= sprintf("<th class=\"%s\"><a href=\"%s\">%s</a></th>", self::COLUMN_PREFIX . $j, sprintf($config[self::KEY_URL_HEADER_SORT], $config[self::KEY_CONFIG_PAGE], $k, $sort_next_direction), $v . "&nbsp;" . $sort_show);
                 // add empty columns for ROW_MENU_ITEM
                 if ($j == (count($header) - 1) && $config[self::KEY_CONFIG_DISABLE_ROW_MENU] === false) {
@@ -427,9 +427,9 @@ class Pagination {
             // box with page numbers
             $s .= sprintf("<div%s%s><ul%s>", (!empty($config[self::KEY_STYLE_PAGINATION_BOX_ID]) ? sprintf(" id=\"%s\"", $config[self::KEY_STYLE_PAGINATION_BOX_ID]) : ""), (!empty($config[self::KEY_STYLE_PAGINATION_BOX_CLASS]) ? sprintf(" class=\"%s\"", $config[self::KEY_STYLE_PAGINATION_BOX_CLASS]) : ""), (!empty($config[self::KEY_STYLE_PAGINATION_UL_CLASS]) ? sprintf(" class=\"%s\"", $config[self::KEY_STYLE_PAGINATION_UL_CLASS]) : ""));
             // to first page
-            $s .= sprintf("<li><a href=\"%s\">&laquo;</a></li>", sprintf($config[self::KEY_URL_PAGE], System::PAGE_MIN_PAGE, $config[self::KEY_CONFIG_COLUMN], $config[self::KEY_CONFIG_SORT_DIRECTION]));
+            $s .= sprintf("<li><a href=\"%s\">%s</a></li>", sprintf($config[self::KEY_URL_PAGE], System::PAGE_MIN_PAGE, $config[self::KEY_CONFIG_COLUMN], $config[self::KEY_CONFIG_SORT_DIRECTION]), self::SYMBOL_BEGIN);
             // 1 step back
-            $s .= sprintf("<li><a href=\"%s\">&lsaquo;</a></li>", sprintf($config[self::KEY_URL_PAGE], ($config[self::KEY_CONFIG_PAGE] > System::PAGE_MIN_PAGE) ? $config[self::KEY_CONFIG_PAGE] - 1 : System::PAGE_MIN_PAGE, $config[self::KEY_CONFIG_COLUMN], $config[self::KEY_CONFIG_SORT_DIRECTION]));
+            $s .= sprintf("<li><a href=\"%s\">%s</a></li>", sprintf($config[self::KEY_URL_PAGE], ($config[self::KEY_CONFIG_PAGE] > System::PAGE_MIN_PAGE) ? $config[self::KEY_CONFIG_PAGE] - 1 : System::PAGE_MIN_PAGE, $config[self::KEY_CONFIG_COLUMN], $config[self::KEY_CONFIG_SORT_DIRECTION]), self::SYMBOL_STEP_BACK);
             $start = ($config[self::KEY_CONFIG_PAGES_COUNT] > self::PAGINATION_PAGE_COUNT_LIMIT) ? (($m = ($config[self::KEY_CONFIG_PAGE] - self::PAGINATION_PAGE_COUNT_LIMIT / 2)) > 1 ? $m : 1) : 1;
             $end = ($config[self::KEY_CONFIG_PAGES_COUNT] > self::PAGINATION_PAGE_COUNT_LIMIT) ? (($m = ($config[self::KEY_CONFIG_PAGE] + self::PAGINATION_PAGE_COUNT_LIMIT / 2)) < $config[self::KEY_CONFIG_PAGES_COUNT] ? $m : $config[self::KEY_CONFIG_PAGES_COUNT]) : $config[self::KEY_CONFIG_PAGES_COUNT];
             for($i = $start; $i <= $end; $i++) {
@@ -437,9 +437,9 @@ class Pagination {
                 $s .= sprintf("<li><a href=\"%s\"%s>%d</a></li>", $url, ((!empty($config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS]) && $i == $config[self::KEY_CONFIG_PAGE]) ? sprintf(" class=\"%s\"", $config[self::KEY_STYLE_PAGINATION_ACIVE_PAGE_CLASS]) : ""), $i);
             }
             // 1 step forward
-            $s .= sprintf("<li><a href=\"%s\">&rsaquo;</a></li>", sprintf($config[self::KEY_URL_PAGE], ($config[self::KEY_CONFIG_PAGE] < $config[self::KEY_CONFIG_PAGES_COUNT]) ? $config[self::KEY_CONFIG_PAGE] + 1 : $config[self::KEY_CONFIG_PAGES_COUNT], $config[self::KEY_CONFIG_COLUMN], $config[self::KEY_CONFIG_SORT_DIRECTION]));
+            $s .= sprintf("<li><a href=\"%s\">%s</a></li>", sprintf($config[self::KEY_URL_PAGE], ($config[self::KEY_CONFIG_PAGE] < $config[self::KEY_CONFIG_PAGES_COUNT]) ? $config[self::KEY_CONFIG_PAGE] + 1 : $config[self::KEY_CONFIG_PAGES_COUNT], $config[self::KEY_CONFIG_COLUMN], $config[self::KEY_CONFIG_SORT_DIRECTION]), self::SYMBOL_STEP_FWD);
             // to last page
-            $s .= sprintf("<li><a href=\"%s\">&raquo;</a></li>", sprintf($config[self::KEY_URL_PAGE], $config[self::KEY_CONFIG_PAGES_COUNT], $config[self::KEY_CONFIG_COLUMN], $config[self::KEY_CONFIG_SORT_DIRECTION]));
+            $s .= sprintf("<li><a href=\"%s\">%s</a></li>", sprintf($config[self::KEY_URL_PAGE], $config[self::KEY_CONFIG_PAGES_COUNT], $config[self::KEY_CONFIG_COLUMN], $config[self::KEY_CONFIG_SORT_DIRECTION]), self::SYMBOL_END);
             $s .= "</ul></div>";
             $s .= "</div>";
         }
