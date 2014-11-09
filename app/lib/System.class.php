@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.13
+ * @version 1.14
  * @author MPI
  * */
 class System {
@@ -39,6 +39,16 @@ class System {
                     80,
                     100 
     );
+    
+    /**
+     * sorting index - column index to sort; time_format - pattern if sort datetime
+     */
+    public static $usort = array (
+                    "sorting_index" => 0, //
+                    "xm" => -1,
+                    "xv" => 1,
+                    "time_format" => "Y-m-d H:i:s"
+    );
 
     private function __construct() {
     }
@@ -61,16 +71,6 @@ class System {
                 exit('The application environment is not set correctly.');
         }
     }
-    
-    /**
-     * sorting index - column index to sort; time_format - pattern if sort datetime
-     */
-    public static $usort = array (
-                    "sorting_index" => 0, //
-                    "xm" => -1,
-                    "xv" => 1,
-                    "time_format" => "Y-m-d H:i:s" 
-    );
 
     /**
      * Comparing function (as an argument to sort function) to compare strings.
