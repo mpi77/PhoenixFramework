@@ -2,7 +2,7 @@
 /**
  * Translate is Translator singleton wrapper.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class Translate {
@@ -37,7 +37,7 @@ class Translate {
         }
         echo htmlspecialchars(self::$translator->get($key));
     }
-    
+
     /**
      * Print string from actual Translator.
      *

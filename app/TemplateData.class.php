@@ -3,7 +3,7 @@
 /**
  * Root template data object.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class TemplateData {
@@ -60,25 +60,25 @@ class TemplateData {
     public function has($key) {
         return array_key_exists($key, $this->data);
     }
-    
+
     /**
      * Print htmlspecialchars(string) from template object.
      *
-     * @param string $key
+     * @param string $key            
      */
-    public function es($key){
-        if(array_key_exists($key, $this->data) && is_string($this->data[$key])){
+    public function es($key) {
+        if (array_key_exists($key, $this->data) && is_string($this->data[$key])) {
             echo htmlspecialchars($this->data[$key]);
         }
     }
-    
+
     /**
      * Print string from template object.
      *
-     * @param string $key
+     * @param string $key            
      */
-    public function e($key){
-        if(array_key_exists($key, $this->data) && is_string($this->data[$key])){
+    public function e($key) {
+        if (array_key_exists($key, $this->data) && is_string($this->data[$key])) {
             echo $this->data[$key];
         }
     }
