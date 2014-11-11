@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.14
+ * @version 1.15
  * @author MPI
  * */
 class System {
@@ -757,8 +757,8 @@ class System {
      * Generates random code with specific length.
      *
      * @param integer $length
-     *            of returned generated code
-     * @return 1D string
+     *            length of generated code
+     * @return string
      */
     public static function generateRandomCode($length) {
         $v = array (
@@ -822,19 +822,19 @@ class System {
                         "Y",
                         "Z" 
         );
-        $str = "";
+        $r = "";
         for($i = 0; $i <= $length - 1; $i++) {
-            $nahoda = rand(0, count($v) - 1);
-            $str .= $v[$nahoda];
+            $random = rand(0, count($v) - 1);
+            $r .= $v[$random];
         }
-        return $str;
+        return $r;
     }
 
     /**
      * Remove given files.
      *
-     * @param
-     *            string array $files with full names of files to remove
+     * @param mixed $files
+     *            string array with full names of files to remove
      */
     public static function removeFiles($files) {
         foreach ($files as $v) {
@@ -848,7 +848,6 @@ class System {
      * Redirect to given url.
      *
      * @param string $url
-     *            to jump
      */
     public static function redirect($url) {
         header(sprintf("Location: %s", $url));
@@ -856,7 +855,7 @@ class System {
     }
 
     /**
-     * Get php version exploded in array.
+     * Get php version exploded into array.
      *
      * @return array
      */
@@ -867,8 +866,7 @@ class System {
     /**
      * Trace variable.
      *
-     * @param $var to
-     *            print.
+     * @param mixed $var
      */
     public static function trace($var) {
         echo "<pre>";
