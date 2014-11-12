@@ -3,7 +3,7 @@
 /**
  * Route action object.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  * */
 class RouteAction {
@@ -16,7 +16,7 @@ class RouteAction {
      * @param Breadcrumbs $breadcrumbsItem            
      */
     public function __construct($runFunctionName, Breadcrumbs $breadcrumbsItem = null) {
-        if (empty($runFunctionName)) {
+        if (empty($runFunctionName) || !is_string($runFunctionName)) {
             return;
         }
         $this->runFunctionName = $runFunctionName;
