@@ -2,7 +2,7 @@
 /**
  * Breadcrumbs class.
  *
- * @version 1.12
+ * @version 1.13
  * @author MPI
  *
  */
@@ -20,9 +20,9 @@ class Breadcrumbs {
      *            translate constant for title
      */
     public function __construct($url, $body, $title = null) {
-        $this->url = $url;
-        $this->body = $body;
-        $this->title = $title;
+        $this->url = (is_string($url) ? $url : null);
+        $this->body = (is_int($body) ? $body : null);
+        $this->title = (is_int($title) ? $title : null);
     }
 
     /**
