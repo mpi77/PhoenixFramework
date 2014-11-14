@@ -2,7 +2,7 @@
 /**
  * Route unit test.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 include '../../app/Route.class.php';
@@ -70,6 +70,7 @@ class RouteTest extends PHPUnit_Framework_TestCase {
         $this->assertSame($a, $this->route->getAllActions());
         $this->assertNull($this->route->getBreadcrumbsItem());
         $this->assertInstanceOf("RouteAction", $this->route->getAction("login"));
+        $this->assertTrue($this->route->isAction("login"));
         
         $b = array (
                         "login" => $this->getMock("RouteAction"),
@@ -82,6 +83,9 @@ class RouteTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("ExController", $this->route->getControllerName());
         $this->assertSame($b, $this->route->getAllActions());
         $this->assertNull($this->route->getBreadcrumbsItem());
+        $this->assertTrue($this->route->isAction("login"));
+        $this->assertTrue($this->route->isAction("logout"));
+        $this->assertTrue($this->route->isAction("edit"));
         $this->assertInstanceOf("RouteAction", $this->route->getAction("login"));
         $this->assertInstanceOf("RouteAction", $this->route->getAction("logout"));
         $this->assertInstanceOf("RouteAction", $this->route->getAction("edit"));
