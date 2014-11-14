@@ -2,7 +2,7 @@
 /**
  * Route unit test.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 include '../../app/Route.class.php';
@@ -89,6 +89,22 @@ class RouteTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf("RouteAction", $this->route->getAction("login"));
         $this->assertInstanceOf("RouteAction", $this->route->getAction("logout"));
         $this->assertInstanceOf("RouteAction", $this->route->getAction("edit"));
+    }
+    
+    public function testBreadcrumbsArg() {
+        $this->route = new Route("ExModel", "ExView", "ExController", array (), null);
+        $this->assertEquals("ExModel", $this->route->getModelName());
+        $this->assertEquals("ExView", $this->route->getViewName());
+        $this->assertEquals("ExController", $this->route->getControllerName());
+        $this->assertEmpty($this->route->getAllActions());
+        $this->assertNull($this->route->getBreadcrumbsItem());
+    
+        $this->route = new Route("ExModel", "ExView", "ExController", array(), $this->getMock("Breadcrumbs"));
+        $this->assertEquals("ExModel", $this->route->getModelName());
+        $this->assertEquals("ExView", $this->route->getViewName());
+        $this->assertEquals("ExController", $this->route->getControllerName());
+        $this->assertEmpty($this->route->getAllActions());
+        $this->assertInstanceOf("Breadcrumbs", $this->route->getBreadcrumbsItem());
     }
 }
 ?>
