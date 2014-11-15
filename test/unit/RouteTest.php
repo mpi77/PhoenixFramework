@@ -2,7 +2,7 @@
 /**
  * Route unit test.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 include '../../app/Route.class.php';
@@ -89,6 +89,24 @@ class RouteTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf("RouteAction", $this->route->getAction("login"));
         $this->assertInstanceOf("RouteAction", $this->route->getAction("logout"));
         $this->assertInstanceOf("RouteAction", $this->route->getAction("edit"));
+        
+        $c = array (
+                        "login" => $this->getMock("RouteAction"),
+                        "logout" => $this->getMock("RouteAction"),
+                        "edit" => $this->getMock("RouteAction")
+        );
+        $this->route = new Route("ExModel", "ExView", "ExController", $c);
+        $this->assertEquals("ExModel", $this->route->getModelName());
+        $this->assertEquals("ExView", $this->route->getViewName());
+        $this->assertEquals("ExController", $this->route->getControllerName());
+        $this->assertSame($c, $this->route->getAllActions());
+        $this->assertNull($this->route->getBreadcrumbsItem());
+        $this->assertTrue($this->route->isAction("Login"));
+        $this->assertTrue($this->route->isAction("loGout"));
+        $this->assertTrue($this->route->isAction("ediT"));
+        $this->assertInstanceOf("RouteAction", $this->route->getAction("Login"));
+        $this->assertInstanceOf("RouteAction", $this->route->getAction("loGout"));
+        $this->assertInstanceOf("RouteAction", $this->route->getAction("ediT"));
     }
     
     public function testBreadcrumbsArg() {
