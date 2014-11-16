@@ -2,7 +2,7 @@
 /**
  * Route unit test.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  * */
 include '../../app/Route.class.php';
@@ -93,7 +93,7 @@ class RouteTest extends PHPUnit_Framework_TestCase {
         $c = array (
                         "login" => $this->getMock("RouteAction"),
                         "logout" => $this->getMock("RouteAction"),
-                        "edit" => $this->getMock("RouteAction")
+                        "edit" => $this->getMock("RouteAction") 
         );
         $this->route = new Route("ExModel", "ExView", "ExController", $c);
         $this->assertEquals("ExModel", $this->route->getModelName());
@@ -108,16 +108,23 @@ class RouteTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf("RouteAction", $this->route->getAction("loGout"));
         $this->assertInstanceOf("RouteAction", $this->route->getAction("ediT"));
     }
-    
+
     public function testBreadcrumbsArg() {
+        $this->route = new Route("ExModel", "ExView", null, array (), $this->getMock("Breadcrumbs"));
+        $this->assertNull($this->route->getModelName());
+        $this->assertNull($this->route->getViewName());
+        $this->assertNull($this->route->getControllerName());
+        $this->assertNull($this->route->getAllActions());
+        $this->assertNull($this->route->getBreadcrumbsItem());
+        
         $this->route = new Route("ExModel", "ExView", "ExController", array (), null);
         $this->assertEquals("ExModel", $this->route->getModelName());
         $this->assertEquals("ExView", $this->route->getViewName());
         $this->assertEquals("ExController", $this->route->getControllerName());
         $this->assertEmpty($this->route->getAllActions());
         $this->assertNull($this->route->getBreadcrumbsItem());
-    
-        $this->route = new Route("ExModel", "ExView", "ExController", array(), $this->getMock("Breadcrumbs"));
+        
+        $this->route = new Route("ExModel", "ExView", "ExController", array (), $this->getMock("Breadcrumbs"));
         $this->assertEquals("ExModel", $this->route->getModelName());
         $this->assertEquals("ExView", $this->route->getViewName());
         $this->assertEquals("ExController", $this->route->getControllerName());
