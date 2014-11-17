@@ -3,7 +3,7 @@
 /**
  * Root template data object.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  * */
 class TemplateData {
@@ -30,7 +30,7 @@ class TemplateData {
         if (is_null($key)) {
             return $this->data;
         } else {
-            if (array_key_exists($key, $this->data)) {
+            if (is_string($key) && array_key_exists($key, $this->data)) {
                 return $this->data[$key];
             } else {
                 return self::NOT_FOUND;
@@ -54,7 +54,7 @@ class TemplateData {
      * @param mixed $value            
      */
     public function set($key, $value) {
-        if (!empty($key)) {
+        if (!empty($key) && is_string($key)) {
             $this->data[$key] = $value;
         }
     }
@@ -67,7 +67,7 @@ class TemplateData {
      * @return boolean
      */
     public function has($key) {
-        return array_key_exists($key, $this->data);
+        return (is_string($key) ? array_key_exists($key, $this->data) : false);
     }
 
     /**
@@ -76,7 +76,7 @@ class TemplateData {
      * @param string $key            
      */
     public function es($key) {
-        if (array_key_exists($key, $this->data) && is_string($this->data[$key])) {
+        if (is_string($key) && array_key_exists($key, $this->data) && is_string($this->data[$key])) {
             echo htmlspecialchars($this->data[$key]);
         }
     }
@@ -87,7 +87,7 @@ class TemplateData {
      * @param string $key            
      */
     public function e($key) {
-        if (array_key_exists($key, $this->data) && is_string($this->data[$key])) {
+        if (is_string($key) && array_key_exists($key, $this->data) && is_string($this->data[$key])) {
             echo $this->data[$key];
         }
     }
