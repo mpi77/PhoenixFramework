@@ -3,7 +3,7 @@
 /**
  * Root template data object.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 class TemplateData {
@@ -36,6 +36,15 @@ class TemplateData {
                 return self::NOT_FOUND;
             }
         }
+    }
+    
+    /**
+     * Get all values from this template object.
+     *
+     * @return mixed
+     */
+    public function getAll() {
+        return $this->get();
     }
 
     /**
