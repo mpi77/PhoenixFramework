@@ -2,7 +2,7 @@
 /**
  * Template data unit test.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 include '../../app/TemplateData.class.php';
@@ -37,7 +37,7 @@ class TemplateDataTest extends PHPUnit_Framework_TestCase {
         /* merge array a + b */
         $b = array (
                         "key4" => "value4",
-                        "key6" => "val<u>e6"
+                        "key6" => "val<u>e6" 
         );
         $a = array_merge($a, $b);
         $this->data->set("key4", "value4");
