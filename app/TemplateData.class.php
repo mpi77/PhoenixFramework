@@ -3,7 +3,7 @@
 /**
  * Root template data object.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  * */
 class TemplateData {
@@ -37,7 +37,7 @@ class TemplateData {
             }
         }
     }
-    
+
     /**
      * Get all values from this template object.
      *
