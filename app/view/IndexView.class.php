@@ -2,7 +2,7 @@
 /**
  * Index view.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 class IndexView extends View{
@@ -13,9 +13,6 @@ class IndexView extends View{
 
 	public function getName(){
 		return get_class($this);
-	}
-
-	public function outputJson(){
 	}
 
 	public function outputHtml(){

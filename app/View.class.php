@@ -3,7 +3,7 @@
 /**
  * Root view object.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 abstract class View {
@@ -70,13 +70,6 @@ abstract class View {
      */
     public abstract function outputHtml();
 
-    /**
-     * JSON output of view.
-     *
-     * @all views must contain a outputJson method which
-     * generates output string of data JSON encoded
-     */
-    public abstract function outputJson();
 
     /**
      * Get name of this class.
