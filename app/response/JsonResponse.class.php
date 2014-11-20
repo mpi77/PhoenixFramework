@@ -3,13 +3,13 @@
 /**
  * Json response object.
  * 
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 final class JsonResponse extends Response {
 
     public function __construct(Exception $e = null) {
-        parent::__construct(Response::CONTENT_TYPE_HTML, Response::CHARSET_HTML, $e);
+        parent::__construct(Response::CONTENT_TYPE_JSON, Response::CHARSET_JSON, $e);
     }
 
     /**
