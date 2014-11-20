@@ -3,14 +3,15 @@
 /**
  * Html response object.
  * 
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 final class HtmlResponse extends Response {
     private $templateData;
 
-    public function __construct(TemplateData $tpd = null, Exception $e = null) {
+    public function __construct(TemplateData $templateData = null, Exception $e = null) {
         parent::__construct(Response::CONTENT_TYPE_HTML, Response::CHARSET_HTML, $e);
+        $this->setTemplateData($templateData);
     }
 
     /**
