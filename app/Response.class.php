@@ -3,7 +3,7 @@
 /**
  * Root response object.
  * 
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 abstract class Response {
@@ -18,14 +18,12 @@ abstract class Response {
     const CHARSET_JSON = "utf-8";
     const CHARSET_XML = "utf-8";
     private $exception;
-    private $data;
     private $headerContentType;
     private $headerCharset;
 
-    public function __construct($contentType = null, $charset = null, Exception $e = null, $data = null) {
+    public function __construct($contentType = null, $charset = null, Exception $e = null) {
         $this->setHeader($contentType, $charset);
         $this->setException($e);
-        $this->setData($data);
     }
 
     /**
@@ -54,15 +52,6 @@ abstract class Response {
     }
 
     /**
-     * Set response data.
-     *
-     * @param mixed $data            
-     */
-    public function setData($data) {
-        $this->data = $data;
-    }
-
-    /**
      * Set response header.
      *
      * @param string $contentType            
@@ -77,6 +66,9 @@ abstract class Response {
      * Send response header.
      */
     protected function sendHeader() {
+        if (empty($this->headerContentType) || empty($this->headerCharset)) {
+            $this->setHeader(self::CONTENT_TYPE_HTML, self::CHARSET_HTML);
+        }
         header("Content-Type: " . $this->headerContentType . "; charset=" . $this->headerCharset);
     }
 }
