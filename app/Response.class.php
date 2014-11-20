@@ -3,7 +3,7 @@
 /**
  * Root response object.
  * 
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 abstract class Response {
@@ -45,7 +45,7 @@ abstract class Response {
      *
      * @param Exception $e            
      */
-    public function setException(Exception $e = null) {
+    public final function setException(Exception $e = null) {
         if (!is_null($e)) {
             $this->exception = $e;
         }
@@ -57,7 +57,7 @@ abstract class Response {
      * @param string $contentType            
      * @param string $charset            
      */
-    public function setHeader($contentType, $charset) {
+    public final function setHeader($contentType, $charset) {
         $this->headerContentType = $contentType;
         $this->headerCharset = $charset;
     }
@@ -65,7 +65,7 @@ abstract class Response {
     /**
      * Send response header.
      */
-    protected function sendHeader() {
+    protected final function sendHeader() {
         if (empty($this->headerContentType) || empty($this->headerCharset)) {
             $this->setHeader(self::CONTENT_TYPE_HTML, self::CHARSET_HTML);
         }

@@ -3,10 +3,10 @@
 /**
  * Html response object.
  * 
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
-abstract class HtmlResponse extends Response {
+final class HtmlResponse extends Response {
     private $templateData;
 
     public function __construct(TemplateData $tpd = null, Exception $e = null) {
