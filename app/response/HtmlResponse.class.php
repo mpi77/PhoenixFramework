@@ -3,7 +3,7 @@
 /**
  * Html response object.
  * 
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 final class HtmlResponse extends Response {
@@ -24,10 +24,24 @@ final class HtmlResponse extends Response {
      */
     public function send() {
         $e = $this->getException();
+        $tpd = $this->templateData;
         if (is_null($e) || $e instanceof NoticeException || $e instanceof WarningException) {
+            // send header
             $this->sendHeader();
+            
+            // include Master header template
+            include 'gui/template/MasterHeaderTemplate.php';
+            
             // make exception box
+            if(!is_null($e)){
+                System::makeExceptionCont();
+            }
+            
             // make content
+            include $this->templateFile;
+            
+            // include Master footer template
+            include 'gui/template/MasterFooterTemplate.php';
         } else {
             System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }

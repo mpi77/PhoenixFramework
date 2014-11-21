@@ -3,7 +3,7 @@
 /**
  * Proxy gateway
  * 
- * @version 1.13
+ * @version 1.14
  * @author MPI
  * */
 class Proxy {
@@ -105,7 +105,7 @@ class Proxy {
     }
 
     private function createAppFrontController() {
-        header("Content-Type: text/html; charset=utf-8");
+        //header("Content-Type: text/html; charset=utf-8");
         $this->frontController = new FrontController($this->db, $this->args);
     }
 

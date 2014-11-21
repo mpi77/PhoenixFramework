@@ -15,28 +15,17 @@
 </head>
 
 <body role="document">
-	<div id="main-wrap">
-		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="menu-navbar">
-			<div class="container">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="./"><li class="fa fa-empire">&nbsp;</li>HOME</a>
-				</div>
-				<div class="navbar-collapse collapse">
-					<ul class="nav navbar-nav">
-						<li><a href="user/login/">Login</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<?php echo $f->output();?>
-		<div id="push"></div>
-	</div>
-	<div id="footer">
-		<div class="container">
-			<p class="text-center">
-				&copy;&nbsp;<a href="#">MPi</a>, 2014
-			</p>
-		</div>
-	</div>
-</body>
-</html>
+    <div id="main-wrap">
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="menu-navbar">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="./"><li class="fa fa-empire">&nbsp;</li>HOME</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="user/login/">Login</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+		

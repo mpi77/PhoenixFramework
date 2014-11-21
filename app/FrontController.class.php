@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.12
+ * @version 1.13
  * @author MPI
  * */
 class FrontController {
@@ -11,6 +11,8 @@ class FrontController {
     private $view;
     private $db;
     private $args = array ();
+    private $routeName;
+    private $actionName;
 
     public function __construct(Database $db, $args = null) {
         try {
@@ -43,16 +45,16 @@ class FrontController {
      * Dispatch user request.
      */
     private function dispatch() {
-        $routeName = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : Router::DEFAULT_EMPTY_ROUTE;
-        $actionName = isset($this->args["GET"]["action"]) ? $this->args["GET"]["action"] : Router::DEFAULT_EMPTY_ACTION;
+        $this->routeName = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : Router::DEFAULT_EMPTY_ROUTE;
+        $this->actionName = isset($this->args["GET"]["action"]) ? $this->args["GET"]["action"] : Router::DEFAULT_EMPTY_ACTION;
         
         try {
             // if route is invalid, redirect to index
-            if (Router::isRoute($routeName) === false) {
-                $routeName = Router::DEFAULT_EMPTY_ROUTE;
-                $actionName = Router::DEFAULT_EMPTY_ACTION;
+            if (Router::isRoute($this->routeName) === false) {
+                $this->routeName = Router::DEFAULT_EMPTY_ROUTE;
+                $this->actionName = Router::DEFAULT_EMPTY_ACTION;
             }
-            $route = Router::getRoute($routeName);
+            $route = Router::getRoute($this->routeName);
             if (!($route instanceof Route)) {
                 throw new WarningException(WarningException::WARNING_ROUTER_ROUTE_INVALID, json_encode($this->args));
             }
@@ -68,16 +70,16 @@ class FrontController {
                 throw new WarningException(WarningException::WARNING_CLASS_NOT_FOUND, json_encode($this->args));
             }
             
-            if (!(Router::getRoute($routeName)->isAction($actionName) === true && (Router::getRoute($routeName)->getAction($actionName) instanceof RouteAction))) {
+            if (!(Router::getRoute($this->routeName)->isAction($this->actionName) === true && (Router::getRoute($this->routeName)->getAction($this->actionName) instanceof RouteAction))) {
                 throw new WarningException(WarningException::WARNING_ROUTER_ROUTE_ACTION_INVALID, json_encode($this->args));
             }
-            if (System::isCallable($this->controller, Router::getRoute($routeName)->getAction($actionName)->getRunFunctionName()) === true) {
-                $this->controller->{Router::getRoute($routeName)->getAction($actionName)->getRunFunctionName()}();
+            if (System::isCallable($this->controller, Router::getRoute($this->routeName)->getAction($this->actionName)->getRunFunctionName()) === true) {
+                $this->controller->{Router::getRoute($this->routeName)->getAction($this->actionName)->getRunFunctionName()}();
             } else {
                 throw new WarningException(WarningException::WARNING_ACTION_IS_NOT_CALLABLE, json_encode($this->args));
             }
             
-            if (Router::isRoute($routeName) === false) {
+            if (Router::isRoute($this->routeName) === false) {
                 throw new WarningException(WarningException::WARNING_INVALID_ROUTE, json_encode($this->args));
             }
         } catch (NoticeException $e) {
@@ -93,15 +95,15 @@ class FrontController {
     }
 
     /**
-     * Generate HTML output.
+     * Generate output.
      */
     public function output() {
+        $response = null;
         try {
-            System::makeExceptionCont();
-            if (!empty($this->view) && System::isViewEnabled()) {
-                $this->view->outputHtml();
+            if (System::isCallable($this->view, Router::getRoute($this->routeName)->getAction($this->actionName)->getRunFunctionName()) === true) {
+                $response = $this->view->{Router::getRoute($this->routeName)->getAction($this->actionName)->getRunFunctionName()}();
             } else {
-                echo "<div class=\"page-header\">&nbsp;</div>";
+                throw new WarningException(WarningException::WARNING_ACTION_IS_NOT_CALLABLE, json_encode($this->args));
             }
         } catch (NoticeException $e) {
             $_SESSION[Config::SERVER_FQDN]["exception"] = $e;
@@ -117,6 +119,7 @@ class FrontController {
             Logger::log($e);
             System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }
+        $response->send();
     }
 }
 ?>

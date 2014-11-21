@@ -3,7 +3,7 @@
 /**
  * Root view object.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 abstract class View {
@@ -67,6 +67,8 @@ abstract class View {
      *
      * @all views must contain a outputHtml method which
      * generates output to html tag DIV /id=content/
+     * 
+     * @deprecated
      */
     public abstract function outputHtml();
 

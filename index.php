@@ -2,7 +2,7 @@
 /**
  * Index page.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  * */
 
@@ -27,7 +27,7 @@ $m = System::findAllFiles("app", array (
                 "Breadcrumbs.class.php",
                 "RouteAction.class.php",
                 "Route.class.php",
-                "Router.class.php"
+                "Router.class.php" 
 ));
 sort($m);
 /* load files */
@@ -45,7 +45,8 @@ $proxy = new Proxy();
 
 /* proxy detected app request, continue with app (frontcontroller) */
 $f = $proxy->getFrontController();
-require 'gui/template/MasterTemplate.php';
-
+if ($f instanceof FrontController) {
+    $f->output();
+}
 exit();
 ?>
