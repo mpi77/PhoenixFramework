@@ -3,7 +3,7 @@
 /**
  * Root response object.
  * 
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 abstract class Response {
@@ -48,7 +48,7 @@ abstract class Response {
     public final function getException() {
         return $this->exception;
     }
-    
+
     /**
      * Set response exception.
      *
@@ -79,6 +79,30 @@ abstract class Response {
             $this->setHeader(self::CONTENT_TYPE_HTML, self::CHARSET_HTML);
         }
         header("Content-Type: " . $this->headerContentType . "; charset=" . $this->headerCharset);
+    }
+
+    /**
+     * Get new response object by given output format.
+     *
+     * @param integer $format
+     *            constants from Response class with preffix RESPONSE_*
+     *            
+     * @return (Html+Json+Xml)Response
+     */
+    public static final function responseFactory($format) {
+        switch ($format) {
+            case self::RESPONSE_HTML :
+                return new HtmlResponse();
+                break;
+            case self::RESPONSE_JSON :
+                return new JsonResponse();
+                break;
+            case self::RESPONSE_XML :
+                return new XmlResponse();
+                break;
+            default :
+                return new HtmlResponse();
+        }
     }
 }
 ?>

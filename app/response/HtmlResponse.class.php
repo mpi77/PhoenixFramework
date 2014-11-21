@@ -3,7 +3,7 @@
 /**
  * Html response object.
  * 
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 final class HtmlResponse extends Response {
@@ -34,7 +34,7 @@ final class HtmlResponse extends Response {
             
             // make exception box
             if(!is_null($e)){
-                System::makeExceptionCont();
+                // TODO
             }
             
             // make content

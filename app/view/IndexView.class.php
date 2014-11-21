@@ -2,7 +2,7 @@
 /**
  * Index view.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class IndexView extends View{
@@ -17,11 +17,15 @@ class IndexView extends View{
 	
 	/**
 	 * Show index page.
+	 * 
+	 * @access Html
 	 */
 	public function index() {
+	    // if format==HTML
 	    $tpd = $this->getTemplateData();
 	    $tpd->set("greeting", "<Welcome page>");
-	    return new HtmlResponse("gui/template/IndexTemplate.php", $tpd);
+	    $response = new HtmlResponse("gui/template/IndexTemplate.php", $tpd);
+	    return $response;
 	}
 
 	public function outputHtml(){

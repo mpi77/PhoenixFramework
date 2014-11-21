@@ -3,16 +3,18 @@
 /**
  * FrontController
  * 
- * @version 1.13
+ * @version 1.14
  * @author MPI
  * */
 class FrontController {
     private $controller;
     private $view;
     private $db;
+    private $response;
     private $args = array ();
     private $routeName;
     private $actionName;
+    private $responseFormat;
 
     public function __construct(Database $db, $args = null) {
         try {
@@ -47,6 +49,7 @@ class FrontController {
     private function dispatch() {
         $this->routeName = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : Router::DEFAULT_EMPTY_ROUTE;
         $this->actionName = isset($this->args["GET"]["action"]) ? $this->args["GET"]["action"] : Router::DEFAULT_EMPTY_ACTION;
+        $this->responseFormat = isset($this->args["GET"]["format"]) ? $this->args["GET"]["format"] : 1;
         
         try {
             // if route is invalid, redirect to index
@@ -98,28 +101,33 @@ class FrontController {
      * Generate output.
      */
     public function output() {
-        $response = null;
         try {
             if (System::isCallable($this->view, Router::getRoute($this->routeName)->getAction($this->actionName)->getRunFunctionName()) === true) {
-                $response = $this->view->{Router::getRoute($this->routeName)->getAction($this->actionName)->getRunFunctionName()}();
+                $this->response = $this->view->{Router::getRoute($this->routeName)->getAction($this->actionName)->getRunFunctionName()}();
             } else {
                 throw new WarningException(WarningException::WARNING_ACTION_IS_NOT_CALLABLE, json_encode($this->args));
             }
         } catch (NoticeException $e) {
-            $_SESSION[Config::SERVER_FQDN]["exception"] = $e;
-            System::makeExceptionCont();
+            $this->response = Response::responseFactory($this->responseFormat);
+            $this->response->setException($e);
         } catch (WarningException $e) {
             Logger::log($e, $this->db);
-            $_SESSION[Config::SERVER_FQDN]["exception"] = $e;
-            System::makeExceptionCont();
+            $this->response = Response::responseFactory($this->responseFormat);
+            $this->response->setException($e);
         } catch (FailureException $e) {
             Logger::log($e);
-            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
+            $this->response = Response::responseFactory($this->responseFormat);
+            $this->response->setException($e);
         } catch (Exception $e) {
             Logger::log($e);
-            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
+            $this->response = Response::responseFactory($this->responseFormat);
+            $this->response->setException($e);
         }
-        $response->send();
+        
+        // send response
+        if ($this->response instanceof Response) {
+            $this->response->send();
+        }
     }
 }
 ?>

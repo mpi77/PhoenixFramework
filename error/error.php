@@ -2,7 +2,7 @@
 /**
  * Show error page.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 header('Content-Type: text/html; charset=utf-8');
@@ -31,7 +31,7 @@ if(isset($_GET["code"]) && is_numeric($_GET["code"]) && array_key_exists($_GET["
 <html>
 <head>
 <meta charset="UTF-8">
-<base href="/galix/">
+<base href="/phoenix/">
 <title><?php echo htmlspecialchars("Error ".$i);?></title>
 <link href="error/error.css" rel="stylesheet" type="text/css" />
 </head>
