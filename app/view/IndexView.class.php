@@ -2,7 +2,7 @@
 /**
  * Index view.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 class IndexView extends View{
@@ -26,10 +26,6 @@ class IndexView extends View{
 	    $tpd->set("greeting", "<Welcome page>");
 	    $response = new HtmlResponse("gui/template/IndexTemplate.php", $tpd);
 	    return $response;
-	}
-
-	public function outputHtml(){
-	    // deprecated
 	}
 }
 ?>

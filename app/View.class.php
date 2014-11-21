@@ -3,7 +3,7 @@
 /**
  * Root view object.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 abstract class View {
@@ -61,17 +61,6 @@ abstract class View {
     protected function getTemplateData() {
         return $this->templateData;
     }
-
-    /**
-     * HTML output of view.
-     *
-     * @all views must contain a outputHtml method which
-     * generates output to html tag DIV /id=content/
-     * 
-     * @deprecated
-     */
-    public abstract function outputHtml();
-
 
     /**
      * Get name of this class.

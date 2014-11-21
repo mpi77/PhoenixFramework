@@ -2,7 +2,7 @@
 /**
  * User view.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 class UserView extends View {
@@ -13,10 +13,6 @@ class UserView extends View {
 
     public function getName() {
         return get_class($this);
-    }
-
-    public function outputHtml() {
-        include 'gui/template/UserTemplate.php';
     }
 }
 ?>
