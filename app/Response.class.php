@@ -3,7 +3,7 @@
 /**
  * Root response object.
  * 
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 abstract class Response {
@@ -40,6 +40,15 @@ abstract class Response {
      */
     public abstract function __toString();
 
+    /**
+     * Get response exception.
+     *
+     * @return Exception
+     */
+    public final function getException() {
+        return $this->exception;
+    }
+    
     /**
      * Set response exception.
      *
