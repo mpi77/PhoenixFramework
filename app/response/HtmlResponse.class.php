@@ -3,7 +3,7 @@
 /**
  * Html response object.
  * 
- * @version 1.5
+ * @version 1.6
  * @author MPI
  * */
 final class HtmlResponse extends Response {
@@ -33,12 +33,14 @@ final class HtmlResponse extends Response {
             include 'gui/template/MasterHeaderTemplate.php';
             
             // make exception box
-            if(!is_null($e)){
-                // TODO
+            if (!is_null($e)) {
+                echo $this->getExceptionBox();
             }
             
             // make content
-            include $this->templateFile;
+            if (!empty($this->templateFile) && is_file($this->templateFile)) {
+                include $this->templateFile;
+            }
             
             // include Master footer template
             include 'gui/template/MasterFooterTemplate.php';
@@ -74,6 +76,39 @@ final class HtmlResponse extends Response {
      */
     public function setTemplateFile($templateFile) {
         $this->templateFile = $templateFile;
+    }
+
+    /**
+     * Get exception container (div).
+     *
+     * @return string
+     */
+    public function getExceptionBox() {
+        $r = "";
+        if (!is_null($this->getException())) {
+            $class = "alert-success";
+            $icon = "fa-info";
+            switch (get_class($this->getException())) {
+                case "NoticeException" :
+                    $class = "alert-info";
+                    $icon = "fa-info";
+                    break;
+                case "WarningException" :
+                    $class = "alert-warning";
+                    $icon = "fa-warning";
+                    break;
+                case "FailureException" :
+                    $class = "alert-error";
+                    $icon = "fa-bolt";
+                    break;
+                default :
+                    $class = "alert-error";
+                    $icon = "fa-bolt";
+                    break;
+            }
+            $r = sprintf("<div id=\"exception\" class=\"alert %s\"><i class=\"fa %s\"></i>&nbsp;<a href=\"#\" class=\"close\" data-dismiss=\"alert\">&times;</a><strong>%s</strong></div>", $class, $icon, $this->getException()->__toString());
+        }
+        return $r;
     }
 }
 ?>

@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.15
+ * @version 1.16
  * @author MPI
  * */
 class System {
@@ -285,58 +285,19 @@ class System {
     }
 
     /**
-     * Detect runtime exception and show it's message box.
-     */
-    public static function makeExceptionCont() {
-        if (isset($_SESSION[Config::SERVER_FQDN]["exception"]) && !empty($_SESSION[Config::SERVER_FQDN]["exception"])) {
-            $class = "alert-success";
-            $icon = "fa-info";
-            switch (get_class($_SESSION[Config::SERVER_FQDN]["exception"])) {
-                case "NoticeException" :
-                    $class = "alert-info";
-                    $icon = "fa-info";
-                    break;
-                case "WarningException" :
-                    $class = "alert-warning";
-                    $icon = "fa-warning";
-                    break;
-                case "FailureException" :
-                    $class = "alert-error";
-                    $icon = "fa-bolt";
-                    break;
-                default :
-                    $class = "alert-error";
-                    $icon = "fa-bolt";
-                    break;
-            }
-            echo sprintf("<div id=\"exception\" class=\"alert %s\"><i class=\"fa %s\"></i>&nbsp;<a href=\"#\" class=\"close\" data-dismiss=\"alert\">&times;</a><strong>%s</strong></div>", $class, $icon, $_SESSION[Config::SERVER_FQDN]["exception"]->__toString());
-        }
-    }
-
-    /**
      * Detect runtime exception.
      *
-     * @return boolean
+     * @deprecated
      */
     public static function isException() {
-        if (isset($_SESSION[Config::SERVER_FQDN]["exception"]) && !empty($_SESSION[Config::SERVER_FQDN]["exception"])) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**
      * Get runtime exception.
      *
-     * @return exception|null
+     * @deprecated
      */
     public static function getException() {
-        if (isset($_SESSION[Config::SERVER_FQDN]["exception"]) && !empty($_SESSION[Config::SERVER_FQDN]["exception"])) {
-            return $_SESSION[Config::SERVER_FQDN]["exception"];
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -544,7 +505,6 @@ class System {
         if (!isset($_SESSION[Config::SERVER_FQDN]["page_size"])) {
             $_SESSION[Config::SERVER_FQDN]["page_size"] = self::PAGE_SIZE_DEFAULT;
         }
-        $_SESSION[Config::SERVER_FQDN]["exception"] = null;
         $_SESSION[Config::SERVER_FQDN]["view"] = true;
     }
 
@@ -652,9 +612,22 @@ class System {
 
     /**
      * Unset exception detector.
+     * 
+     * @deprecated
      */
     public static function clearException() {
-        $_SESSION[Config::SERVER_FQDN]["exception"] = null;
+    }
+    
+    /**
+     * Convert size of bits to size of bytes with human readable prefix.
+     * 
+     * @param integer $bitSize
+     * 
+     * @return string
+     */
+    public static function convert2bytes($bitSize){
+        $unit=array('B','KB','MB','GB','TB','PB');
+        return @round($size/pow(1024,($i=floor(log($size,1024)))),2)." ".$unit[$i];
     }
 
     /**
