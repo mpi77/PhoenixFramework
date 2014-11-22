@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.16
+ * @version 1.17
  * @author MPI
  * */
 class System {
@@ -505,7 +505,6 @@ class System {
         if (!isset($_SESSION[Config::SERVER_FQDN]["page_size"])) {
             $_SESSION[Config::SERVER_FQDN]["page_size"] = self::PAGE_SIZE_DEFAULT;
         }
-        $_SESSION[Config::SERVER_FQDN]["view"] = true;
     }
 
     /**
@@ -590,24 +589,25 @@ class System {
     /**
      * Check if View is enabled.
      *
-     * @return booleean
+     * @deprecated
      */
     public static function isViewEnabled() {
-        return (isset($_SESSION[Config::SERVER_FQDN]["view"]) && $_SESSION[Config::SERVER_FQDN]["view"]);
     }
 
     /**
      * Set View to enabled.
+     * 
+     * @deprecated
      */
     public static function setViewEnabled() {
-        $_SESSION[Config::SERVER_FQDN]["view"] = true;
     }
 
     /**
      * Set View to disabled.
+     * 
+     * @deprecated
      */
     public static function setViewDisabled() {
-        $_SESSION[Config::SERVER_FQDN]["view"] = false;
     }
 
     /**

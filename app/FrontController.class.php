@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.15
+ * @version 1.16
  * @author MPI
  * */
 class FrontController {
@@ -23,12 +23,10 @@ class FrontController {
         $this->responseFormat = isset($this->args["GET"]["format"]) ? $this->args["GET"]["format"] : 1;
         
         try {
-            if ($db->getStatus() !== true) {
+            if (!($db instanceof Database) || $db->getStatus() !== true) {
                 throw new FailureException(FailureException::FAILURE_UNABLE_CONNECT_DB);
             }
             $this->db = $db;
-            System::setViewEnabled();
-            System::clearException();
             $this->dispatch();
         } catch (NoticeException $e) {
             $this->response = Response::responseFactory($this->responseFormat);
@@ -52,14 +50,12 @@ class FrontController {
         if (!empty($this->db)) {
             $this->db = null;
         }
-        System::setViewEnabled();
-        System::clearException();
     }
 
     /**
      * Dispatch user request.
      */
-    private function dispatch() {        
+    private function dispatch() {
         // if route is invalid, redirect to index
         if (Router::isRoute($this->routeName) === false) {
             $this->routeName = Router::DEFAULT_EMPTY_ROUTE;
@@ -100,10 +96,14 @@ class FrontController {
      */
     public function output() {
         try {
-            if (System::isCallable($this->view, Router::getRoute($this->routeName)->getAction($this->actionName)->getRunFunctionName()) === true) {
-                $this->response = $this->view->{Router::getRoute($this->routeName)->getAction($this->actionName)->getRunFunctionName()}();
-            } else {
-                throw new WarningException(WarningException::WARNING_ACTION_IS_NOT_CALLABLE, json_encode($this->args));
+            if (is_null($this->response) || ($this->response instanceof Response && $this->response->getException() instanceof NoticeException)) {
+                if (System::isCallable($this->view, Router::getRoute($this->routeName)->getAction($this->actionName)->getRunFunctionName()) === true) {
+                    $oldException = ($this->response instanceof Response && $this->response->getException() instanceof NoticeException) ? $this->response->getException() : null;
+                    $this->response = $this->view->{Router::getRoute($this->routeName)->getAction($this->actionName)->getRunFunctionName()}();
+                    $this->response->setException($oldException);
+                } else {
+                    throw new WarningException(WarningException::WARNING_ACTION_IS_NOT_CALLABLE, json_encode($this->args));
+                }
             }
         } catch (NoticeException $e) {
             $this->response = Response::responseFactory($this->responseFormat);

@@ -3,7 +3,7 @@
 /**
  * Html response object.
  * 
- * @version 1.6
+ * @version 1.7
  * @author MPI
  * */
 final class HtmlResponse extends Response {
@@ -37,8 +37,8 @@ final class HtmlResponse extends Response {
                 echo $this->getExceptionBox();
             }
             
-            // make content
-            if (!empty($this->templateFile) && is_file($this->templateFile)) {
+            // make content (only for null or Notice exception)
+            if ((is_null($e) || $e instanceof NoticeException) && !empty($this->templateFile) && is_file($this->templateFile)) {
                 include $this->templateFile;
             }
             
@@ -83,7 +83,7 @@ final class HtmlResponse extends Response {
      *
      * @return string
      */
-    public function getExceptionBox() {
+    private function getExceptionBox() {
         $r = "";
         if (!is_null($this->getException())) {
             $class = "alert-success";
