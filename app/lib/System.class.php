@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.17
+ * @version 1.18
  * @author MPI
  * */
 class System {
@@ -282,22 +282,6 @@ class System {
                 require $rootDir . $file;
             }
         }
-    }
-
-    /**
-     * Detect runtime exception.
-     *
-     * @deprecated
-     */
-    public static function isException() {
-    }
-
-    /**
-     * Get runtime exception.
-     *
-     * @deprecated
-     */
-    public static function getException() {
     }
 
     /**
@@ -584,38 +568,6 @@ class System {
      */
     public static function printAuthInput() {
         echo sprintf("<input type=\"hidden\" name=\"auth_token\" value=\"%s\">", htmlspecialchars($_SESSION[Config::SERVER_FQDN]["user"]["auth_token"]));
-    }
-
-    /**
-     * Check if View is enabled.
-     *
-     * @deprecated
-     */
-    public static function isViewEnabled() {
-    }
-
-    /**
-     * Set View to enabled.
-     * 
-     * @deprecated
-     */
-    public static function setViewEnabled() {
-    }
-
-    /**
-     * Set View to disabled.
-     * 
-     * @deprecated
-     */
-    public static function setViewDisabled() {
-    }
-
-    /**
-     * Unset exception detector.
-     * 
-     * @deprecated
-     */
-    public static function clearException() {
     }
     
     /**
