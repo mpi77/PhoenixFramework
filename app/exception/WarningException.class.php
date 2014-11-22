@@ -2,13 +2,16 @@
 
 /**
  * WarningException is used to inform user that called action crashed
- * due to internal program error. This final state is CRITICAL for user 
- * because it means that some program function crashed, but whole program 
- * may process ahead. It is possible to make step back, but this
- * state is logged. In normal running program, this type of exception 
- * should not be thrown. Typicaly thrown by incorect SQL query, bad ACL, etc. 
+ * due to internal program error or with state incompatible with correct 
+ * proccess. This final state is CRITICAL for user because it means that 
+ * some program function crashed, but whole program may process ahead. 
+ * It is possible to make step back, but this state is logged. In normal 
+ * running program, this type of exception should not be thrown. Typicaly 
+ * thrown by incorect SQL query, bad ACL, etc. 
+ * While generating Response.send, the only allowed output is this exception.
+ * Other output content is not allowed.
  * 
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class WarningException extends Exception implements IAppException {

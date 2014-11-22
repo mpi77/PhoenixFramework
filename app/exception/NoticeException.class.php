@@ -5,8 +5,10 @@
  * This final state is only INFORMATIVE for user (show message) 
  * and it doesn't mean that app crashed while processing. Also this
  * state is not logged. Typicaly thrown by invalid user input, etc.
+ * While generating Response.send, the output content (in html content 
+ * div) is attached into response object with this exception.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 class NoticeException extends Exception implements IAppException {

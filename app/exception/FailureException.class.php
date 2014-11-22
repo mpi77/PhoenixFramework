@@ -4,10 +4,12 @@
  * FailureException is used to inform user that called action crashed.
  * This final state is CRITICAL for user because it means that app crashed 
  * and it is impossible to make step back. This state is logged and redirected to 
- * shutdown page, because it is impossible to continue witch prosessing.
+ * shutdown page, because it is impossible to continue with processing.
  * Typicaly thrown by unavailable database, etc.
+ * While generating Response.send, the only allowed output is this exception.
+ * Other output content is not allowed.
  *
- * @version 1.2
+ * @version 1.4
  * @author MPI
  * */
 class FailureException extends Exception implements IAppException {
