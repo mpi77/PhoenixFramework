@@ -3,37 +3,50 @@
 /**
  * Proxy gateway
  * 
- * @version 1.15
+ * @version 1.16
  * @author MPI
  * */
 class Proxy {
     private $db;
     private $args;
     private $frontController;
+    private $response;
+    private $responseFormat;
     const FILE_DOWNLOAD_ROUTE = "file";
     const FILE_DOWNLOAD_ACTION = "download";
 
     public function __construct() {
         try {
-            $this->db = new Database(Config::getDatabaseConnectionParams(Config::DB_DEFAULT_POOL));
-            
-            // do not change (trim&slash) $_GET and $_POST
+            $this->response = null;
             $this->args["GET"] = System::trimSlashMultidimAssocArray($_GET);
             $this->args["POST"] = System::trimSlashMultidimAssocArray($_POST);
+            $this->responseFormat = isset($this->args["GET"]["format"]) ? $this->args["GET"]["format"] : 1;
+            
+            $this->db = new Database(Config::getDatabaseConnectionParams(Config::DB_DEFAULT_POOL));
             
             $this->runProxy();
         } catch (NoticeException $e) {
-            System::redirect(Config::SITE_PATH . "404");
+            $this->response = Response::responseFactory($this->responseFormat);
+            $this->response->setException($e);
         } catch (WarningException $e) {
             Logger::log($e, $this->db);
-            System::redirect(Config::SITE_PATH . "404");
+            $this->response = Response::responseFactory($this->responseFormat);
+            $this->response->setException($e);
         } catch (FailureException $e) {
             Logger::log($e);
-            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
+            $this->response = Response::responseFactory($this->responseFormat);
+            $this->response->setException($e);
         } catch (Exception $e) {
             Logger::log($e);
-            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
-        } 
+            $this->response = Response::responseFactory($this->responseFormat);
+            $this->response->setException($e);
+        }
+        
+        // send response with exception
+        if ($this->response instanceof Response) {
+            $this->response->send();
+            exit();
+        }
     }
 
     public function __destruct() {

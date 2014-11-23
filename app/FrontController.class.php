@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.17
+ * @version 1.18
  * @author MPI
  * */
 class FrontController {
@@ -125,6 +125,7 @@ class FrontController {
         // send response
         if ($this->response instanceof Response) {
             $this->response->send();
+            exit();
         }
     }
 }
