@@ -8,49 +8,49 @@
  * While generating Response.send, the output content (in html content 
  * div) is attached into response object with this exception.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class NoticeException extends Exception implements IAppException {
-    const NOTICE_UNKNOWN = 0;
-    const NOTICE_LOGIN_FAILED = 1;
-    const NOTICE_INVALID_PARAMETERS = 2;
-    const NOTICE_PERMISSION_DENIED = 3;
-    const NOTICE_PASSWORD_INVALID_FORMAT = 4;
-    const NOTICE_INPUT_INVALID_FORMAT = 5;
-    const NOTICE_SUCCESSFULLY_SAVED = 6;
-    const NOTICE_LOGIN_REQUIRED = 7;
-    const NOTICE_RENEW_EMAIL_ERROR = 8;
-    const NOTICE_RENEW_EMAIL_SENDED = 9;
-    const NOTICE_INVALID_TOKEN = 10;
-    const NOTICE_PASSWORD_CHANGED = 11;
-    const NOTICE_USER_NOT_FOUND = 12;
-    const NOTICE_USER_CREATE_EMAIL_ERROR = 13;
-    const NOTICE_EMAIL_USED_ENTER_ANOTHER = 14;
-    const NOTICE_USER_CREATE_EMAIL_SENDED = 15;
-    const NOTICE_USER_ACTIVATED = 16;
-    const NOTICE_NOTHING_TO_DISPLAY = 17;
-    const NOTICE_FILE_IS_NOT_DELETABLE = 18;
+    const N_UNKNOWN = 0;
+    const N_LOGIN_FAILED = 1;
+    const N_INVALID_PARAMETERS = 2;
+    const N_PERMISSION_DENIED = 3;
+    const N_PASSWORD_INVALID_FORMAT = 4;
+    const N_INPUT_INVALID_FORMAT = 5;
+    const N_SUCCESSFULLY_SAVED = 6;
+    const N_LOGIN_REQUIRED = 7;
+    const N_RENEW_EMAIL_ERROR = 8;
+    const N_RENEW_EMAIL_SENDED = 9;
+    const N_INVALID_TOKEN = 10;
+    const N_PASSWORD_CHANGED = 11;
+    const N_USER_NOT_FOUND = 12;
+    const N_USER_CREATE_EMAIL_ERROR = 13;
+    const N_EMAIL_USED_ENTER_ANOTHER = 14;
+    const N_USER_CREATE_EMAIL_SENDED = 15;
+    const N_USER_ACTIVATED = 16;
+    const N_NOTHING_TO_DISPLAY = 17;
+    const N_FILE_IS_NOT_DELETABLE = 18;
     private static $notice = array (
-                    self::NOTICE_UNKNOWN => Translator::NOTICE_UNKNOWN,
-                    self::NOTICE_LOGIN_FAILED => Translator::NOTICE_LOGIN_FAILED,
-                    self::NOTICE_INVALID_PARAMETERS => Translator::NOTICE_INVALID_PARAMETERS,
-                    self::NOTICE_PERMISSION_DENIED => Translator::NOTICE_PERMISSION_DENIED,
-                    self::NOTICE_PASSWORD_INVALID_FORMAT => Translator::NOTICE_PASSWORD_INVALID_FORMAT,
-                    self::NOTICE_INPUT_INVALID_FORMAT => Translator::NOTICE_INPUT_INVALID_FORMAT,
-                    self::NOTICE_SUCCESSFULLY_SAVED => Translator::NOTICE_SUCCESSFULLY_SAVED,
-                    self::NOTICE_LOGIN_REQUIRED => Translator::NOTICE_LOGIN_REQUIRED,
-                    self::NOTICE_RENEW_EMAIL_ERROR => Translator::NOTICE_RENEW_EMAIL_ERROR,
-                    self::NOTICE_RENEW_EMAIL_SENDED => Translator::NOTICE_RENEW_EMAIL_SENDED,
-                    self::NOTICE_INVALID_TOKEN => Translator::NOTICE_INVALID_TOKEN,
-                    self::NOTICE_PASSWORD_CHANGED => Translator::NOTICE_PASSWORD_CHANGED,
-                    self::NOTICE_USER_NOT_FOUND => Translator::NOTICE_USER_NOT_FOUND,
-                    self::NOTICE_USER_CREATE_EMAIL_ERROR => Translator::NOTICE_USER_CREATE_EMAIL_ERROR,
-                    self::NOTICE_EMAIL_USED_ENTER_ANOTHER => Translator::NOTICE_EMAIL_USED_ENTER_ANOTHER,
-                    self::NOTICE_USER_CREATE_EMAIL_SENDED => Translator::NOTICE_USER_CREATE_EMAIL_SENDED,
-                    self::NOTICE_USER_ACTIVATED => Translator::NOTICE_USER_ACTIVATED,
-                    self::NOTICE_NOTHING_TO_DISPLAY => Translator::NOTICE_NOTHING_TO_DISPLAY,
-                    self::NOTICE_FILE_IS_NOT_DELETABLE => Translator::NOTICE_FILE_IS_NOT_DELETABLE 
+                    self::N_UNKNOWN => Translator::N_UNKNOWN,
+                    self::N_LOGIN_FAILED => Translator::N_LOGIN_FAILED,
+                    self::N_INVALID_PARAMETERS => Translator::N_INVALID_PARAMETERS,
+                    self::N_PERMISSION_DENIED => Translator::N_PERMISSION_DENIED,
+                    self::N_PASSWORD_INVALID_FORMAT => Translator::N_PASSWORD_INVALID_FORMAT,
+                    self::N_INPUT_INVALID_FORMAT => Translator::N_INPUT_INVALID_FORMAT,
+                    self::N_SUCCESSFULLY_SAVED => Translator::N_SUCCESSFULLY_SAVED,
+                    self::N_LOGIN_REQUIRED => Translator::N_LOGIN_REQUIRED,
+                    self::N_RENEW_EMAIL_ERROR => Translator::N_RENEW_EMAIL_ERROR,
+                    self::N_RENEW_EMAIL_SENDED => Translator::N_RENEW_EMAIL_SENDED,
+                    self::N_INVALID_TOKEN => Translator::N_INVALID_TOKEN,
+                    self::N_PASSWORD_CHANGED => Translator::N_PASSWORD_CHANGED,
+                    self::N_USER_NOT_FOUND => Translator::N_USER_NOT_FOUND,
+                    self::N_USER_CREATE_EMAIL_ERROR => Translator::N_USER_CREATE_EMAIL_ERROR,
+                    self::N_EMAIL_USED_ENTER_ANOTHER => Translator::N_EMAIL_USED_ENTER_ANOTHER,
+                    self::N_USER_CREATE_EMAIL_SENDED => Translator::N_USER_CREATE_EMAIL_SENDED,
+                    self::N_USER_ACTIVATED => Translator::N_USER_ACTIVATED,
+                    self::N_NOTHING_TO_DISPLAY => Translator::N_NOTHING_TO_DISPLAY,
+                    self::N_FILE_IS_NOT_DELETABLE => Translator::N_FILE_IS_NOT_DELETABLE 
     );
 
     public function __construct($code = 0, $message = null) {
