@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.18
+ * @version 1.19
  * @author MPI
  * */
 class FrontController {
@@ -20,7 +20,7 @@ class FrontController {
         $this->args = $args;
         $this->routeName = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : Router::DEFAULT_EMPTY_ROUTE;
         $this->actionName = isset($this->args["GET"]["action"]) ? $this->args["GET"]["action"] : Router::DEFAULT_EMPTY_ACTION;
-        $this->responseFormat = isset($this->args["GET"]["format"]) ? $this->args["GET"]["format"] : 1;
+        $this->responseFormat = isset($this->args["GET"]["format"]) ? $this->args["GET"]["format"] : Response::RESPONSE_HTML;
         
         try {
             if (!($db instanceof Database) || $db->getStatus() !== true) {

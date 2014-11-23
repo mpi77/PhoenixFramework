@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.19
+ * @version 1.20
  * @author MPI
  * */
 class System {
@@ -489,42 +489,6 @@ class System {
         if (!isset($_SESSION[Config::SERVER_FQDN]["page_size"])) {
             $_SESSION[Config::SERVER_FQDN]["page_size"] = self::PAGE_SIZE_DEFAULT;
         }
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function checkSessionInactivity() {
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function checkSessionFixation() {
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function initAuthToken() {
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function updateAuthToken() {
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function isCsrfAttack($auth_token) {
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function printAuthInput() {
     }
     
     /**

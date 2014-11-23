@@ -3,7 +3,7 @@
 /**
  * Proxy gateway
  * 
- * @version 1.16
+ * @version 1.17
  * @author MPI
  * */
 class Proxy {
@@ -20,7 +20,7 @@ class Proxy {
             $this->response = null;
             $this->args["GET"] = System::trimSlashMultidimAssocArray($_GET);
             $this->args["POST"] = System::trimSlashMultidimAssocArray($_POST);
-            $this->responseFormat = isset($this->args["GET"]["format"]) ? $this->args["GET"]["format"] : 1;
+            $this->responseFormat = isset($this->args["GET"]["format"]) ? $this->args["GET"]["format"] : Response::RESPONSE_HTML;
             
             $this->db = new Database(Config::getDatabaseConnectionParams(Config::DB_DEFAULT_POOL));
             
