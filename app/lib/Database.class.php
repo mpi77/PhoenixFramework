@@ -4,7 +4,7 @@
  * Database provides interaction between this program
  * and db server.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  *        
  */
@@ -24,7 +24,7 @@ class Database {
     public function __construct($connectionParams) {
         $this->connectionParams = $connectionParams;
         if (empty($this->connectionParams)) {
-            throw new FailureException(FailureException::FAILURE_MISSING_CONFIG_DB);
+            throw new FailureException(FailureException::F_MISSING_CONFIG_DB);
         } else {
             $this->connect();
         }
@@ -65,10 +65,10 @@ class Database {
                     return self::EMPTY_RESULT;
                 }
             } else {
-                throw new WarningException(WarningException::WARNING_INVALID_SQL_SELECT);
+                throw new WarningException(WarningException::W_INVALID_SQL_SELECT);
             }
         } catch (PDOException $e) {
-            throw new WarningException(WarningException::WARNING_INVALID_SQL_SELECT);
+            throw new WarningException(WarningException::W_INVALID_SQL_SELECT);
         }
     }
 
@@ -88,10 +88,10 @@ class Database {
             if ($r->execute($queryArgs)) {
                 return ($r->rowCount() > 0 ? $r->rowCount() : 0);
             } else {
-                throw new WarningException(WarningException::WARNING_INVALID_SQL_ACTION);
+                throw new WarningException(WarningException::W_INVALID_SQL_ACTION);
             }
         } catch (PDOException $e) {
-            throw new WarningException(WarningException::WARNING_INVALID_SQL_ACTION);
+            throw new WarningException(WarningException::W_INVALID_SQL_ACTION);
         }
     }
 
@@ -205,7 +205,7 @@ class Database {
             $this->status = true;
         } catch (PDOException $e) {
             $this->status = false;
-            throw new FailureException(FailureException::FAILURE_UNABLE_CONNECT_DB);
+            throw new FailureException(FailureException::F_UNABLE_CONNECT_DB);
         }
     }
 }

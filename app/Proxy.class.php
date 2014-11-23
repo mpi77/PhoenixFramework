@@ -3,7 +3,7 @@
 /**
  * Proxy gateway
  * 
- * @version 1.14
+ * @version 1.15
  * @author MPI
  * */
 class Proxy {
@@ -60,7 +60,7 @@ class Proxy {
     private function linkProcess() {
         $proxyItem = ProxyEntity::getProxyItemByValidToken($this->db, $_GET["token"]);
         if ($proxyItem == Database::EMPTY_RESULT) {
-            throw new NoticeException(NoticeException::NOTICE_INVALID_TOKEN);
+            throw new NoticeException(NoticeException::N_INVALID_TOKEN);
         }
         $proxyItem = $proxyItem[0];
         
@@ -71,11 +71,11 @@ class Proxy {
         }
         if (!is_null($proxyItem->getOnlyUid()) && $_SESSION[Config::SERVER_FQDN]["user"]["uid"] != $proxyItem->getOnlyUid()) {
             // user is blocked
-            throw new NoticeException(NoticeException::NOTICE_PERMISSION_DENIED);
+            throw new NoticeException(NoticeException::N_PERMISSION_DENIED);
         }
         if (!is_null($proxyItem->getOnlyGid()) && !in_array($proxyItem->getOnlyGid(), $_SESSION[Config::SERVER_FQDN]["user"]["gid"])) {
             // user has not membership in allowed group
-            throw new NoticeException(NoticeException::NOTICE_PERMISSION_DENIED);
+            throw new NoticeException(NoticeException::N_PERMISSION_DENIED);
         }
         
         // detect type of request
@@ -100,12 +100,11 @@ class Proxy {
                 return;
             }
         } else {
-            throw new NoticeException(NoticeException::NOTICE_INVALID_TOKEN);
+            throw new NoticeException(NoticeException::N_INVALID_TOKEN);
         }
     }
 
     private function createAppFrontController() {
-        //header("Content-Type: text/html; charset=utf-8");
         $this->frontController = new FrontController($this->db, $this->args);
     }
 

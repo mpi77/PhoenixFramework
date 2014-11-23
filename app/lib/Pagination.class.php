@@ -3,7 +3,7 @@
 /**
  * Pagination class makes list table string with support of paging.
  *
- * @version 1.21
+ * @version 1.22
  * @author MPI
  *
  */
@@ -235,7 +235,7 @@ class Pagination {
         $config = self::validateConfig($config);
         
         if ((!empty($config[self::KEY_CONFIG_COLUMN]) && !empty($config[self::KEY_CONFIG_PAGE])) && (!array_key_exists($config[self::KEY_CONFIG_COLUMN], $header) || $config[self::KEY_CONFIG_PAGE] < System::PAGE_MIN_PAGE || $config[self::KEY_CONFIG_PAGE] > $config[self::KEY_CONFIG_PAGES_COUNT])) {
-            throw new NoticeException(NoticeException::NOTICE_INVALID_PARAMETERS);
+            throw new NoticeException(NoticeException::N_INVALID_PARAMETERS);
         }
         
         if (!empty($header) && !empty($data) && $data != Database::EMPTY_RESULT && count($header) > 0 && count($data) > 0 && $config[self::KEY_CONFIG_DATA_COUNT] == count($data) && count($header) == count($data[0])) {
@@ -267,7 +267,7 @@ class Pagination {
     private static function validateConfig($config) {
         // check required arguments
         if (empty($config)) {
-            throw new NoticeException(NoticeException::NOTICE_INVALID_PARAMETERS);
+            throw new NoticeException(NoticeException::N_INVALID_PARAMETERS);
         }
         
         $base_url = self::getBaseUrl();

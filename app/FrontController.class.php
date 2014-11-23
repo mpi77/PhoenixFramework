@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.16
+ * @version 1.17
  * @author MPI
  * */
 class FrontController {
@@ -24,7 +24,7 @@ class FrontController {
         
         try {
             if (!($db instanceof Database) || $db->getStatus() !== true) {
-                throw new FailureException(FailureException::FAILURE_UNABLE_CONNECT_DB);
+                throw new FailureException(FailureException::F_UNABLE_CONNECT_DB);
             }
             $this->db = $db;
             $this->dispatch();
@@ -63,7 +63,7 @@ class FrontController {
         }
         $route = Router::getRoute($this->routeName);
         if (!($route instanceof Route)) {
-            throw new WarningException(WarningException::WARNING_ROUTER_ROUTE_INVALID, json_encode($this->args));
+            throw new WarningException(WarningException::W_ROUTER_ROUTE_INVALID, json_encode($this->args));
         }
         $modelName = $route->getModelName();
         $controllerName = $route->getControllerName();
@@ -74,20 +74,20 @@ class FrontController {
             $this->controller = new $controllerName($model, $this->args);
             $this->view = new $viewName($model, $this->args);
         } else {
-            throw new WarningException(WarningException::WARNING_CLASS_NOT_FOUND, json_encode($this->args));
+            throw new WarningException(WarningException::W_CLASS_NOT_FOUND, json_encode($this->args));
         }
         
         if (!(Router::getRoute($this->routeName)->isAction($this->actionName) === true && (Router::getRoute($this->routeName)->getAction($this->actionName) instanceof RouteAction))) {
-            throw new WarningException(WarningException::WARNING_ROUTER_ROUTE_ACTION_INVALID, json_encode($this->args));
+            throw new WarningException(WarningException::W_ROUTER_ROUTE_ACTION_INVALID, json_encode($this->args));
         }
         if (System::isCallable($this->controller, Router::getRoute($this->routeName)->getAction($this->actionName)->getRunFunctionName()) === true) {
             $this->controller->{Router::getRoute($this->routeName)->getAction($this->actionName)->getRunFunctionName()}();
         } else {
-            throw new WarningException(WarningException::WARNING_ACTION_IS_NOT_CALLABLE, json_encode($this->args));
+            throw new WarningException(WarningException::W_ACTION_IS_NOT_CALLABLE, json_encode($this->args));
         }
         
         if (Router::isRoute($this->routeName) === false) {
-            throw new WarningException(WarningException::WARNING_INVALID_ROUTE, json_encode($this->args));
+            throw new WarningException(WarningException::W_INVALID_ROUTE, json_encode($this->args));
         }
     }
 
@@ -102,7 +102,7 @@ class FrontController {
                     $this->response = $this->view->{Router::getRoute($this->routeName)->getAction($this->actionName)->getRunFunctionName()}();
                     $this->response->setException($oldException);
                 } else {
-                    throw new WarningException(WarningException::WARNING_ACTION_IS_NOT_CALLABLE, json_encode($this->args));
+                    throw new WarningException(WarningException::W_ACTION_IS_NOT_CALLABLE, json_encode($this->args));
                 }
             }
         } catch (NoticeException $e) {

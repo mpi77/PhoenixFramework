@@ -3,7 +3,7 @@
 /**
  * Logger object
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 class Logger {
@@ -43,10 +43,10 @@ class Logger {
         try {
             $r = InternalLogEntity::insertRecord($db, get_class($e), $e->getCode(), $e->getTraceAsString(), $e->getMessage());
             if ($r != 1) {
-                throw new WarningException(WarningException::WARNING_INVALID_SQL_ACTION);
+                throw new WarningException(WarningException::W_INVALID_SQL_ACTION);
             }
         } catch (WarningException $ex) {
-            self::saveIntoFile(new FailureException(FailureException::FAILURE_UNABLE_SAVE_WARNING));
+            self::saveIntoFile(new FailureException(FailureException::F_UNABLE_SAVE_WARNING));
             self::saveIntoFile($e);
             System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
         }
