@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.18
+ * @version 1.19
  * @author MPI
  * */
 class System {
@@ -480,11 +480,11 @@ class System {
             $_SESSION[Config::SERVER_FQDN]["user"]["type"] = null;
             $_SESSION[Config::SERVER_FQDN]["user"]["lang"] = Translator::LANG_CZ;
             $_SESSION[Config::SERVER_FQDN]["user"]["auth"] = false;
-            self::initAuthToken();
+            Security::initAuthToken();
         }
         if ($_SESSION[Config::SERVER_FQDN]["user"]["auth"] === true) {
-            self::checkSessionInactivity();
-            self::checkSessionFixation();
+            Security::checkSessionInactivity();
+            Security::checkSessionFixation();
         }
         if (!isset($_SESSION[Config::SERVER_FQDN]["page_size"])) {
             $_SESSION[Config::SERVER_FQDN]["page_size"] = self::PAGE_SIZE_DEFAULT;
@@ -492,82 +492,39 @@ class System {
     }
 
     /**
-     * Check session inactivity timeout.
-     * This method should be called after succesfull login.
+     * @deprecated
      */
     public static function checkSessionInactivity() {
-        if (Config::SESSION_INACTIVITY_ENABLED !== true) {
-            return;
-        }
-        
-        if (!isset($_SESSION[Config::SERVER_FQDN]["last_activity"])) {
-            $_SESSION[Config::SERVER_FQDN]["last_activity"] = time();
-        } else {
-            if (time() - $_SESSION[Config::SERVER_FQDN]["last_activity"] > Config::SESSION_INACTIVITY_TIMEOUT) {
-                session_unset();
-                session_destroy();
-                self::redirect(Config::SITE_PATH + Config::SESSION_INACTIVITY_REDIRECT_PATH);
-            } else {
-                $_SESSION[Config::SERVER_FQDN]["last_activity"] = time();
-            }
-        }
     }
 
     /**
-     * Session fixation detection.
-     * This method should be called after succesfull login.
+     * @deprecated
      */
     public static function checkSessionFixation() {
-        if (Config::SESSION_FIXATION_DETECTION_ENABLED !== true) {
-            return;
-        }
-        
-        if (!isset($_SESSION[Config::SERVER_FQDN]["remote_addr"]) || !isset($_SESSION[Config::SERVER_FQDN]["http_user_agent"])) {
-            $_SESSION[Config::SERVER_FQDN]["remote_addr"] = $_SERVER["REMOTE_ADDR"];
-            $_SESSION[Config::SERVER_FQDN]["http_user_agent"] = $_SERVER["HTTP_USER_AGENT"];
-        } else {
-            if ($_SESSION[Config::SERVER_FQDN]["remote_addr"] !== $_SERVER["REMOTE_ADDR"] || $_SESSION[Config::SERVER_FQDN]["http_user_agent"] !== $_SERVER["HTTP_USER_AGENT"]) {
-                session_unset();
-                session_destroy();
-                self::redirect(Config::SITE_PATH + Config::SESSION_FIXATION_REDIRECT_PATH);
-            }
-        }
     }
 
     /**
-     * Initialize auth_token in session.
+     * @deprecated
      */
     public static function initAuthToken() {
-        $_SESSION[Config::SERVER_FQDN]["user"]["auth_token"] = self::generateRandomCode(32);
-        $_SESSION[Config::SERVER_FQDN]["user"]["auth_cnt"] = 1;
     }
 
     /**
-     * Update aut_token and auth_counter.
+     * @deprecated
      */
     public static function updateAuthToken() {
-        if ($_SESSION[Config::SERVER_FQDN]["user"]["auth_cnt"] >= 1) {
-            self::initAuthToken();
-        } else {
-            ++$_SESSION[Config::SERVER_FQDN]["user"]["auth_cnt"];
-        }
     }
 
     /**
-     * Detection of csrf attack.
-     *
-     * @param string $auth_token            
-     * @return boolean
+     * @deprecated
      */
     public static function isCsrfAttack($auth_token) {
-        return (isset($_SESSION[Config::SERVER_FQDN]["user"]["auth_token"]) && $auth_token != $_SESSION[Config::SERVER_FQDN]["user"]["auth_token"]);
     }
 
     /**
-     * Print auth_token hidden input.
+     * @deprecated
      */
     public static function printAuthInput() {
-        echo sprintf("<input type=\"hidden\" name=\"auth_token\" value=\"%s\">", htmlspecialchars($_SESSION[Config::SERVER_FQDN]["user"]["auth_token"]));
     }
     
     /**
