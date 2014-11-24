@@ -2,7 +2,7 @@
 /**
  * Czech translator.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  * */
 class CzechTranslator extends Translator {
@@ -22,19 +22,20 @@ class CzechTranslator extends Translator {
                     Translator::W_UNABLE_COMPLETE_TRANSACTION => "Transakce se nezdařila.",
                     Translator::W_ROUTER_ROUTE_INVALID => "Neplatný objekt cesty v routeru.",
                     Translator::W_ROUTER_ROUTE_ACTION_INVALID => "Neplatná akce v objektu cesty routeru.",
+                    Translator::W_INVALID_PARAMETERS => "Zadali jste špatné parametry.",
+                    Translator::W_PERMISSION_DENIED => "Nemáte potřebné oprávnění k provedení této akce.",
+                    Translator::W_LOGIN_REQUIRED => "K provedení požadované akce se musíte přihlásit.",
+                    Translator::W_INVALID_TOKEN => "Zadali jste neplatný token.",
+                    Translator::W_USER_NOT_FOUND => "Uživatel nenalezen.",
                     Translator::N_UNKNOWN => "Neznámé upozornění.",
                     Translator::N_LOGIN_FAILED => "Přihlášení selhalo. Zkuste to prosím znovu.",
-                    Translator::N_INVALID_PARAMETERS => "Nepodařilo se obnovit seznam. Zadali jste špatné parametry.",
-                    Translator::N_PERMISSION_DENIED => "Nemáte potřebné oprávnění k provedení této akce.",
+                    Translator::N_INVALID_PARAMETERS => "Zadali jste špatné parametry.",
                     Translator::N_PASSWORD_INVALID_FORMAT => "Heslo se nepodařilo nastavit. Zadaná hesla nesplňují požadované vlastnosti.",
                     Translator::N_INPUT_INVALID_FORMAT => "Údaje se nepodařilo uložit, nesplňují požadované vlastnosti.",
                     Translator::N_SUCCESSFULLY_SAVED => "Změny úspěšně uloženy.",
-                    Translator::N_LOGIN_REQUIRED => "K provedení požadované akce se musíte přihlásit.",
                     Translator::N_RENEW_EMAIL_ERROR => "Nepodařilo se odeslat email s kódem pro obnovu hesla. Nadále platí současné heslo.",
                     Translator::N_RENEW_EMAIL_SENDED => "Na email vám byl zaslán odkaz pro obnovu hesla. Na provedení změny máte 24 hodin.",
-                    Translator::N_INVALID_TOKEN => "Zadali jste neplatný token.",
                     Translator::N_PASSWORD_CHANGED => "Nastavili jste nové heslo k vašemu účtu. Nyní se můžete přihlásit.",
-                    Translator::N_USER_NOT_FOUND => "Uživatel nenalezen.",
                     Translator::N_USER_CREATE_EMAIL_ERROR => "Nepodařilo se odeslat email s kódem pro vytvoření nového uživatelského účtu.",
                     Translator::N_EMAIL_USED_ENTER_ANOTHER => "Zadaný email je již používán. Zadejte jiný.",
                     Translator::N_USER_CREATE_EMAIL_SENDED => "Na zadaný email byl odeslán email s instrukcemi pro aktivaci účtu.",

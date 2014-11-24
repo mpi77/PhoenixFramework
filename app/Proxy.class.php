@@ -3,7 +3,7 @@
 /**
  * Proxy gateway
  * 
- * @version 1.17
+ * @version 1.18
  * @author MPI
  * */
 class Proxy {
@@ -73,7 +73,7 @@ class Proxy {
     private function linkProcess() {
         $proxyItem = ProxyEntity::getProxyItemByValidToken($this->db, $_GET["token"]);
         if ($proxyItem == Database::EMPTY_RESULT) {
-            throw new NoticeException(NoticeException::N_INVALID_TOKEN);
+            throw new WarningException(WarningException::W_INVALID_TOKEN);
         }
         $proxyItem = $proxyItem[0];
         
@@ -84,11 +84,11 @@ class Proxy {
         }
         if (!is_null($proxyItem->getOnlyUid()) && $_SESSION[Config::SERVER_FQDN]["user"]["uid"] != $proxyItem->getOnlyUid()) {
             // user is blocked
-            throw new NoticeException(NoticeException::N_PERMISSION_DENIED);
+            throw new WarningException(WarningException::W_PERMISSION_DENIED);
         }
         if (!is_null($proxyItem->getOnlyGid()) && !in_array($proxyItem->getOnlyGid(), $_SESSION[Config::SERVER_FQDN]["user"]["gid"])) {
             // user has not membership in allowed group
-            throw new NoticeException(NoticeException::N_PERMISSION_DENIED);
+            throw new WarningException(WarningException::W_PERMISSION_DENIED);
         }
         
         // detect type of request
@@ -113,7 +113,7 @@ class Proxy {
                 return;
             }
         } else {
-            throw new NoticeException(NoticeException::N_INVALID_TOKEN);
+            throw new WarningException(WarningException::W_INVALID_TOKEN);
         }
     }
 

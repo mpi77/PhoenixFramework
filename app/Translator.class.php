@@ -3,7 +3,7 @@
 /**
  * Root translator object.
  * 
- * @version 1.6
+ * @version 1.7
  * @author MPI
  * */
 abstract class Translator {
@@ -60,25 +60,26 @@ abstract class Translator {
     const W_UNABLE_COMPLETE_TRANSACTION = 207;
     const W_ROUTER_ROUTE_INVALID = 208;
     const W_ROUTER_ROUTE_ACTION_INVALID = 209;
+    const W_INVALID_PARAMETERS = 210;
+    const W_PERMISSION_DENIED = 211;
+    const W_LOGIN_REQUIRED = 212;
+    const W_INVALID_TOKEN = 213;
+    const W_USER_NOT_FOUND = 214;
     const N_UNKNOWN = 300;
     const N_LOGIN_FAILED = 301;
     const N_INVALID_PARAMETERS = 302;
-    const N_PERMISSION_DENIED = 303;
-    const N_PASSWORD_INVALID_FORMAT = 304;
-    const N_INPUT_INVALID_FORMAT = 305;
-    const N_SUCCESSFULLY_SAVED = 306;
-    const N_LOGIN_REQUIRED = 307;
-    const N_RENEW_EMAIL_ERROR = 308;
-    const N_RENEW_EMAIL_SENDED = 309;
-    const N_INVALID_TOKEN = 310;
-    const N_PASSWORD_CHANGED = 311;
-    const N_USER_NOT_FOUND = 312;
-    const N_USER_CREATE_EMAIL_ERROR = 313;
-    const N_EMAIL_USED_ENTER_ANOTHER = 314;
-    const N_USER_CREATE_EMAIL_SENDED = 315;
-    const N_USER_ACTIVATED = 316;
-    const N_NOTHING_TO_DISPLAY = 317;
-    const N_FILE_IS_NOT_DELETABLE = 318;
+    const N_PASSWORD_INVALID_FORMAT = 303;
+    const N_INPUT_INVALID_FORMAT = 304;
+    const N_SUCCESSFULLY_SAVED = 305;
+    const N_RENEW_EMAIL_ERROR = 306;
+    const N_RENEW_EMAIL_SENDED = 307;
+    const N_PASSWORD_CHANGED = 308;
+    const N_USER_CREATE_EMAIL_ERROR = 309;
+    const N_EMAIL_USED_ENTER_ANOTHER = 310;
+    const N_USER_CREATE_EMAIL_SENDED = 311;
+    const N_USER_ACTIVATED = 312;
+    const N_NOTHING_TO_DISPLAY = 313;
+    const N_FILE_IS_NOT_DELETABLE = 314;
     const LOG_USER_LOGIN = 500;
     const LOG_USER_LOGOUT = 501;
     const LOG_USER_ACTIVATION = 502;

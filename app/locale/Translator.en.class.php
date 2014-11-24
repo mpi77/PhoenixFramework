@@ -2,7 +2,7 @@
 /**
  * English translator.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  * */
 class EnglishTranslator extends Translator {
@@ -22,19 +22,20 @@ class EnglishTranslator extends Translator {
                     Translator::W_UNABLE_COMPLETE_TRANSACTION => "Unable to complete transaction.",
                     Translator::W_ROUTER_ROUTE_INVALID => "Invalid route in router.",
                     Translator::W_ROUTER_ROUTE_ACTION_INVALID => "Invalid route action in route.",
+                    Translator::W_INVALID_PARAMETERS => "List actualisation failed due to invalid parameters.",
+                    Translator::W_PERMISSION_DENIED => "Permission denied.",
+                    Translator::W_LOGIN_REQUIRED => "You need to login first.",
+                    Translator::W_INVALID_TOKEN => "Invalid token.",
+                    Translator::W_USER_NOT_FOUND => "User not found.",
                     Translator::N_UNKNOWN => "Unknow notice exception.",
                     Translator::N_LOGIN_FAILED => "Login failed. Please try it again.",
                     Translator::N_INVALID_PARAMETERS => "List actualisation failed due to invalid parameters.",
-                    Translator::N_PERMISSION_DENIED => "Permission denied.",
                     Translator::N_PASSWORD_INVALID_FORMAT => "Password format is incorrect.",
                     Translator::N_INPUT_INVALID_FORMAT => "Input format is invalid.",
                     Translator::N_SUCCESSFULLY_SAVED => "Succesfully saved.",
-                    Translator::N_LOGIN_REQUIRED => "You need to login first.",
                     Translator::N_RENEW_EMAIL_ERROR => "Unable to send email with renew token. Password is still the same.",
                     Translator::N_RENEW_EMAIL_SENDED => "Email with instructions for renew password was sended to you.",
-                    Translator::N_INVALID_TOKEN => "Invalid token.",
                     Translator::N_PASSWORD_CHANGED => "New password was saved. You can login now.",
-                    Translator::N_USER_NOT_FOUND => "User not found.",
                     Translator::N_USER_CREATE_EMAIL_ERROR => "Unable to send email with token for create new user.",
                     Translator::N_EMAIL_USED_ENTER_ANOTHER => "Email is used. Enter another email.",
                     Translator::N_USER_CREATE_EMAIL_SENDED => "Email with instructions for create user was sended.",

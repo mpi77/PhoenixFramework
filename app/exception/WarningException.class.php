@@ -11,7 +11,7 @@
  * While generating Response.send, the only allowed output is this exception.
  * Other output content is not allowed.
  * 
- * @version 1.5
+ * @version 1.6
  * @author MPI
  * */
 class WarningException extends Exception implements IAppException {
@@ -25,6 +25,11 @@ class WarningException extends Exception implements IAppException {
     const W_UNABLE_COMPLETE_TRANSACTION = 7;
     const W_ROUTER_ROUTE_INVALID = 8;
     const W_ROUTER_ROUTE_ACTION_INVALID = 9;
+    const W_INVALID_PARAMETERS = 10; 
+    const W_PERMISSION_DENIED = 11;
+    const W_LOGIN_REQUIRED = 12;
+    const W_INVALID_TOKEN = 13;
+    const W_USER_NOT_FOUND = 14;
     private static $error = array (
                     self::W_UNKNOWN => Translator::W_UNKNOWN,
                     self::W_CLASS_NOT_FOUND => Translator::W_CLASS_NOT_FOUND,
@@ -35,7 +40,12 @@ class WarningException extends Exception implements IAppException {
                     self::W_UNABLE_VERIFY_RESULT => Translator::W_UNABLE_VERIFY_RESULT,
                     self::W_UNABLE_COMPLETE_TRANSACTION => Translator::W_UNABLE_COMPLETE_TRANSACTION,
                     self::W_ROUTER_ROUTE_INVALID => Translator::W_ROUTER_ROUTE_INVALID,
-                    self::W_ROUTER_ROUTE_ACTION_INVALID => Translator::W_ROUTER_ROUTE_ACTION_INVALID 
+                    self::W_ROUTER_ROUTE_ACTION_INVALID => Translator::W_ROUTER_ROUTE_ACTION_INVALID,
+                    self::W_INVALID_PARAMETERS => Translator::W_INVALID_PARAMETERS,
+                    self::W_PERMISSION_DENIED => Translator::W_PERMISSION_DENIED,
+                    self::W_LOGIN_REQUIRED => Translator::W_LOGIN_REQUIRED,
+                    self::W_INVALID_TOKEN => Translator::W_INVALID_TOKEN,
+                    self::W_USER_NOT_FOUND => Translator::W_USER_NOT_FOUND
     );
 
     public function __construct($code = 0, $message = null) {
