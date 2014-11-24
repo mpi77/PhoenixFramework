@@ -3,15 +3,17 @@
 /**
  * Root controller object.
  * 
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 abstract class Controller {
     private $model;
     private $args;
+    private $responseFormat;
 
-    public function __construct(Model $model, $args) {
+    public function __construct(Model $model, $responseFormat, $args) {
         $this->model = $model;
+        $this->responseFormat = $responseFormat;
         $this->args = $args;
     }
 
@@ -20,7 +22,7 @@ abstract class Controller {
      *
      * @return Model
      */
-    protected function getModel() {
+    protected final function getModel() {
         return $this->model;
     }
 
@@ -29,7 +31,7 @@ abstract class Controller {
      *
      * @return string
      */
-    protected function getRouteName() {
+    protected final function getRouteName() {
         return $this->args["GET"]["route"];
     }
 
@@ -38,8 +40,17 @@ abstract class Controller {
      *
      * @return string
      */
-    protected function getActionName() {
+    protected final function getActionName() {
         return $this->args["GET"]["action"];
+    }
+    
+    /**
+     * Get this response format.
+     *
+     * @return integer
+     */
+    protected final function getResponseFormat() {
+        return $this->responseFormat;
     }
 
     /**
@@ -47,7 +58,7 @@ abstract class Controller {
      *
      * @return string
      */
-    protected function getArgs() {
+    protected final function getArgs() {
         return $this->args;
     }
 

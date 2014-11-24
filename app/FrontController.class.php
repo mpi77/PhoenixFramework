@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.20
+ * @version 1.21
  * @author MPI
  * */
 class FrontController {
@@ -71,7 +71,7 @@ class FrontController {
         
         if (class_exists($modelName) && class_exists($controllerName) && class_exists($viewName)) {
             $model = new $modelName($this->db);
-            $this->controller = new $controllerName($model, $this->args);
+            $this->controller = new $controllerName($model, $this->responseFormat, $this->args);
             $this->view = new $viewName($model, $this->responseFormat, $this->args);
         } else {
             throw new WarningException(WarningException::W_CLASS_NOT_FOUND, json_encode($this->args));
