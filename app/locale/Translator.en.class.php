@@ -2,7 +2,7 @@
 /**
  * English translator.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  * */
 class EnglishTranslator extends Translator {
@@ -27,6 +27,8 @@ class EnglishTranslator extends Translator {
                     Translator::W_LOGIN_REQUIRED => "You need to login first.",
                     Translator::W_INVALID_TOKEN => "Invalid token.",
                     Translator::W_USER_NOT_FOUND => "User not found.",
+                    Translator::W_RESPONSE_INVALID_FORMAT => "Invalid response format.",
+                    Translator::W_RESPONSE_UNSUPPORTED_FORMAT => "Response format is not supported.",
                     Translator::N_UNKNOWN => "Unknow notice exception.",
                     Translator::N_LOGIN_FAILED => "Login failed. Please try it again.",
                     Translator::N_INVALID_PARAMETERS => "List actualisation failed due to invalid parameters.",

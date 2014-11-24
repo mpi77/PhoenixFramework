@@ -2,7 +2,7 @@
 /**
  * Czech translator.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  * */
 class CzechTranslator extends Translator {
@@ -27,6 +27,8 @@ class CzechTranslator extends Translator {
                     Translator::W_LOGIN_REQUIRED => "K provedení požadované akce se musíte přihlásit.",
                     Translator::W_INVALID_TOKEN => "Zadali jste neplatný token.",
                     Translator::W_USER_NOT_FOUND => "Uživatel nenalezen.",
+                    Translator::W_RESPONSE_INVALID_FORMAT => "Neznámý formát požadované odpovědi.",
+                    Translator::W_RESPONSE_UNSUPPORTED_FORMAT => "Formát odpovědi není podporován.",
                     Translator::N_UNKNOWN => "Neznámé upozornění.",
                     Translator::N_LOGIN_FAILED => "Přihlášení selhalo. Zkuste to prosím znovu.",
                     Translator::N_INVALID_PARAMETERS => "Zadali jste špatné parametry.",

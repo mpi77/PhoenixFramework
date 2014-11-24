@@ -11,7 +11,7 @@
  * While generating Response.send, the only allowed output is this exception.
  * Other output content is not allowed.
  * 
- * @version 1.6
+ * @version 1.7
  * @author MPI
  * */
 class WarningException extends Exception implements IAppException {
@@ -30,6 +30,8 @@ class WarningException extends Exception implements IAppException {
     const W_LOGIN_REQUIRED = 12;
     const W_INVALID_TOKEN = 13;
     const W_USER_NOT_FOUND = 14;
+    const W_RESPONSE_INVALID_FORMAT = 15;
+    const W_RESPONSE_UNSUPPORTED_FORMAT = 16;
     private static $error = array (
                     self::W_UNKNOWN => Translator::W_UNKNOWN,
                     self::W_CLASS_NOT_FOUND => Translator::W_CLASS_NOT_FOUND,
@@ -45,7 +47,9 @@ class WarningException extends Exception implements IAppException {
                     self::W_PERMISSION_DENIED => Translator::W_PERMISSION_DENIED,
                     self::W_LOGIN_REQUIRED => Translator::W_LOGIN_REQUIRED,
                     self::W_INVALID_TOKEN => Translator::W_INVALID_TOKEN,
-                    self::W_USER_NOT_FOUND => Translator::W_USER_NOT_FOUND
+                    self::W_USER_NOT_FOUND => Translator::W_USER_NOT_FOUND,
+                    self::W_RESPONSE_INVALID_FORMAT => Translator::W_RESPONSE_INVALID_FORMAT,
+                    self::W_RESPONSE_UNSUPPORTED_FORMAT => Translator::W_RESPONSE_UNSUPPORTED_FORMAT
     );
 
     public function __construct($code = 0, $message = null) {

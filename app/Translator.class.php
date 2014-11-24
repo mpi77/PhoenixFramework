@@ -65,6 +65,8 @@ abstract class Translator {
     const W_LOGIN_REQUIRED = 212;
     const W_INVALID_TOKEN = 213;
     const W_USER_NOT_FOUND = 214;
+    const W_RESPONSE_INVALID_FORMAT = 215;
+    const W_RESPONSE_UNSUPPORTED_FORMAT = 216;
     const N_UNKNOWN = 300;
     const N_LOGIN_FAILED = 301;
     const N_INVALID_PARAMETERS = 302;
