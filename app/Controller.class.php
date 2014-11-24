@@ -3,17 +3,15 @@
 /**
  * Root controller object.
  * 
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 abstract class Controller {
     private $model;
     private $args;
-    private $responseFormat;
 
-    public function __construct(Model $model, $responseFormat, $args) {
+    public function __construct(Model $model, $args) {
         $this->model = $model;
-        $this->responseFormat = $responseFormat;
         $this->args = $args;
     }
 
@@ -50,7 +48,7 @@ abstract class Controller {
      * @return integer
      */
     protected final function getResponseFormat() {
-        return $this->responseFormat;
+        return $this->args["GET"]["format"];
     }
 
     /**

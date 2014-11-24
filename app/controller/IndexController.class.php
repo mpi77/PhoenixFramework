@@ -6,14 +6,14 @@ Router::register("index", new Route("IndexModel", "IndexView", "IndexController"
 /**
  * Index controller.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  *        
  */
 class IndexController extends Controller {
 
-    public function __construct(Model $model, $responseFormat, $args) {
-        parent::__construct($model, $responseFormat, $args);
+    public function __construct(Model $model, $args) {
+        parent::__construct($model, $args);
     }
 
     public function getName() {

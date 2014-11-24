@@ -3,18 +3,16 @@
 /**
  * Root view object.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  * */
 abstract class View {
     private $model;
     private $templateData;
     private $args;
-    private $responseFormat;
 
-    public function __construct(Model $model, $responseFormat, $args, TemplateData $templateData = null) {
+    public function __construct(Model $model, $args, TemplateData $templateData = null) {
         $this->model = $model;
-        $this->responseFormat = $responseFormat;
         $this->args = $args;
         $this->templateData = is_null($templateData) ? new TemplateData() : $templateData;
     }
@@ -52,7 +50,7 @@ abstract class View {
      * @return integer
      */
     protected final function getResponseFormat() {
-        return $this->responseFormat;
+        return $this->args["GET"]["format"];
     }
 
     /**

@@ -3,7 +3,7 @@
 /**
  * Root response object.
  * 
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 abstract class Response {
@@ -102,6 +102,30 @@ abstract class Response {
                 break;
             default :
                 return new HtmlResponse();
+        }
+    }
+    
+    /**
+     * Is output fomat valid.
+     *
+     * @param integer $format
+     *            constants from Response class with preffix RESPONSE_*
+     *
+     * @return boolean
+     */
+    public static final function isValidResponseFormat($format) {
+        if(!is_numeric($format)){
+            return false;
+        }
+        
+        switch ($format) {
+            case self::RESPONSE_HTML :
+            case self::RESPONSE_JSON :
+            case self::RESPONSE_XML :
+                return true;
+                break;
+            default :
+                return false;
         }
     }
 }

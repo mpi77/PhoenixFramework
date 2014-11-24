@@ -2,13 +2,13 @@
 /**
  * Index view.
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
  * */
 class IndexView extends View {
 
-    public function __construct(Model $model, $responseFormat, $args, TemplateData $templateData = null) {
-        parent::__construct($model, $responseFormat, $args, $templateData);
+    public function __construct(Model $model, $args, TemplateData $templateData = null) {
+        parent::__construct($model, $args, $templateData);
     }
 
     public function getName() {

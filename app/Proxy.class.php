@@ -3,7 +3,7 @@
 /**
  * Proxy gateway
  * 
- * @version 1.19
+ * @version 1.20
  * @author MPI
  * */
 class Proxy {
@@ -20,7 +20,10 @@ class Proxy {
             $this->response = null;
             $this->args["GET"] = System::trimSlashMultidimAssocArray($_GET);
             $this->args["POST"] = System::trimSlashMultidimAssocArray($_POST);
-            $this->responseFormat = isset($this->args["GET"]["format"]) ? $this->args["GET"]["format"] : Response::RESPONSE_HTML;
+            $this->args["GET"]["route"] = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : Router::DEFAULT_EMPTY_ROUTE;
+            $this->args["GET"]["action"] = isset($this->args["GET"]["action"]) ? $this->args["GET"]["action"] : Router::DEFAULT_EMPTY_ACTION;
+            $this->args["GET"]["format"] = (isset($this->args["GET"]["format"]) && Response::isValidResponseFormat($this->args["GET"]["format"])) ? $this->args["GET"]["format"] : Response::RESPONSE_HTML;
+            $this->responseFormat = $this->args["GET"]["format"];
             
             $this->db = new Database(Config::getDatabaseConnectionParams(Config::DB_DEFAULT_POOL));
             
@@ -118,7 +121,7 @@ class Proxy {
     }
 
     private function createAppFrontController() {
-        $this->frontController = new FrontController($this->db, $this->responseFormat, $this->args);
+        $this->frontController = new FrontController($this->db, $this->args);
     }
 
     private function isApp() {
