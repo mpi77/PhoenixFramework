@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.19
+ * @version 1.20
  * @author MPI
  * */
 class FrontController {
@@ -16,11 +16,11 @@ class FrontController {
     private $actionName;
     private $responseFormat;
 
-    public function __construct(Database $db, $args = null) {
+    public function __construct(Database $db, $responseFormat = null, $args = null) {
         $this->args = $args;
         $this->routeName = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : Router::DEFAULT_EMPTY_ROUTE;
         $this->actionName = isset($this->args["GET"]["action"]) ? $this->args["GET"]["action"] : Router::DEFAULT_EMPTY_ACTION;
-        $this->responseFormat = isset($this->args["GET"]["format"]) ? $this->args["GET"]["format"] : Response::RESPONSE_HTML;
+        $this->responseFormat = !empty($responseFormat) ? $responseFormat : (isset($this->args["GET"]["format"]) ? $this->args["GET"]["format"] : Response::RESPONSE_HTML);
         
         try {
             if (!($db instanceof Database) || $db->getStatus() !== true) {
@@ -72,7 +72,7 @@ class FrontController {
         if (class_exists($modelName) && class_exists($controllerName) && class_exists($viewName)) {
             $model = new $modelName($this->db);
             $this->controller = new $controllerName($model, $this->args);
-            $this->view = new $viewName($model, $this->args);
+            $this->view = new $viewName($model, $this->responseFormat, $this->args);
         } else {
             throw new WarningException(WarningException::W_CLASS_NOT_FOUND, json_encode($this->args));
         }

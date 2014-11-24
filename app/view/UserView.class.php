@@ -2,13 +2,13 @@
 /**
  * User view.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class UserView extends View {
 
-    public function __construct(Model $model, $args, TemplateData $templateData = null) {
-        parent::__construct($model, $args, $templateData);
+    public function __construct(Model $model, $responseFormat, $args, TemplateData $templateData = null) {
+        parent::__construct($model, $responseFormat, $args, $templateData);
     }
 
     public function getName() {

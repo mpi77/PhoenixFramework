@@ -3,16 +3,18 @@
 /**
  * Root view object.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 abstract class View {
     private $model;
     private $templateData;
     private $args;
+    private $responseFormat;
 
-    public function __construct(Model $model, $args, TemplateData $templateData = null) {
+    public function __construct(Model $model, $responseFormat, $args, TemplateData $templateData = null) {
         $this->model = $model;
+        $this->responseFormat = $responseFormat;
         $this->args = $args;
         $this->templateData = is_null($templateData) ? new TemplateData() : $templateData;
     }
@@ -22,7 +24,7 @@ abstract class View {
      *
      * @return Model
      */
-    protected function getModel() {
+    protected final function getModel() {
         return $this->model;
     }
 
@@ -31,7 +33,7 @@ abstract class View {
      *
      * @return string
      */
-    protected function getRouteName() {
+    protected final function getRouteName() {
         return $this->args["GET"]["route"];
     }
 
@@ -40,16 +42,25 @@ abstract class View {
      *
      * @return string
      */
-    protected function getActionName() {
+    protected final function getActionName() {
         return $this->args["GET"]["action"];
+    }
+    
+    /**
+     * Get this response format.
+     *
+     * @return integer
+     */
+    protected final function getResponseFormat() {
+        return $this->responseFormat;
     }
 
     /**
      * Get this args.
      *
-     * @return string
+     * @return mixed
      */
-    protected function getArgs() {
+    protected final function getArgs() {
         return $this->args;
     }
 
@@ -58,7 +69,7 @@ abstract class View {
      *
      * @return TemplateData
      */
-    protected function getTemplateData() {
+    protected final function getTemplateData() {
         return $this->templateData;
     }
 

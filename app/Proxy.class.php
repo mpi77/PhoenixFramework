@@ -3,7 +3,7 @@
 /**
  * Proxy gateway
  * 
- * @version 1.18
+ * @version 1.19
  * @author MPI
  * */
 class Proxy {
@@ -118,7 +118,7 @@ class Proxy {
     }
 
     private function createAppFrontController() {
-        $this->frontController = new FrontController($this->db, $this->args);
+        $this->frontController = new FrontController($this->db, $this->responseFormat, $this->args);
     }
 
     private function isApp() {
