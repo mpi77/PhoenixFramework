@@ -3,7 +3,7 @@
 /**
  * FrontController
  * 
- * @version 1.22
+ * @version 1.23
  * @author MPI
  * */
 class FrontController {
@@ -17,10 +17,14 @@ class FrontController {
     private $responseFormat;
 
     public function __construct(Database $db, $args = null) {
+        $this->response = null;
         $this->args = $args;
-        $this->routeName = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : Router::DEFAULT_EMPTY_ROUTE;
-        $this->actionName = isset($this->args["GET"]["action"]) ? $this->args["GET"]["action"] : Router::DEFAULT_EMPTY_ACTION;
-        $this->responseFormat = isset($this->args["GET"]["format"]) ? $this->args["GET"]["format"] : Response::RESPONSE_HTML;
+        $this->args["GET"]["route"] = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : Router::DEFAULT_EMPTY_ROUTE;
+        $this->args["GET"]["action"] = isset($this->args["GET"]["action"]) ? $this->args["GET"]["action"] : Router::DEFAULT_EMPTY_ACTION;
+        $this->args["GET"]["format"] = (isset($this->args["GET"]["format"]) && Response::isValidResponseFormat($this->args["GET"]["format"])) ? $this->args["GET"]["format"] : Response::RESPONSE_HTML;
+        $this->routeName = $this->args["GET"]["route"];
+        $this->actionName = $this->args["GET"]["action"];
+        $this->responseFormat = $this->args["GET"]["format"];
         
         try {
             if (!($db instanceof Database) || $db->getStatus() !== true) {
@@ -54,6 +58,8 @@ class FrontController {
 
     /**
      * Dispatch user request.
+     * 
+     * @throws WarningException
      */
     private function dispatch() {
         // if route is invalid, redirect to index
@@ -92,7 +98,7 @@ class FrontController {
     }
 
     /**
-     * Generate output.
+     * Generate application output.
      */
     public function output() {
         try {

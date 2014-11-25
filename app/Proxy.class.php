@@ -3,7 +3,7 @@
 /**
  * Proxy gateway
  * 
- * @version 1.20
+ * @version 1.21
  * @author MPI
  * */
 class Proxy {
@@ -16,17 +16,16 @@ class Proxy {
     const FILE_DOWNLOAD_ACTION = "download";
 
     public function __construct() {
+        $this->response = null;
+        $this->args["GET"] = System::trimSlashMultidimAssocArray($_GET);
+        $this->args["POST"] = System::trimSlashMultidimAssocArray($_POST);
+        $this->args["GET"]["route"] = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : Router::DEFAULT_EMPTY_ROUTE;
+        $this->args["GET"]["action"] = isset($this->args["GET"]["action"]) ? $this->args["GET"]["action"] : Router::DEFAULT_EMPTY_ACTION;
+        $this->args["GET"]["format"] = (isset($this->args["GET"]["format"]) && Response::isValidResponseFormat($this->args["GET"]["format"])) ? $this->args["GET"]["format"] : Response::RESPONSE_HTML;
+        $this->responseFormat = $this->args["GET"]["format"];
+        
         try {
-            $this->response = null;
-            $this->args["GET"] = System::trimSlashMultidimAssocArray($_GET);
-            $this->args["POST"] = System::trimSlashMultidimAssocArray($_POST);
-            $this->args["GET"]["route"] = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : Router::DEFAULT_EMPTY_ROUTE;
-            $this->args["GET"]["action"] = isset($this->args["GET"]["action"]) ? $this->args["GET"]["action"] : Router::DEFAULT_EMPTY_ACTION;
-            $this->args["GET"]["format"] = (isset($this->args["GET"]["format"]) && Response::isValidResponseFormat($this->args["GET"]["format"])) ? $this->args["GET"]["format"] : Response::RESPONSE_HTML;
-            $this->responseFormat = $this->args["GET"]["format"];
-            
             $this->db = new Database(Config::getDatabaseConnectionParams(Config::DB_DEFAULT_POOL));
-            
             $this->runProxy();
         } catch (NoticeException $e) {
             $this->response = Response::responseFactory($this->responseFormat);
@@ -58,22 +57,42 @@ class Proxy {
         }
     }
 
+    /**
+     * Get FrontController.
+     *
+     * @return FrontController
+     */
     public function getFrontController() {
         return $this->frontController;
     }
 
+    /**
+     * Run proxy detection.
+     */
     private function runProxy() {
-        if ($this->isApp() === true) {
-            $this->createAppFrontController();
+        if ($this->isFcpRequest() === true) {
+            $this->createFrontController();
             return;
         }
         
-        if ($this->isLink() === true) {
-            $this->linkProcess();
+        if ($this->isProxyRequest() === true) {
+            $this->proxyRequest();
         }
     }
+    
+    /**
+     * Process fcp request.
+     */
+    private function createFrontController() {
+        $this->frontController = new FrontController($this->db, $this->args);
+    }
 
-    private function linkProcess() {
+    /**
+     * Process proxy request.
+     *
+     * @throws WarningException
+     */
+    private function proxyRequest() {
         $proxyItem = ProxyEntity::getProxyItemByValidToken($this->db, $_GET["token"]);
         if ($proxyItem == Database::EMPTY_RESULT) {
             throw new WarningException(WarningException::W_INVALID_TOKEN);
@@ -112,7 +131,7 @@ class Proxy {
                     $_GET = array_merge($_GET, json_decode($proxyItem->getData(), true));
                 }
                 $this->args["GET"] = System::trimSlashMultidimAssocArray($_GET);
-                $this->createAppFrontController();
+                $this->createFrontController();
                 return;
             }
         } else {
@@ -120,15 +139,21 @@ class Proxy {
         }
     }
 
-    private function createAppFrontController() {
-        $this->frontController = new FrontController($this->db, $this->args);
-    }
-
-    private function isApp() {
+    /**
+     * Detects fcp request.
+     * 
+     * @return boolean
+     */
+    private function isFcpRequest() {
         return ((!isset($_GET["route"]) && !isset($_GET["action"]) && !isset($_GET["token"])) || (isset($_GET["route"]) && !empty($_GET["route"]) && isset($_GET["action"]) && !empty($_GET["action"])));
     }
 
-    private function isLink() {
+    /**
+     * Detect proxy request.
+     * 
+     * @return boolean
+     */
+    private function isProxyRequest() {
         return (!isset($_GET["route"]) && !isset($_GET["action"]) && isset($_GET["token"]) && !empty($_GET["token"]));
     }
 }
