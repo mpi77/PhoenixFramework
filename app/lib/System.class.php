@@ -3,7 +3,7 @@
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.20
+ * @version 1.21
  * @author MPI
  * */
 class System {
@@ -52,6 +52,9 @@ class System {
 
     private function __construct() {
     }
+    
+    private function __destruct() {
+    }
 
     /**
      * Set application environment.
@@ -69,6 +72,31 @@ class System {
                 break;
             default :
                 exit('The application environment is not set correctly.');
+        }
+    }
+    
+    /**
+     * Initialize session
+     */
+    public static function initSession() {
+        if (!isset($_SESSION[Config::SERVER_FQDN]["user"])) {
+            $_SESSION[Config::SERVER_FQDN]["user"]["uid"] = null;
+            $_SESSION[Config::SERVER_FQDN]["user"]["gid"] = array ();
+            $_SESSION[Config::SERVER_FQDN]["user"]["email"] = null;
+            $_SESSION[Config::SERVER_FQDN]["user"]["first_name"] = null;
+            $_SESSION[Config::SERVER_FQDN]["user"]["last_name"] = null;
+            $_SESSION[Config::SERVER_FQDN]["user"]["last_login"] = null;
+            $_SESSION[Config::SERVER_FQDN]["user"]["type"] = null;
+            $_SESSION[Config::SERVER_FQDN]["user"]["lang"] = Translator::LANG_CZ;
+            $_SESSION[Config::SERVER_FQDN]["user"]["auth"] = false;
+            Security::initAuthToken();
+        }
+        if ($_SESSION[Config::SERVER_FQDN]["user"]["auth"] === true) {
+            Security::checkSessionInactivity();
+            Security::checkSessionFixation();
+        }
+        if (!isset($_SESSION[Config::SERVER_FQDN]["page_size"])) {
+            $_SESSION[Config::SERVER_FQDN]["page_size"] = self::PAGE_SIZE_DEFAULT;
         }
     }
 
@@ -464,31 +492,6 @@ class System {
             $r[$tmp_key] = $tmp_value;
         }
         return $r;
-    }
-
-    /**
-     * Initialize session
-     */
-    public static function initSession() {
-        if (!isset($_SESSION[Config::SERVER_FQDN]["user"])) {
-            $_SESSION[Config::SERVER_FQDN]["user"]["uid"] = null;
-            $_SESSION[Config::SERVER_FQDN]["user"]["gid"] = array ();
-            $_SESSION[Config::SERVER_FQDN]["user"]["email"] = null;
-            $_SESSION[Config::SERVER_FQDN]["user"]["first_name"] = null;
-            $_SESSION[Config::SERVER_FQDN]["user"]["last_name"] = null;
-            $_SESSION[Config::SERVER_FQDN]["user"]["last_login"] = null;
-            $_SESSION[Config::SERVER_FQDN]["user"]["type"] = null;
-            $_SESSION[Config::SERVER_FQDN]["user"]["lang"] = Translator::LANG_CZ;
-            $_SESSION[Config::SERVER_FQDN]["user"]["auth"] = false;
-            Security::initAuthToken();
-        }
-        if ($_SESSION[Config::SERVER_FQDN]["user"]["auth"] === true) {
-            Security::checkSessionInactivity();
-            Security::checkSessionFixation();
-        }
-        if (!isset($_SESSION[Config::SERVER_FQDN]["page_size"])) {
-            $_SESSION[Config::SERVER_FQDN]["page_size"] = self::PAGE_SIZE_DEFAULT;
-        }
     }
     
     /**
