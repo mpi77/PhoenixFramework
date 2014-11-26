@@ -3,7 +3,7 @@
 /**
  * Root model object.
  * 
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 abstract class Model {
@@ -18,7 +18,7 @@ abstract class Model {
      *
      * @return Database
      */
-    protected function getDb() {
+    protected final function getDb() {
         return $this->db;
     }
 
@@ -31,7 +31,7 @@ abstract class Model {
      *            text msg to save
      * @return int
      */
-    public function insertActivityRecord($uid, $message) {
+    public final function insertActivityRecord($uid, $message) {
         return ActivityLogEntity::insertRecord($this->db, $uid, $message);
     }
 
