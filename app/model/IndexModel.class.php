@@ -2,17 +2,13 @@
 /**
  * Index model.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 class IndexModel extends Model{
 
-	public function __construct($db){
+	public function __construct(Database $db){
 		parent::__construct($db);
-	}
-
-	public function getName(){
-		return get_class($this);
 	}
 }
 ?>

@@ -3,7 +3,7 @@
 /**
  * Root model object.
  * 
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 abstract class Model {
@@ -34,12 +34,5 @@ abstract class Model {
     public final function insertActivityRecord($uid, $message) {
         return ActivityLogEntity::insertRecord($this->db, $uid, $message);
     }
-
-    /**
-     * Get name of this class.
-     *
-     * @all models must contain a getName method
-     */
-    public abstract function getName();
 }
 ?>
