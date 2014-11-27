@@ -2,7 +2,7 @@
 /**
  * Activity log entity.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 class ActivityLogEntity extends Entity {
@@ -13,10 +13,6 @@ class ActivityLogEntity extends Entity {
     
     public function __construct() {
         parent::__construct();
-    }
-
-    public function getName() {
-        return get_class($this);
     }
 
     public function __toString() {

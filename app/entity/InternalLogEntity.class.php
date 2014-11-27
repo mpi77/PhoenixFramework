@@ -2,7 +2,7 @@
 /**
  * Internal log entity.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 class InternalLogEntity extends Entity {
@@ -15,10 +15,6 @@ class InternalLogEntity extends Entity {
     
     public function __construct() {
         parent::__construct();
-    }
-
-    public function getName() {
-        return get_class($this);
     }
 
     public function __toString() {

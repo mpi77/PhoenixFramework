@@ -2,7 +2,7 @@
 /**
  * Proxy entity.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 class ProxyEntity extends Entity {
@@ -19,10 +19,6 @@ class ProxyEntity extends Entity {
 
     public function __construct() {
         parent::__construct();
-    }
-
-    public function getName() {
-        return get_class($this);
     }
 
     public function __toString() {
