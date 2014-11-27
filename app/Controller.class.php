@@ -3,7 +3,7 @@
 /**
  * Root controller object.
  * 
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 abstract class Controller {
@@ -59,12 +59,5 @@ abstract class Controller {
     protected final function getArgs() {
         return $this->args;
     }
-
-    /**
-     * Get name of this class.
-     *
-     * @all views must contain a getName method
-     */
-    public abstract function getName();
 }
 ?>
