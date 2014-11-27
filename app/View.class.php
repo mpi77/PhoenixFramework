@@ -3,7 +3,7 @@
 /**
  * Root view object.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  * */
 abstract class View {
@@ -70,12 +70,5 @@ abstract class View {
     protected final function getTemplateData() {
         return $this->templateData;
     }
-
-    /**
-     * Get name of this class.
-     *
-     * @all views must contain a getName method
-     */
-    public abstract function getName();
 }
 ?>
