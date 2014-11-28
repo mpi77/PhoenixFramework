@@ -3,7 +3,7 @@
 /**
  * Root translator object.
  * 
- * @version 1.7
+ * @version 1.8
  * @author MPI
  * */
 abstract class Translator {
@@ -29,13 +29,6 @@ abstract class Translator {
      */
     public abstract function get($key);
 
-    /**
-     * Get name of this class.
-     *
-     * @all views must contain a getName method
-     */
-    public abstract function getName();
-    
     /*
      * Common translation keys follow
      *

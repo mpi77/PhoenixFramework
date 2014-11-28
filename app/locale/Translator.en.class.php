@@ -2,7 +2,7 @@
 /**
  * English translator.
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
  * */
 class EnglishTranslator extends Translator {
@@ -70,15 +70,6 @@ class EnglishTranslator extends Translator {
      */
     public function get($key) {
         return (key_exists($key, $this->data)) ? $this->data[$key] : Translator::DEFAULT_INVALID_KEY;
-    }
-
-    /**
-     * Get name of this class.
-     *
-     * @return string
-     */
-    public function getName() {
-        return get_class($this);
     }
 }
 ?>
