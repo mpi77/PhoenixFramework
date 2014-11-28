@@ -3,7 +3,7 @@
 /**
  * Html response object.
  * 
- * @version 1.7
+ * @version 1.9
  * @author MPI
  * */
 final class HtmlResponse extends Response {
@@ -18,9 +18,6 @@ final class HtmlResponse extends Response {
 
     /**
      * Send this response object to output.
-     *
-     * @todo
-     *
      */
     public function send() {
         $e = $this->getException();
@@ -52,10 +49,10 @@ final class HtmlResponse extends Response {
     /**
      * Get string representation of this response class.
      *
-     * @todo
-     *
+     * @return string
      */
     public function __toString() {
+        return sprintf("HtmlResponse{templateFile=%s}", $this->templateFile);
     }
 
     /**
