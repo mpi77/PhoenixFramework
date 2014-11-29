@@ -47,12 +47,12 @@ class System {
                     "sorting_index" => 0, //
                     "xm" => -1,
                     "xv" => 1,
-                    "time_format" => "Y-m-d H:i:s"
+                    "time_format" => "Y-m-d H:i:s" 
     );
 
     private function __construct() {
     }
-    
+
     private function __destruct() {
     }
 
@@ -74,7 +74,7 @@ class System {
                 exit('The application environment is not set correctly.');
         }
     }
-    
+
     /**
      * Initialize session
      */
@@ -493,17 +493,24 @@ class System {
         }
         return $r;
     }
-    
+
     /**
      * Convert size of bits to size of bytes with human readable prefix.
-     * 
-     * @param integer $bitSize
-     * 
+     *
+     * @param integer $bitSize            
+     *
      * @return string
      */
-    public static function convert2bytes($bitSize){
-        $unit=array('B','KB','MB','GB','TB','PB');
-        return @round($size/pow(1024,($i=floor(log($size,1024)))),2)." ".$unit[$i];
+    public static function convert2bytes($bitSize) {
+        $unit = array (
+                        'B',
+                        'KB',
+                        'MB',
+                        'GB',
+                        'TB',
+                        'PB' 
+        );
+        return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . " " . $unit[$i];
     }
 
     /**
@@ -696,7 +703,7 @@ class System {
     /**
      * Redirect to given url.
      *
-     * @param string $url
+     * @param string $url            
      */
     public static function redirect($url) {
         header(sprintf("Location: %s", $url));
@@ -715,7 +722,7 @@ class System {
     /**
      * Trace variable.
      *
-     * @param mixed $var
+     * @param mixed $var            
      */
     public static function trace($var) {
         echo "<pre>";
