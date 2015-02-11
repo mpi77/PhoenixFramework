@@ -2,9 +2,12 @@
 /**
  * Index page.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  * */
+
+/* TODO: reorganize file structure*/
+exit();
 
 /* load system and config - for basic init */
 require "app/lib/System.class.php";
