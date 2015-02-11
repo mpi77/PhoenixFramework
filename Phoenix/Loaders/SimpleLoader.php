@@ -5,7 +5,7 @@ namespace Phoenix\Loaders;
 /**
  * SimpleLoader
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  *        
  */
@@ -32,6 +32,11 @@ class SimpleLoader {
         return false;
     }
 
+    /**
+     * Get statistics of loading classes.
+     *
+     * @return array (indexes: filesOk, filesFail)
+     */
     public static function getStats() {
         return array (
                         "filesOk" => self::$filesOk,
