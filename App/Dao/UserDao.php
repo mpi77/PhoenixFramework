@@ -1,11 +1,11 @@
 <?php
 /**
- * User entity.
+ * User Dao.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
-class UserEntity extends Entity {
+class UserDao extends Dao {
     private $uid;
     private $email;
     private $password;
@@ -25,7 +25,7 @@ class UserEntity extends Entity {
     }
 
     public function __toString() {
-        return "UserEntity{uid=" . $this->uid . ", email=" . $this->email . ", password=" . $this->password . ", type=" . $this->type . ", status=" . $this->status . "}";
+        return "UserDao{uid=" . $this->uid . ", email=" . $this->email . ", password=" . $this->password . ", type=" . $this->type . ", status=" . $this->status . "}";
     }
     
     public function getUid(){

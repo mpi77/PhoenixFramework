@@ -1,11 +1,11 @@
 <?php
 /**
- * Ucr entity.
+ * Ucr Dao.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
-class UcrEntity extends Entity {
+class UcrDao extends Dao {
     private $id;
     private $email;
     private $token;
@@ -17,7 +17,7 @@ class UcrEntity extends Entity {
     }
 
     public function __toString() {
-        return "UcrEntity{id=" . $this->id . ", email=" . $this->email . ", token=" . $this->token . ", user_type=" . $this->user_type . ", valid_to=" . $this->valid_to . "}";
+        return "UcrDao{id=" . $this->id . ", email=" . $this->email . ", token=" . $this->token . ", user_type=" . $this->user_type . ", valid_to=" . $this->valid_to . "}";
     }
     
     public function getId(){

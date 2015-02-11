@@ -1,11 +1,11 @@
 <?php
 /**
- * Internal log entity.
+ * Internal log Dao.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
-class InternalLogEntity extends Entity {
+class InternalLogDao extends Dao {
     private $id;
     private $ts_insert;
     private $class;
@@ -18,7 +18,7 @@ class InternalLogEntity extends Entity {
     }
 
     public function __toString() {
-        return "InternalLogEntity{id=" . $this->id . ", ts_insert=" . $this->ts_insert . ", code=" . $this->code . ", class=" . $this->class . ", message=" . $this->message . "}";
+        return "InternalLogDao{id=" . $this->id . ", ts_insert=" . $this->ts_insert . ", code=" . $this->code . ", class=" . $this->class . ", message=" . $this->message . "}";
     }
     
     public function getId(){

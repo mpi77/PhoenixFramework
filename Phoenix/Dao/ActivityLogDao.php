@@ -1,11 +1,11 @@
 <?php
 /**
- * Activity log entity.
+ * Activity log Dao.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
-class ActivityLogEntity extends Entity {
+class ActivityLogDao extends Dao {
     private $id;
     private $user_uid;
     private $message;
@@ -16,7 +16,7 @@ class ActivityLogEntity extends Entity {
     }
 
     public function __toString() {
-        return "ActivityLogEntity{id=" . $this->id . ", ts_insert=" . $this->ts_insert . ", user_uid=" . $this->user_uid . ", message=" . $this->message . "}";
+        return "ActivityLogDao{id=" . $this->id . ", ts_insert=" . $this->ts_insert . ", user_uid=" . $this->user_uid . ", message=" . $this->message . "}";
     }
     
     public function getId(){

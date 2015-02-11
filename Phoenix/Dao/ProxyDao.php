@@ -1,11 +1,11 @@
 <?php
 /**
- * Proxy entity.
+ * Proxy Dao.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  * */
-class ProxyEntity extends Entity {
+class ProxyDao extends Dao {
     private $id;
     private $token;
     private $valid_from;
@@ -22,7 +22,7 @@ class ProxyEntity extends Entity {
     }
 
     public function __toString() {
-        return "ProxyEntity{id=" . $this->id . ", token=" . $this->token . "}";
+        return "ProxyDao{id=" . $this->id . ", token=" . $this->token . "}";
     }
 
     public function getId() {
