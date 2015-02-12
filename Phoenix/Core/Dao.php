@@ -1,13 +1,19 @@
 <?php
 
+namespace Phoenix\Core;
+
 /**
  * Root Dao object.
- * 
- * @version 1.0
+ *
+ * @version 1.1
  * @author MPI
- * */
+ *        
+ */
 abstract class Dao {
 
+    /**
+     * Dao constructor.
+     */
     public function __construct() {
     }
 

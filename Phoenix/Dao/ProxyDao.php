@@ -1,10 +1,17 @@
 <?php
+
+namespace Phoenix\Dao;
+
+use \Phoenix\Core\Dao;
+use \Phoenix\Core\Database;
+
 /**
  * Proxy Dao.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
- * */
+ *        
+ */
 class ProxyDao extends Dao {
     private $id;
     private $token;

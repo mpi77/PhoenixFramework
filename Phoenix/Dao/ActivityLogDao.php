@@ -1,16 +1,23 @@
 <?php
+
+namespace Phoenix\Dao;
+
+use \Phoenix\Core\Dao;
+use \Phoenix\Core\Database;
+
 /**
  * Activity log Dao.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
- * */
+ *        
+ */
 class ActivityLogDao extends Dao {
     private $id;
     private $user_uid;
     private $message;
     private $ts_insert;
-    
+
     public function __construct() {
         parent::__construct();
     }
@@ -18,20 +25,20 @@ class ActivityLogDao extends Dao {
     public function __toString() {
         return "ActivityLogDao{id=" . $this->id . ", ts_insert=" . $this->ts_insert . ", user_uid=" . $this->user_uid . ", message=" . $this->message . "}";
     }
-    
-    public function getId(){
+
+    public function getId() {
         return $this->id;
     }
-    
-    public function getTsInsert(){
+
+    public function getTsInsert() {
         return $this->ts_insert;
     }
-    
-    public function getUserUid(){
+
+    public function getUserUid() {
         return $this->user_uid;
     }
-    
-    public function getMessage(){
+
+    public function getMessage() {
         return $this->message;
     }
 
@@ -39,7 +46,7 @@ class ActivityLogDao extends Dao {
         $query = "INSERT INTO log_activity (id, ts_insert, user_uid, message) VALUES (default, NOW(), :user_uid, :message)";
         $queryArgs = array (
                         ":user_uid" => $user_uid,
-                        ":message" => $message
+                        ":message" => $message 
         );
         return $db->actionQuery($query, $queryArgs);
     }
