@@ -2,7 +2,7 @@
 /**
  * Config unit test.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 include '../../../../Phoenix/Core/Config.php';
@@ -41,16 +41,36 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(3, Config::get(Config::KEY_DB_THIRD_POOL));
     }
     
-    public function testConfigInvalidKeys() {
-        $this->assertNull(Config::get("0"));
-        $this->assertNull(Config::get("0.0"));
-        $this->assertNull(Config::get(0.1));
-        $this->assertNull(Config::get("-*-"));
+    public function testConfigUserDefined() {
+        Config::set(2000, true);
+        $this->assertTrue(Config::get(2000));
+        Config::set(2001, "string");
+        $this->assertSame("string", Config::get(2001));
+    }
+    
+    public function testConfigUndefinedKeys(){
         $this->assertNull(Config::get(-125));
-        $this->assertNull(Config::get(0x55));
         $this->assertNull(Config::get(999));
-        $this->assertNull(Config::get(1001));
+        $this->assertNull(Config::get(0x55));
+    }
+    
+    public function testConfigInvalidKeys() {
+        $this->assertFalse(Config::set("0", "x"));
+        $this->assertNull(Config::get("0"));
+        
+        $this->assertFalse(Config::set("0.0", "x"));
+        $this->assertNull(Config::get("0.0"));
+        
+        $this->assertFalse(Config::set("-*-", "x"));
+        $this->assertNull(Config::get("-*-"));
+        
+        $this->assertFalse(Config::set(0.1, "x"));
+        $this->assertNull(Config::get(0.1));
+        
+        $this->assertFalse(Config::set(true, "x"));
         $this->assertNull(Config::get(true));
+        
+        $this->assertFalse(Config::set(null, "x"));
         $this->assertNull(Config::get(null));
     }
     
@@ -125,22 +145,28 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
         $this->assertNull(Config::getEmailPool(4));
     }
     
+    public function testDatabasePoolUndefinedKeys() {
+        $this->assertNull(Config::getDatabasePool(-125));
+        $this->assertNull(Config::getDatabasePool(999));
+    }
+    
     public function testDatabasePoolInvalidKeys() {
         $this->assertNull(Config::getDatabasePool(0.0));
         $this->assertNull(Config::getDatabasePool(0.1));
-        $this->assertNull(Config::getDatabasePool(-125));
-        $this->assertNull(Config::getDatabasePool(999));
         $this->assertNull(Config::getDatabasePool("hello"));
         $this->assertNull(Config::getDatabasePool("*-*"));
         $this->assertNull(Config::getDatabasePool(true));
         $this->assertNull(Config::getDatabasePool(null));
     }
     
+    public function testEmailPoolUndefinedKeys() {
+        $this->assertNull(Config::getEmailPool(-125));
+        $this->assertNull(Config::getEmailPool(999));
+    }
+    
     public function testEmailPoolInvalidKeys() {
         $this->assertNull(Config::getEmailPool(0.0));
         $this->assertNull(Config::getEmailPool(0.1));
-        $this->assertNull(Config::getEmailPool(-125));
-        $this->assertNull(Config::getEmailPool(999));
         $this->assertNull(Config::getEmailPool("hello"));
         $this->assertNull(Config::getEmailPool("*-*"));
         $this->assertNull(Config::getEmailPool(true));
@@ -149,6 +175,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
     
     public function testDisableRegistration() {
         Config::disableRegistration();
+        
+        /* modify user defined config */
+        Config::set(2001, "XDD");
+        $this->assertSame("string", Config::get(2001));
         
         /* modify DIR_ROOT */
         Config::set(Config::KEY_DIR_ROOT, "/srv/www/88");
