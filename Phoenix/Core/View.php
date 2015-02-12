@@ -1,20 +1,30 @@
 <?php
 
+namespace Phoenix\Core;
+
+use \Phoenix\Core\Model;
+// use \Phoenix\Http\Request;
+
 /**
  * Root view object.
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
- * */
+ *        
+ */
 abstract class View {
     private $model;
-    private $templateData;
-    private $args;
+    private $request;
 
-    public function __construct(Model $model, $args, TemplateData $templateData = null) {
+    /**
+     * View constructor.
+     *
+     * @param Model $model            
+     * @param unknown $request            
+     */
+    public function __construct(Model $model, $request) {
         $this->model = $model;
-        $this->args = $args;
-        $this->templateData = is_null($templateData) ? new TemplateData() : $templateData;
+        $this->request = $request;
     }
 
     /**
@@ -27,48 +37,12 @@ abstract class View {
     }
 
     /**
-     * Get this route name.
+     * Get this request.
      *
-     * @return string
+     * @return Request
      */
-    protected final function getRouteName() {
-        return $this->args["GET"]["route"];
-    }
-
-    /**
-     * Get this action name.
-     *
-     * @return string
-     */
-    protected final function getActionName() {
-        return $this->args["GET"]["action"];
-    }
-    
-    /**
-     * Get this response format.
-     *
-     * @return integer
-     */
-    protected final function getResponseFormat() {
-        return $this->args["GET"]["format"];
-    }
-
-    /**
-     * Get this args.
-     *
-     * @return mixed
-     */
-    protected final function getArgs() {
-        return $this->args;
-    }
-
-    /**
-     * Get this template data.
-     *
-     * @return TemplateData
-     */
-    protected final function getTemplateData() {
-        return $this->templateData;
+    protected final function getRequest() {
+        return $this->request;
     }
 }
 ?>

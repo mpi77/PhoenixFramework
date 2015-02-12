@@ -1,20 +1,31 @@
 <?php
 
+namespace Phoenix\Core;
+
+use \Phoenix\Core\Database;
+use \Phoenix\Dao\ActivityLogDao;
+
 /**
  * Root model object.
- * 
- * @version 1.4
+ *
+ * @version 1.5
  * @author MPI
- * */
+ *        
+ */
 abstract class Model {
     private $db;
 
+    /**
+     * Model constructor.
+     *
+     * @param Database $db            
+     */
     public function __construct(Database $db) {
         $this->db = $db;
     }
 
     /**
-     * Get this db link.
+     * Get this db instance.
      *
      * @return Database
      */
@@ -25,14 +36,14 @@ abstract class Model {
     /**
      * Save user activity record to db.
      *
-     * @param int $uid
+     * @param integer $uid
      *            of user
      * @param string $description
      *            text msg to save
-     * @return int
+     * @return integer
      */
     public final function insertActivityRecord($uid, $message) {
-        return ActivityLogEntity::insertRecord($this->db, $uid, $message);
+        return ActivityLogDao::insertRecord($this->db, $uid, $message);
     }
 }
 ?>
