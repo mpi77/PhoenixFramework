@@ -1,71 +1,301 @@
 <?php
+
+namespace Phoenix\Core;
+
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
- * */
+ *        
+ */
 class Config {
-    const APP_ENVIRONMENT = System::ENV_DEVELOPMENT;
-    const SITE_PATH = "http://localhost/phoenix/";
-    const SITE_BASE = "/phoenix/";
-    const SHUTDOWN_PAGE = "500"; // code for an error page
-    const LOG_DIR = "log";
-    const LOG_SIZE = 4194304; // 4 MB
-    const TIME_ZONE = "Europe/Prague";
-    const SERVER_FQDN = "x";
-    const SERVER_INTERNAL_IP = "x";
-    const SERVER_PORT = "x";
-    const SERVER_PROTOCOL = "x";
-    const SESSION_INACTIVITY_ENABLED = true;
-    const SESSION_INACTIVITY_TIMEOUT = 1800;
-    const SESSION_INACTIVITY_REDIRECT_PATH = "user/inactivity/";
-    const SESSION_FIXATION_DETECTION_ENABLED = true;
-    const SESSION_FIXATION_REDIRECT_PATH = "user/fixation/";
+    /* general constants */
     const SET = 1;
     const CLEAR = 0;
-    const DB_DEFAULT_POOL = 1;
-    private static $dbParams = array (
-                    self::DB_DEFAULT_POOL => array (
-                                    "server" => "localhost",
-                                    "port" => "3306",
-                                    "login" => "phoenix",
-                                    "password" => "phoenix",
-                                    "schema" => "phoenix",
-                                    "charset" => "utf8",
-                                    "driver" => "mysql" 
-                    ) 
-    );
-    private static $email = array (
-                    "server" => "x",
-                    "username" => "x",
-                    "password" => "x",
-                    "port" => "25",
-                    "smtp_auth" => true,
-                    "from_name" => "x",
-                    "smtp_secure" => null 
-    );
+    
+    /* config keys */
+    const KEY_DIR_ROOT = 10;
+    const KEY_DIR_APP = 11;
+    const KEY_DIR_PHOENIX = 12;
+    const KEY_DIR_TEMP = 13;
+    const KEY_DIR_LOG = 14;
+    const KEY_DIR_VENDOR = 15;
+    const KEY_DIR_CACHE = 16;
+    const KEY_SITE_FQDN = 20;
+    const KEY_SITE_BASE = 21;
+    const KEY_SHUTDOWN_PAGE = 22;
+    const KEY_ENVIRONMENT = 23;
+    const KEY_LOG_SIZE = 24;
+    const KEY_TIME_ZONE = 25;
+    const KEY_SESSION_INACTIVITY_ENABLED = 30;
+    const KEY_SESSION_INACTIVITY_TIMEOUT = 31;
+    const KEY_SESSION_INACTIVITY_REDIRECT_PATH = 32;
+    const KEY_SESSION_FIXATION_DETECTION_ENABLED = 33;
+    const KEY_SESSION_FIXATION_REDIRECT_PATH = 34;
+    const KEY_DB_PRIMARY_POOL = 50;
+    const KEY_DB_SECONDARY_POOL = 51;
+    const KEY_DB_THIRD_POOL = 52;
+    
+    /* default config values for config keys */
+    const DEFAULT_DIR_ROOT = __DIR__;
+    const DEFAULT_DIR_APP = "/App";
+    const DEFAULT_DIR_PHOENIX = "/Phoenix";
+    const DEFAULT_DIR_TEMP = "/Temp";
+    const DEFAULT_DIR_LOG = "/Log";
+    const DEFAULT_DIR_VENDOR = "/Vendor";
+    const DEFAULT_DIR_CACHE = "/Cache";
+    const DEFAULT_SITE_FQDN = "http://localhost/phoenix/";
+    const DEFAULT_SITE_BASE = "/phoenix/";
+    const DEFAULT_SHUTDOWN_PAGE = "500";
+    const DEFAULT_ENVIRONMENT = 0;
+    const DEFAULT_LOG_SIZE = 4194304;
+    const DEFAULT_TIME_ZONE = "Europe/Prague";
+    const DEFAULT_SESSION_INACTIVITY_ENABLED = true;
+    const DEFAULT_SESSION_INACTIVITY_TIMEOUT = 1800;
+    const DEFAULT_SESSION_INACTIVITY_REDIRECT_PATH = "user/inactivity/";
+    const DEFAULT_SESSION_FIXATION_DETECTION_ENABLED = true;
+    const DEFAULT_SESSION_FIXATION_REDIRECT_PATH = "user/fixation/";
+    const DEFAULT_DB_PRIMARY_POOL = 1;
+    const DEFAULT_DB_SECONDARY_POOL = 2;
+    const DEFAULT_DB_THIRD_POOL = 3;
+    
+    /* db keys */
+    const DB_DRIVER = 1;
+    const DB_SERVER = 2;
+    const DB_PORT = 3;
+    const DB_LOGIN = 4;
+    const DB_PASSWORD = 5;
+    const DB_SCHEMA = 6;
+    const DB_CHARSET = 7;
+    
+    /* email keys */
+    const EMAIL_SERVER = 1;
+    const EMAIL_PORT = 2;
+    const EMAIL_LOGIN = 3;
+    const EMAIL_PASSWORD = 4;
+    const EMAIL_SMTP_AUTH = 5;
+    const EMAIL_SMTP_SECURE = 6;
+    const EMAIL_FROM_NAME = 7;
+    private static $config = array ();
+    private static $db = array ();
+    private static $email = array ();
+    private static $registrationEnabled = true;
 
     private function __construct() {
     }
 
     /**
-     * Get configuration parameters for connection to db.
+     * Get config value for given key.
      *
-     * @param integer $connectionId            
-     * @return string array
+     * @param integer $key
+     *            predefined constant Config::KEY_ (integer key); can be self defined integer constant (convention is integer grater than 1000)
+     * @return multitype|null
      */
-    public static function getDatabaseConnectionParams($connectionId) {
-        return self::$dbParams[$connectionId];
+    public static function get($key) {
+        if (empty(self::$config)) {
+            self::setConfigDefaults();
+        }
+        return (is_int($key) && array_key_exists($key, self::$config)) ? self::$config[$key] : null;
     }
 
     /**
-     * Get configuration parameters to email server.
+     * Set config value for given key.
      *
-     * @return string array
+     * @param integer $key
+     *            predefined constant Config::KEY_ (integer key); can be self defined integer constant (convention is integer grater than 1000)
+     * @param multitype $value            
+     * @return boolean
      */
-    public static function getEmailParams() {
-        return self::$email;
+    public static function set($key, $value) {
+        if (!is_int($key)) {
+            return false;
+        }
+        if (self::$registrationEnabled === true) {
+            if (empty(self::$config)) {
+                self::setConfigDefaults();
+            }
+            self::$config[$key] = $value;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get absolute path for specified folder.
+     *
+     * @param integer $key
+     *            valid keys are Config::KEY_DIR_*
+     * @return string|NULL
+     */
+    public static function getAbsoluteFolderPath($key) {
+        if (!is_int($key)) {
+            return null;
+        }
+        if (empty(self::$config)) {
+            self::setConfigDefaults();
+        }
+        switch ($key) {
+            case self::KEY_DIR_ROOT :
+                return self::$config[$key];
+                break;
+            case self::KEY_DIR_APP :
+            case self::KEY_DIR_CACHE :
+            case self::KEY_DIR_LOG :
+            case self::KEY_DIR_PHOENIX :
+            case self::KEY_DIR_TEMP :
+            case self::KEY_DIR_VENDOR :
+                return self::$config[self::KEY_DIR_ROOT] . self::$config[$key];
+                break;
+            default :
+                return null;
+        }
+    }
+
+    /**
+     * Get Database config set for given key.
+     *
+     * @param integer $key            
+     * @return null|array (with indexes Config::DB_)
+     */
+    public static function getDatabasePool($key) {
+        if (!is_int($key) || empty(self::$db)) {
+            return null;
+        }
+        return (is_int($key) && array_key_exists($key, self::$db)) ? self::$db[$key] : null;
+    }
+
+    /**
+     * Set data of Database pool.
+     *
+     * @param integer $key
+     *            can be used predefined constants Config::KEY_DB_ in use Config::get(Config::KEY_DB_);
+     * @param string $driver
+     *            available PDO drivers on your system (mysql, ...)
+     * @param string $server            
+     * @param string $port            
+     * @param string $login            
+     * @param string $password            
+     * @param string $schema            
+     * @param string $charset            
+     * @return boolean
+     */
+    public static function setDatabasePool($key, $driver, $server, $port, $login, $password, $schema, $charset) {
+        if (!is_int($key)) {
+            return false;
+        }
+        if (self::$registrationEnabled === true) {
+            if (empty(self::$db)) {
+                self::$db = array ();
+            }
+            self::$db[$key] = array (
+                            self::DB_DRIVER => $driver,
+                            self::DB_SERVER => $server,
+                            self::DB_PORT => $port,
+                            self::DB_LOGIN => $login,
+                            self::DB_PASSWORD => $password,
+                            self::DB_SCHEMA => $schema,
+                            self::DB_CHARSET => $charset 
+            );
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get Email config set for given key.
+     *
+     * @param integer $key            
+     * @return null|array (with indexes Config::EMAIL_)
+     */
+    public static function getEmailPool($key) {
+        if (!is_int($key) || empty(self::$email)) {
+            return null;
+        }
+        return (is_int($key) && array_key_exists($key, self::$email)) ? self::$email[$key] : null;
+    }
+
+    /**
+     * Set data of Email pool.
+     *
+     * @param integer $key            
+     * @param string $server            
+     * @param string $port            
+     * @param string $login            
+     * @param string $password            
+     * @param boolean $smtp_auth            
+     * @param string $smtp_secure
+     *            valid options (tls, ssl)
+     * @param string $from_name            
+     * @return boolean
+     */
+    public static function setEmailPool($key, $server, $port, $login, $password, $smtp_auth, $smtp_secure, $from_name) {
+        if (!is_int($key)) {
+            return false;
+        }
+        if (self::$registrationEnabled === true) {
+            if (empty(self::$email)) {
+                self::$email = array ();
+            }
+            self::$email[$key] = array (
+                            self::EMAIL_SERVER => $server,
+                            self::EMAIL_PORT => $port,
+                            self::EMAIL_LOGIN => $login,
+                            self::EMAIL_PASSWORD => $password,
+                            self::EMAIL_SMTP_AUTH => $smtp_auth,
+                            self::EMAIL_SMTP_SECURE => ($smtp_secure == "tls" || $smtp_secure == "ssl") ? $smtp_secure : "",
+                            self::EMAIL_FROM_NAME => $from_name 
+            );
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Disable registering (modifications of) values into Config.
+     */
+    public static function disableRegistration() {
+        self::$registrationEnabled = false;
+    }
+
+    /**
+     * Get bool of registration enabled.
+     *
+     * @return boolean
+     */
+    public static function isRegistrationEnabled() {
+        return self::$registrationEnabled;
+    }
+
+    /**
+     * Set defaults to Config.
+     */
+    private static function setConfigDefaults() {
+        $dir_root = substr(self::DEFAULT_DIR_ROOT, 0, strlen(self::DEFAULT_DIR_ROOT) - strlen(self::DEFAULT_DIR_PHOENIX) - strlen("/Core"));
+        // $dir_root = self::DEFAULT_DIR_ROOT . "/../..";
+        self::$config = array (
+                        self::KEY_DIR_ROOT => $dir_root,
+                        self::KEY_DIR_APP => self::DEFAULT_DIR_APP,
+                        self::KEY_DIR_PHOENIX => self::DEFAULT_DIR_PHOENIX,
+                        self::KEY_DIR_TEMP => self::DEFAULT_DIR_TEMP,
+                        self::KEY_DIR_LOG => self::DEFAULT_DIR_LOG,
+                        self::KEY_DIR_VENDOR => self::DEFAULT_DIR_VENDOR,
+                        self::KEY_DIR_CACHE => self::DEFAULT_DIR_CACHE,
+                        self::KEY_SITE_FQDN => self::DEFAULT_SITE_FQDN,
+                        self::KEY_SITE_BASE => self::DEFAULT_SITE_BASE,
+                        self::KEY_SHUTDOWN_PAGE => self::DEFAULT_SHUTDOWN_PAGE,
+                        self::KEY_ENVIRONMENT => self::DEFAULT_ENVIRONMENT,
+                        self::KEY_LOG_SIZE => self::DEFAULT_LOG_SIZE,
+                        self::KEY_TIME_ZONE => self::DEFAULT_TIME_ZONE,
+                        self::KEY_SESSION_INACTIVITY_ENABLED => self::DEFAULT_SESSION_INACTIVITY_ENABLED,
+                        self::KEY_SESSION_INACTIVITY_TIMEOUT => self::DEFAULT_SESSION_INACTIVITY_TIMEOUT,
+                        self::KEY_SESSION_INACTIVITY_REDIRECT_PATH => self::DEFAULT_SESSION_INACTIVITY_REDIRECT_PATH,
+                        self::KEY_SESSION_FIXATION_DETECTION_ENABLED => self::DEFAULT_SESSION_FIXATION_DETECTION_ENABLED,
+                        self::KEY_SESSION_FIXATION_REDIRECT_PATH => self::DEFAULT_SESSION_FIXATION_REDIRECT_PATH,
+                        self::KEY_DB_PRIMARY_POOL => self::DEFAULT_DB_PRIMARY_POOL,
+                        self::KEY_DB_SECONDARY_POOL => self::DEFAULT_DB_SECONDARY_POOL,
+                        self::KEY_DB_THIRD_POOL => self::DEFAULT_DB_THIRD_POOL 
+        );
     }
 }
 ?>
