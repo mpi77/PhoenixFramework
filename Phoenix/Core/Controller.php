@@ -8,7 +8,7 @@ use \Phoenix\Http\Request;
 /**
  * Root controller object.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  *        
  */
@@ -19,7 +19,6 @@ abstract class Controller {
     /**
      * Controller constructor.
      *
-     * @todo : cast $request to Phoenix\Http\Request
      * @param Model $model            
      * @param Request $request            
      */

@@ -5,7 +5,7 @@ namespace Phoenix\Core;
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.10
+ * @version 1.11
  * @author MPI
  *        
  */
@@ -255,7 +255,7 @@ class Config {
     }
 
     /**
-     * Disable registering (modifications of) values into Config.
+     * Disable registration (modifications) of values in Config.
      */
     public static function disableRegistration() {
         self::$registrationEnabled = false;
