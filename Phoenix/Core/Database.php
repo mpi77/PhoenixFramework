@@ -1,18 +1,27 @@
 <?php
 
+namespace Phoenix\Core;
+
+use \Phoenix\Core\Config;
+use \Phoenix\Exceptions\FrameworkExceptions as FX;
+use \Phoenix\Exceptions\WarningException;
+use \Phoenix\Exceptions\FailureException;
+use \PDO;
+use \PDOException;
+
 /**
  * Database provides interaction between this program
  * and db server.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  *        
  */
 class Database {
-    private $link = null;
-    private $connectionParams = null;
-    private $status = null;
     const EMPTY_RESULT = -1;
+    private $link = null;
+    private $pool_id = null;
+    private $status = null;
 
     /**
      * Initialize connection with db server.
@@ -21,31 +30,31 @@ class Database {
      *            with keys[server, port, login, password, schema, charset, driver]
      * @throws FailureException
      */
-    public function __construct($connectionParams) {
-        $this->connectionParams = $connectionParams;
-        if (empty($this->connectionParams)) {
-            throw new FailureException(FailureException::F_MISSING_CONFIG_DB);
+    public function __construct($pool_id) {
+        $this->pool_id = $pool_id;
+        if (empty($this->pool_id)) {
+            throw new FailureException(FX::F_MISSING_CONFIG_DB);
         } else {
             $this->connect();
         }
     }
 
     /**
-     * Ask SELECT query on db.
+     * Run SELECT query on db.
      *
      * @param string $query
      *            SELECT single query
-     * @param array $queryArgs
+     * @param array $query_args
      *            array with query arguments
-     * @param array $fetchConfig
+     * @param array $fetch_config
      *            array with config fetch op. [type=>PDO::FETCH_ASSOC or PDO::FETCH_NUM or PDO::FETCH_CLASS, className=>string]
      * @throws WarningException
      * @return 2D array (more rows fetched) | 1D array (one row fetched) | Database::EMPTY_RESULT (nothing fetched)
      */
-    public function selectQuery($query, $queryArgs, $fetchConfig = array("type"=>PDO::FETCH_ASSOC, "className" => "")) {
+    public function selectQuery($query, $query_args, $fetch_config = array("type"=>PDO::FETCH_ASSOC, "className" => "")) {
         try {
             $r = $this->link->prepare($query);
-            switch ($fetchConfig["type"]) {
+            switch ($fetch_config["type"]) {
                 case PDO::FETCH_ASSOC :
                     $r->setFetchMode(PDO::FETCH_ASSOC);
                     break;
@@ -53,45 +62,45 @@ class Database {
                     $r->setFetchMode(PDO::FETCH_NUM);
                     break;
                 case PDO::FETCH_CLASS :
-                    $r->setFetchMode(PDO::FETCH_CLASS, $fetchConfig["className"]);
+                    $r->setFetchMode(PDO::FETCH_CLASS, $fetch_config["className"]);
                     break;
                 default :
                     $r->setFetchMode(PDO::FETCH_ASSOC);
             }
-            if ($r->execute($queryArgs)) {
+            if ($r->execute($query_args)) {
                 if ($r->rowCount() >= 1) {
                     return $r->fetchAll();
                 } else {
                     return self::EMPTY_RESULT;
                 }
             } else {
-                throw new WarningException(WarningException::W_INVALID_SQL_SELECT);
+                throw new WarningException(FX::W_DB_INVALID_SQL_SELECT);
             }
         } catch (PDOException $e) {
-            throw new WarningException(WarningException::W_INVALID_SQL_SELECT);
+            throw new WarningException(FX::W_DB_INVALID_SQL_SELECT);
         }
     }
 
     /**
-     * Ask INSERT, UPDATE, DELETE query on db.
+     * Run INSERT, UPDATE, DELETE query on db.
      *
      * @param string $query
      *            action (INSERT, UPDATE, DELETE) single query
-     * @param array $queryArgs
+     * @param array $query_args
      *            array with query arguments
      * @throws WarningException
-     * @return number of affected rows
+     * @return integer of affected rows
      */
-    public function actionQuery($query, $queryArgs) {
+    public function actionQuery($query, $query_args) {
         try {
             $r = $this->link->prepare($query);
-            if ($r->execute($queryArgs)) {
+            if ($r->execute($query_args)) {
                 return ($r->rowCount() > 0 ? $r->rowCount() : 0);
             } else {
-                throw new WarningException(WarningException::W_INVALID_SQL_ACTION);
+                throw new WarningException(FX::W_DB_INVALID_SQL_ACTION);
             }
         } catch (PDOException $e) {
-            throw new WarningException(WarningException::W_INVALID_SQL_ACTION);
+            throw new WarningException(FX::W_DB_INVALID_SQL_ACTION);
         }
     }
 
@@ -99,7 +108,7 @@ class Database {
      * Get the ID of the last inserted row or sequence value.
      *
      * @param string $name
-     *            Name of the sequence object from which the ID should be returned.
+     *            name of the sequence object from which the ID should be returned.
      * @return string
      */
     public function lastInsertId($name = null) {
@@ -111,8 +120,7 @@ class Database {
      *
      * @param string $text
      *            input text to be escaped
-     * @param
-     *            integer
+     * @param integer $parameter_type
      *            parameters to quote string by PDO
      * @return string
      */
@@ -123,37 +131,54 @@ class Database {
     /**
      * Start transaction.
      *
-     * @throws PDOException
+     * @throws WarningException
      * @return boolean
      */
     public function beginTransaction() {
-        return $this->link->beginTransaction();
+        $r = false;
+        try {
+            $r = $this->link->beginTransaction();
+        } catch (PDOException $e) {
+            throw new WarningException(FX::W_DB_UNABLE_BEGIN_TRANSACTION);
+        }
+        return $r;
     }
 
     /**
      * Commit current transaction.
      *
-     * @throws PDOException
+     * @throws WarningException
      * @return boolean
      */
     public function commitTransaction() {
-        return $this->link->commit();
+        $r = false;
+        try {
+            $r = $this->link->commit();
+        } catch (PDOException $e) {
+            throw new WarningException(FX::W_DB_UNABLE_COMMIT_TRANSACTION);
+        }
+        return $r;
     }
 
     /**
      * Rollback current transaction.
      *
-     * @throws PDOException
+     * @throws WarningException
      * @return boolean
      */
     public function rollbackTransaction() {
-        return $this->link->rollback();
+        $r = false;
+        try {
+            $r = $this->link->rollback();
+        } catch (PDOException $e) {
+            throw new WarningException(FX::W_DB_UNABLE_ROLLBACK_TRANSACTION);
+        }
+        return $r;
     }
 
     /**
      * Checks if inside a transaction
      *
-     * @throws PDOException
      * @return boolean
      */
     public function inTransaction() {
@@ -172,20 +197,19 @@ class Database {
     /**
      * Test connection to db server.
      *
-     * @param array $connectionParams
-     *            with keys[server, login, password, schema, charset, driver]
-     *            
+     * @param integer $pool_id            
      * @return true (if succesfull test) | false (if unsuccesfull test)
      */
-    public static function testConnection($connectionParams) {
+    public static function testConnection($pool_id) {
         $link = null;
+        $cp = Config::getDatabasePool($pool_id);
         
-        if (empty($connectionParams)) {
+        if (empty($cp) || !is_array($cp)) {
             return false;
         }
         
         try {
-            $link = new PDO(sprintf("%s:host=%s:%d;dbname=%s;charset=%s", $connectionParams["driver"], $connectionParams["server"], $connectionParams["port"], $connectionParams["schema"], $connectionParams["charset"]), $connectionParams["login"], $connectionParams["password"]);
+            $link = new PDO(sprintf("%s:host=%s:%d;dbname=%s;charset=%s", $cp[Config::DB_DRIVER], $cp[Config::DB_SERVER], $cp[Config::DB_PORT], $cp[Config::DB_SCHEMA], $cp[Config::DB_CHARSET]), $cp[Config::DB_LOGIN], $cp[Config::DB_PASSWORD]);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             return false;
@@ -199,13 +223,17 @@ class Database {
      * @throws FailureException
      */
     private function connect() {
+        $cp = Config::getDatabasePool($this->pool_id);
         try {
-            $this->link = new PDO(sprintf("%s:host=%s:%d;dbname=%s;charset=%s", $this->connectionParams["driver"], $this->connectionParams["server"], $this->connectionParams["port"], $this->connectionParams["schema"], $this->connectionParams["charset"]), $this->connectionParams["login"], $this->connectionParams["password"]);
+            if (empty($cp) || !is_array($cp)) {
+                throw new PDOException();
+            }
+            $this->link = new PDO(sprintf("%s:host=%s:%d;dbname=%s;charset=%s", $cp[Config::DB_DRIVER], $cp[Config::DB_SERVER], $cp[Config::DB_PORT], $cp[Config::DB_SCHEMA], $cp[Config::DB_CHARSET]), $cp[Config::DB_LOGIN], $cp[Config::DB_PASSWORD]);
             $this->link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->status = true;
         } catch (PDOException $e) {
             $this->status = false;
-            throw new FailureException(FailureException::F_UNABLE_CONNECT_DB);
+            throw new FailureException(FX::F_UNABLE_CONNECT_DB);
         }
     }
 }

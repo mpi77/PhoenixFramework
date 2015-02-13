@@ -13,7 +13,7 @@ use \Phoenix\Exceptions\BaseException;
  * While generating Response.send, the only allowed output is this exception.
  * Other output content is not allowed.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  *        
  */
@@ -30,7 +30,7 @@ class FailureException extends BaseException {
      * @param string $message            
      */
     public function __construct($code = 0, $message = null) {
-        parent::__construct($message, $code);
+        parent::__construct($code, $message);
     }
 
     public function __toString() {

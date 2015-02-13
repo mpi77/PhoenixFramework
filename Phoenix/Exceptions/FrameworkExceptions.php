@@ -13,7 +13,7 @@ namespace Phoenix\Exceptions;
  * in AppConfigurator should be an integer greater 
  * than 1000.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  *        
  */
@@ -31,7 +31,9 @@ class FrameworkExceptions {
     const W_DB_INVALID_SQL_SELECT = 40;
     const W_DB_INVALID_SQL_ACTION = 41;
     const W_DB_UNABLE_VERIFY_RESULT = 42;
-    const W_DB_UNABLE_COMPLETE_TRANSACTION = 43;
+    const W_DB_UNABLE_BEGIN_TRANSACTION = 43;
+    const W_DB_UNABLE_COMMIT_TRANSACTION = 44;
+    const W_DB_UNABLE_ROLLBACK_TRANSACTION = 45;
     const W_ROUTER_INVALID_ROUTE = 50;
     const W_ROUTER_INVALID_ROUTE_ACTION = 51;
     const W_RESPONSE_INVALID_FORMAT = 60;

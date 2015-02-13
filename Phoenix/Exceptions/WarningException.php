@@ -16,7 +16,7 @@ use \Phoenix\Exceptions\BaseException;
  * While generating Response.send, the only allowed output is this exception.
  * Other output content is not allowed.
  *
- * @version 1.8
+ * @version 1.9
  * @author MPI
  *        
  */
@@ -33,7 +33,7 @@ class WarningException extends BaseException {
      * @param string $message            
      */
     public function __construct($code = 0, $message = null) {
-        parent::__construct($message, $code);
+        parent::__construct($code, $message);
     }
 
     public function __toString() {

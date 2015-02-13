@@ -12,7 +12,7 @@ use \Phoenix\Exceptions\FrameworkExceptions as FX;
 /**
  * Application configurator.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  *        
  */
@@ -73,7 +73,9 @@ class AppConfigurator extends Configurator {
                         FX::W_DB_INVALID_SQL_SELECT => 1,
                         FX::W_DB_INVALID_SQL_ACTION => 1,
                         FX::W_DB_UNABLE_VERIFY_RESULT => 1,
-                        FX::W_DB_UNABLE_COMPLETE_TRANSACTION => 1,
+                        FX::W_DB_UNABLE_BEGIN_TRANSACTION => 1,
+                        FX::W_DB_UNABLE_COMMIT_TRANSACTION => 1,
+                        FX::W_DB_UNABLE_ROLLBACK_TRANSACTION => 1,
                         FX::W_ROUTER_INVALID_ROUTE => 1,
                         FX::W_ROUTER_INVALID_ROUTE_ACTION => 1,
                         FX::W_RESPONSE_INVALID_FORMAT => 1,
