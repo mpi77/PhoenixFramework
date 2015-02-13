@@ -2,7 +2,7 @@
 /**
  * Config unit test.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 include '../../../../Phoenix/Core/Config.php';
@@ -21,10 +21,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("/srv/www/htdocs/phoenix", Config::get(Config::KEY_DIR_ROOT));
         $this->assertEquals("/App", Config::get(Config::KEY_DIR_APP));
         $this->assertEquals("/Phoenix", Config::get(Config::KEY_DIR_PHOENIX));
-        $this->assertEquals("/Temp", Config::get(Config::KEY_DIR_TEMP));
-        $this->assertEquals("/Log", Config::get(Config::KEY_DIR_LOG));
-        $this->assertEquals("/Vendor", Config::get(Config::KEY_DIR_VENDOR));
-        $this->assertEquals("/Cache", Config::get(Config::KEY_DIR_CACHE));
+        $this->assertEquals("/temp", Config::get(Config::KEY_DIR_TEMP));
+        $this->assertEquals("/log", Config::get(Config::KEY_DIR_LOG));
+        $this->assertEquals("/vendor", Config::get(Config::KEY_DIR_VENDOR));
+        $this->assertEquals("/cache", Config::get(Config::KEY_DIR_CACHE));
         $this->assertEquals("http://localhost/phoenix/", Config::get(Config::KEY_SITE_FQDN));
         $this->assertEquals("/phoenix/", Config::get(Config::KEY_SITE_BASE));
         $this->assertEquals("500", Config::get(Config::KEY_SHUTDOWN_PAGE));
