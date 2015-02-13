@@ -5,7 +5,7 @@ namespace Phoenix\Core;
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *        
  */
@@ -22,6 +22,7 @@ class Config {
     const KEY_DIR_LOG = 14;
     const KEY_DIR_VENDOR = 15;
     const KEY_DIR_CACHE = 16;
+    const KEY_DIR_WWW = 17;
     const KEY_SITE_FQDN = 20;
     const KEY_SITE_BASE = 21;
     const KEY_SHUTDOWN_PAGE = 22;
@@ -45,6 +46,7 @@ class Config {
     const DEFAULT_DIR_LOG = "/log";
     const DEFAULT_DIR_VENDOR = "/vendor";
     const DEFAULT_DIR_CACHE = "/cache";
+    const DEFAULT_DIR_WWW = "/www";
     const DEFAULT_SITE_FQDN = "http://localhost/phoenix/";
     const DEFAULT_SITE_BASE = "/phoenix/";
     const DEFAULT_SHUTDOWN_PAGE = "500";
@@ -145,6 +147,7 @@ class Config {
             case self::KEY_DIR_PHOENIX :
             case self::KEY_DIR_TEMP :
             case self::KEY_DIR_VENDOR :
+            case self::KEY_DIR_WWW:
                 return self::$config[self::KEY_DIR_ROOT] . self::$config[$key];
                 break;
             default :
@@ -282,6 +285,7 @@ class Config {
                         self::KEY_DIR_LOG => self::DEFAULT_DIR_LOG,
                         self::KEY_DIR_VENDOR => self::DEFAULT_DIR_VENDOR,
                         self::KEY_DIR_CACHE => self::DEFAULT_DIR_CACHE,
+                        self::KEY_DIR_WWW => self::DEFAULT_DIR_WWW,
                         self::KEY_SITE_FQDN => self::DEFAULT_SITE_FQDN,
                         self::KEY_SITE_BASE => self::DEFAULT_SITE_BASE,
                         self::KEY_SHUTDOWN_PAGE => self::DEFAULT_SHUTDOWN_PAGE,

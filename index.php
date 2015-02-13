@@ -2,26 +2,24 @@
 /**
  * Index page.
  *
- * @version 1.7
+ * @deprecated, will be removed in future release
+ * 
+ * @version 1.8
  * @author MPI
  * */
 
-/* TODO: reorganize file structure*/
 exit();
 
-/* load system and config - for basic init */
+/*
 require "app/lib/System.class.php";
 require "app/Config.class.php";
 
-/* set application environment */
 System::setAppEnvironment(Config::APP_ENVIRONMENT);
 
-/* load required files before scan - depends on order */
 require "app/lib/Breadcrumbs.class.php";
 require "app/RouteAction.class.php";
 require "app/Route.class.php";
 require "app/Router.class.php";
-/* get files from app dir */
 $m = System::findAllFiles("app", array (
                 ".",
                 "..",
@@ -33,23 +31,18 @@ $m = System::findAllFiles("app", array (
                 "Router.class.php" 
 ));
 sort($m);
-/* load files */
 System::autoload(__DIR__, $m);
 
-/* disable registering new routes */
 Router::disableRegistration();
 
-/* init session */
 session_start();
 System::initSession();
 
-/* start proxy gateway (if proxy will detect app request, it will return to this place) */
 $proxy = new Proxy();
 
-/* proxy detected app request, continue with app (frontcontroller) */
 $f = $proxy->getFrontController();
 if ($f instanceof FrontController) {
     $f->output();
 }
-exit();
+exit();*/
 ?>

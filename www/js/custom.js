@@ -1,0 +1,3 @@
+/**
+ * Custom app script
+ */

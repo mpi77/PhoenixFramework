@@ -5,11 +5,12 @@ namespace Phoenix\Loaders;
 /**
  * SimpleLoader
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  *        
  */
 class SimpleLoader {
+    const FOLDER_PREFIX = "../";
     const PHP_SUFFIX = ".php";
     private static $filesOk = 0;
     private static $filesFail = 0;
@@ -20,7 +21,7 @@ class SimpleLoader {
      * @param string $className            
      */
     public static function load($className) {
-        $file = str_replace("\\", "/", $className) . self::PHP_SUFFIX;
+        $file = self::FOLDER_PREFIX . str_replace("\\", "/", $className) . self::PHP_SUFFIX;
         if (file_exists($file)) {
             include ($file);
             if (class_exists($className)) {

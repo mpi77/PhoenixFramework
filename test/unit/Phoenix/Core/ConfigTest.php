@@ -2,7 +2,7 @@
 /**
  * Config unit test.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
 include '../../../../Phoenix/Core/Config.php';
@@ -25,6 +25,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("/log", Config::get(Config::KEY_DIR_LOG));
         $this->assertEquals("/vendor", Config::get(Config::KEY_DIR_VENDOR));
         $this->assertEquals("/cache", Config::get(Config::KEY_DIR_CACHE));
+        $this->assertEquals("/www", Config::get(Config::KEY_DIR_WWW));
         $this->assertEquals("http://localhost/phoenix/", Config::get(Config::KEY_SITE_FQDN));
         $this->assertEquals("/phoenix/", Config::get(Config::KEY_SITE_BASE));
         $this->assertEquals("500", Config::get(Config::KEY_SHUTDOWN_PAGE));
