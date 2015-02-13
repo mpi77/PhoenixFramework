@@ -3,12 +3,12 @@
 namespace Phoenix\Core;
 
 use \Phoenix\Core\Model;
-// use \Phoenix\Http\Request;
+use \Phoenix\Http\Request;
 
 /**
  * Root view object.
  *
- * @version 1.8
+ * @version 1.9
  * @author MPI
  *        
  */
@@ -20,9 +20,9 @@ abstract class View {
      * View constructor.
      *
      * @param Model $model            
-     * @param unknown $request            
+     * @param Request $request            
      */
-    public function __construct(Model $model, $request) {
+    public function __construct(Model $model, Request $request) {
         $this->model = $model;
         $this->request = $request;
     }

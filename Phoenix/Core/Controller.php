@@ -3,12 +3,12 @@
 namespace Phoenix\Core;
 
 use \Phoenix\Core\Model;
-//use \Phoenix\Http\Request;
+use \Phoenix\Http\Request;
 
 /**
  * Root controller object.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  *        
  */
@@ -21,9 +21,9 @@ abstract class Controller {
      *
      * @todo : cast $request to Phoenix\Http\Request
      * @param Model $model            
-     * @param unknown $request            
+     * @param Request $request            
      */
-    public function __construct(Model $model, $request) {
+    public function __construct(Model $model, Request $request) {
         $this->model = $model;
         $this->request = $request;
     }

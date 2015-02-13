@@ -5,7 +5,7 @@ namespace Phoenix\Core;
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.8
+ * @version 1.9
  * @author MPI
  *        
  */
@@ -41,10 +41,10 @@ class Config {
     const DEFAULT_DIR_ROOT = __DIR__;
     const DEFAULT_DIR_APP = "/App";
     const DEFAULT_DIR_PHOENIX = "/Phoenix";
-    const DEFAULT_DIR_TEMP = "/Temp";
-    const DEFAULT_DIR_LOG = "/Log";
-    const DEFAULT_DIR_VENDOR = "/Vendor";
-    const DEFAULT_DIR_CACHE = "/Cache";
+    const DEFAULT_DIR_TEMP = "/temp";
+    const DEFAULT_DIR_LOG = "/log";
+    const DEFAULT_DIR_VENDOR = "/vendor";
+    const DEFAULT_DIR_CACHE = "/cache";
     const DEFAULT_SITE_FQDN = "http://localhost/phoenix/";
     const DEFAULT_SITE_BASE = "/phoenix/";
     const DEFAULT_SHUTDOWN_PAGE = "500";
@@ -271,7 +271,8 @@ class Config {
      * Set defaults to Config.
      */
     private static function setConfigDefaults() {
-        $dir_root = substr(self::DEFAULT_DIR_ROOT, 0, strlen(self::DEFAULT_DIR_ROOT) - strlen(self::DEFAULT_DIR_PHOENIX) - strlen("/Core"));
+        $dir_root = substr(self::DEFAULT_DIR_ROOT, 0, strrpos(self::DEFAULT_DIR_ROOT, "/")); // remove /Core
+        $dir_root = substr($dir_root, 0, strrpos($dir_root, "/")); // remove /Phoenix
         // $dir_root = self::DEFAULT_DIR_ROOT . "/../..";
         self::$config = array (
                         self::KEY_DIR_ROOT => $dir_root,
