@@ -8,7 +8,7 @@ use \App\AppTranslator as AT;
 /**
  * English translator.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *        
  */
@@ -17,6 +17,12 @@ class EnglishTranslator extends AT {
                     T::INFO_LANGUAGE_NAME => "english",
                     T::INFO_CLASS_NAME => __CLASS__ 
     );
+    
+    /**
+     * Maps AppTranslator::constant to string.
+     *
+     * @var array
+     */
     private $data = array (
                     AT::F_UNKNOWN => "Unknown failure.",
                     AT::F_MISSING_CONFIG_DB => "Empty config data for connect to db.",
@@ -42,14 +48,28 @@ class EnglishTranslator extends AT {
                     AT::N_UNKNOWN => "Unknown notice." 
     );
 
+    /**
+     * EnglishTranslator constructor.
+     */
     public function __construct() {
         parent::__construct();
     }
 
+    /**
+     * Get translated message for given key.
+     *
+     * @param integer $key            
+     * @return string
+     */
     public function get($key) {
-        return (key_exists($key, $this->data)) ? $this->data[$key] : T::DEFAULT_VALUE;
+        return (is_int($key) && key_exists($key, $this->data)) ? $this->data[$key] : T::DEFAULT_VALUE;
     }
 
+    /**
+     * Get language info.
+     *
+     * @return array
+     */
     public static function langInfo() {
         return self::$info;
     }

@@ -8,7 +8,7 @@ use \App\AppTranslator as AT;
 /**
  * Czech translator.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *        
  */
@@ -17,6 +17,12 @@ class CzechTranslator extends AT {
                     T::INFO_LANGUAGE_NAME => "čeština",
                     T::INFO_CLASS_NAME => __CLASS__ 
     );
+    
+    /**
+     * Maps AppTranslator::constant to string.
+     *
+     * @var array
+     */
     private $data = array (
                     AT::F_UNKNOWN => "Neznámá kritická chyba.",
                     AT::F_MISSING_CONFIG_DB => "Nebyly zadány parametry pro spojení s databází.",
@@ -39,17 +45,31 @@ class CzechTranslator extends AT {
                     AT::W_ROUTER_INVALID_ROUTE_ACTION => "Neznámá akce.",
                     AT::W_RESPONSE_INVALID_FORMAT => "Neplatný formát odpovědi.",
                     AT::W_RESPONSE_UNSUPPORTED_FORMAT => "Neznámý formát odpovědi.",
-                    AT::N_UNKNOWN => "Neznámé upozornění."
+                    AT::N_UNKNOWN => "Neznámé upozornění." 
     );
 
+    /**
+     * CzechTranslator constructor.
+     */
     public function __construct() {
         parent::__construct();
     }
 
+    /**
+     * Get translated message for given key.
+     *
+     * @param integer $key            
+     * @return string
+     */
     public function get($key) {
-        return (key_exists($key, $this->data)) ? $this->data[$key] : T::DEFAULT_VALUE;
+        return (is_int($key) && key_exists($key, $this->data)) ? $this->data[$key] : T::DEFAULT_VALUE;
     }
 
+    /**
+     * Get language info.
+     *
+     * @return array
+     */
     public static function langInfo() {
         return self::$info;
     }

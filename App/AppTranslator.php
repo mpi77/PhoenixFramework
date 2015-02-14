@@ -7,10 +7,12 @@ use \Phoenix\Locale\Translator;
 /**
  * App translator object.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  */
 abstract class AppTranslator extends Translator {
+    
+    /* at this place can be user defined constants for translation */
     
     /* failure exceptions */
     const F_UNKNOWN = 100;
@@ -40,16 +42,33 @@ abstract class AppTranslator extends Translator {
     /* notice exceptions */
     const N_UNKNOWN = 500;
 
+    /**
+     * AppTranslator constructor.
+     */
     public function __construct() {
         parent::__construct();
     }
 
+    /**
+     * Get all available languages in App.
+     * 
+     * @todo
+     *
+     * @return null
+     */
     public static function getAvailableLanguages() {
-        return "gAL implementation";
+        return null;
     }
 
+    /**
+     * Get current language.
+     * 
+     * @todo
+     *
+     * @return null
+     */
     public static function getCurrentLanguage() {
-        return "gCL implementation";
+        return null;
     }
 }
 ?>
