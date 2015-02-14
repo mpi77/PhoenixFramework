@@ -5,7 +5,7 @@ namespace Phoenix\Core;
 /**
  * Root configurator object.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  *        
  */
@@ -20,7 +20,21 @@ abstract class Configurator {
     /**
      * Run all required operations in Configurator to setup App.
      */
-    public abstract function run();
+    public function run(){
+        $this->registerConfiguration();
+        $this->registerRoutes();
+        $this->registerNoticeExceptions();
+        $this->registerWarningExceptions();
+        $this->registerFailureExceptions();
+        $this->disableRegistrations();
+    }
+    
+    /**
+     * Disable registration in all required objects (Config, Router,
+     * Notice+Warning+Failure Exceptions). Will be executed after all
+     * register methods in this class.
+     */
+    protected abstract function disableRegistrations();
     
     /**
      * Register App Configuration into Config object.

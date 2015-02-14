@@ -12,31 +12,33 @@ use \Phoenix\Exceptions\FrameworkExceptions as FX;
 /**
  * Application configurator.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  *        
  */
 class AppConfigurator extends Configurator {
-
+    
+    /* at this place can be user defined constants for exceptions */
+    
+    /**
+     * App constructor.
+     */
     public function __construct() {
         parent::__construct();
     }
 
     /**
-     * Run all required operations in AppConfigurator to setup App.
+     * Disable registration in all required objects (Config, Router,
+     * Notice+Warning+Failure Exceptions).
+     * Will be executed after all register methods in this class.
+     *
+     * @todo disable router
      */
-    public final function run() {
-        $this->registerConfiguration();
-        $this->registerRoutes();
-        $this->registerNoticeExceptions();
-        $this->registerWarningExceptions();
-        $this->registerFailureExceptions();
-    }
-
-    /**
-     * Register Routes into Router object.
-     */
-    protected final function registerRoutes() {
+    public final function disableRegistrations() {
+        Config::disableRegistration();
+        NoticeException::disableRegistration();
+        WarningException::disableRegistration();
+        FailureException::disableRegistration();
     }
 
     /**
@@ -46,21 +48,25 @@ class AppConfigurator extends Configurator {
         Config::set(Config::KEY_SITE_FQDN, "http://localhost/phoenix/www");
         Config::set(Config::KEY_SITE_BASE, "/phoenix/");
         Config::setDatabasePool(Config::get(Config::KEY_DB_PRIMARY_POOL), "mysql", "localhost", "3306", "phoenix", "phoenix", "phoenix", "utf8");
-        Config::disableRegistration();
     }
 
     /**
-     * Register NoticeExceptions defined in App into NoticeException object.
+     * Register Routes into Router object.
+     */
+    protected final function registerRoutes() {
+    }
+
+    /**
+     * Register NoticeExceptions defined in App (in this file) into NoticeException object.
      */
     protected final function registerNoticeExceptions() {
         NoticeException::setArray(array (
                         FX::N_UNKNOWN => 1 
         ));
-        NoticeException::disableRegistration();
     }
 
     /**
-     * Register WarningExceptions defined in App into WarningException object.
+     * Register WarningExceptions defined in App (in this file) into WarningException object.
      */
     protected final function registerWarningExceptions() {
         WarningException::setArray(array (
@@ -81,11 +87,10 @@ class AppConfigurator extends Configurator {
                         FX::W_RESPONSE_INVALID_FORMAT => 1,
                         FX::W_RESPONSE_UNSUPPORTED_FORMAT => 1 
         ));
-        WarningException::disableRegistration();
     }
 
     /**
-     * Register FailureExceptions defined in App into FailureException object.
+     * Register FailureExceptions defined in App (in this file) into FailureException object.
      */
     protected final function registerFailureExceptions() {
         FailureException::setArray(array (
@@ -95,7 +100,6 @@ class AppConfigurator extends Configurator {
                         FX::F_UNABLE_SAVE_WARNING => 4,
                         FX::F_UNABLE_SET_DB_CHARSET => 5 
         ));
-        FailureException::disableRegistration();
     }
 }
 ?>
