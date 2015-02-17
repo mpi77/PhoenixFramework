@@ -1,12 +1,16 @@
 <?php
+
 namespace Phoenix\Locale;
+
+use \Phoenix\Utils;
 
 /**
  * Translate is Translator singleton wrapper.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
- * */
+ *        
+ */
 class Translate {
     private static $translator = null;
 
@@ -16,13 +20,13 @@ class Translate {
     /**
      * Get string or string pattern from actual Translator.
      *
-     * @param string $key
-     *            string index (constant defined in Translator root object) to index item
+     * @param integer $key
+     *            constant defined in AppTranslator
      * @return string
      */
     public static function get($key) {
         if (empty(self::$translator)) {
-            self::initTranslator($_SESSION[Config::SERVER_FQDN]["user"]["lang"]);
+            self::initTranslator();
         }
         return self::$translator->get($key);
     }
@@ -30,12 +34,12 @@ class Translate {
     /**
      * Print htmlspecialchars(string) from actual Translator.
      *
-     * @param string $key
-     *            string index (constant defined in Translator root object) to index item
+     * @param integer $key
+     *            constant defined in AppTranslator
      */
     public static function es($key) {
         if (empty(self::$translator)) {
-            self::initTranslator($_SESSION[Config::SERVER_FQDN]["user"]["lang"]);
+            self::initTranslator();
         }
         echo htmlspecialchars(self::$translator->get($key));
     }
@@ -43,42 +47,41 @@ class Translate {
     /**
      * Print string from actual Translator.
      *
-     * @param string $key
-     *            string index (constant defined in Translator root object) to index item
+     * @param integer $key
+     *            constant defined in AppTranslator
      */
     public static function e($key) {
         if (empty(self::$translator)) {
-            self::initTranslator($_SESSION[Config::SERVER_FQDN]["user"]["lang"]);
+            self::initTranslator();
         }
         echo self::$translator->get($key);
     }
 
     /**
      * Reinitialize translator to new language.
-     * Called only in updateUser function!
      *
-     * @param integer $lang_id            
+     * @param string $class_name
+     *            may be fully namespaced class name or only end class name (yourClassName) in namespace \App\Locale\yourClassName
      */
-    public static function changeLang($lang_id) {
-        self::initTranslator($lang_id);
+    public static function changeLang($class_name) {
+        self::initTranslator($class_name);
     }
 
     /**
-     * Create new translator.
+     * Create new translator object.
      *
-     * @param integer $lang_id            
+     * @todo validation of $class_name on fns or class
+     * @todo load from session user lang
+     *      
+     * @param string $class_name
+     *            may be fully namespaced class name or only end class name (yourClassName) in namespace \App\Locale\yourClassName
      */
-    private static function initTranslator($lang_id) {
-        switch ($lang_id) {
-            case Translator::LANG_EN :
-                self::$translator = new EnglishTranslator();
-                break;
-            case Translator::LANG_CZ :
-                self::$translator = new CzechTranslator();
-                break;
-            default :
-                self::$translator = new EnglishTranslator();
+    private static function initTranslator($class_name = null) {
+        if (empty($class_name)) {
+            // first load from session
+            $class_name = "\App\Locale\EnglishTranslator";
         }
+        self::$translator = new $class_name();
     }
 }
 ?>
