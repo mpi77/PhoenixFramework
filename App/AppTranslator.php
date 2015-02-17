@@ -7,12 +7,10 @@ use \Phoenix\Locale\Translator;
 /**
  * App translator object.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  */
 abstract class AppTranslator extends Translator {
-    
-    /* at this place can be user defined constants for translation */
     
     /* failure exceptions */
     const F_UNKNOWN = 100;
@@ -42,6 +40,8 @@ abstract class AppTranslator extends Translator {
     /* notice exceptions */
     const N_UNKNOWN = 500;
 
+    /* AT THIS PLACE CAN BE USER DEFINED CONSTANTS FOR TRANSLATION */
+    
     /**
      * AppTranslator constructor.
      */
@@ -68,6 +68,16 @@ abstract class AppTranslator extends Translator {
      */
     public static final function getAvailableLanguages() {
         return null;
+    }
+    
+    /**
+     * Get default Translator fully namespaced class name.
+     * This Translator is defaultly used when user do not select any Translator.
+     *
+     * @return string
+     */
+    public static final function getDefaultTranslator(){
+        return "\App\Locale\EnglishTranslator";
     }
 }
 ?>

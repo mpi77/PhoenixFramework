@@ -5,7 +5,7 @@ namespace Phoenix\Locale;
 /**
  * Root translator object.
  *
- * @version 1.11
+ * @version 1.12
  * @author MPI
  */
 abstract class Translator {
@@ -60,5 +60,16 @@ abstract class Translator {
      * @return array (2D array; each sub-array has keys Translator::INFO_*)
      */
     public abstract static function getAvailableLanguages();
+
+    /**
+     * Get default Translator fully namespaced class name.
+     * This Translator is defaultly used when user do not select any Translator.
+     * This method needs to be implemented in App\AppTranslator.
+     *
+     * @abstract
+     *
+     * @return string
+     */
+    public abstract static function getDefaultTranslator();
 }
 ?>

@@ -3,11 +3,12 @@
 namespace Phoenix\Locale;
 
 use \Phoenix\Utils;
+use \App\AppTranslator;
 
 /**
  * Translate is Translator singleton wrapper.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  *        
  */
@@ -79,7 +80,7 @@ class Translate {
     private static function initTranslator($class_name = null) {
         if (empty($class_name)) {
             // first load from session
-            $class_name = "\App\Locale\EnglishTranslator";
+            $class_name = AppTranslator::getDefaultTranslator();
         }
         self::$translator = new $class_name();
     }
