@@ -1,9 +1,11 @@
 <?php
 
+namespace Phoenix\Utils;
+
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.22
+ * @version 1.23
  * @author MPI
  * */
 class System {
