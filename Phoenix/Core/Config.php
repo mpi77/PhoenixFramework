@@ -5,7 +5,7 @@ namespace Phoenix\Core;
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.11
+ * @version 1.12
  * @author MPI
  *        
  */
@@ -92,7 +92,7 @@ class Config {
      *
      * @param integer $key
      *            predefined constant Config::KEY_ (integer key); can be self defined integer constant (convention is integer grater than 1000)
-     * @return multitype|null
+     * @return mixed|null
      */
     public static function get($key) {
         if (empty(self::$config)) {
@@ -106,7 +106,7 @@ class Config {
      *
      * @param integer $key
      *            predefined constant Config::KEY_ (integer key); can be self defined integer constant (convention is integer grater than 1000)
-     * @param multitype $value            
+     * @param mixed $value            
      * @return boolean
      */
     public static function set($key, $value) {
