@@ -1,8 +1,10 @@
 <?php
+namespace Phoenix\Locale;
+
 /**
  * Translate is Translator singleton wrapper.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 class Translate {

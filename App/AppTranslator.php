@@ -7,7 +7,7 @@ use \Phoenix\Locale\Translator;
 /**
  * App translator object.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  */
 abstract class AppTranslator extends Translator {
@@ -50,24 +50,23 @@ abstract class AppTranslator extends Translator {
     }
 
     /**
-     * Get all available languages in App.
-     * 
-     * @todo
+     * Get current instance language info.
+     * This method is instance variant of static::langInfo() for current language.
      *
-     * @return null
+     * @return array (with keys Translator::INFO_*)
      */
-    public static function getAvailableLanguages() {
-        return null;
+    public final function getLangInfo() {
+        return static::langInfo();
     }
 
     /**
-     * Get current language.
-     * 
+     * Get all available languages in App.
+     *
      * @todo
      *
-     * @return null
+     * @return array (2D array; each sub-array has keys Translator::INFO_*)
      */
-    public static function getCurrentLanguage() {
+    public static final function getAvailableLanguages() {
         return null;
     }
 }
