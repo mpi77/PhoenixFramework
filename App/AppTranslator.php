@@ -3,11 +3,12 @@
 namespace App;
 
 use \Phoenix\Locale\Translator;
+use \Phoenix\Utils\System;
 
 /**
  * App translator object.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  */
 abstract class AppTranslator extends Translator {
@@ -62,12 +63,20 @@ abstract class AppTranslator extends Translator {
     /**
      * Get all available languages in App.
      *
-     * @todo
+     * @todo add AppLocale dir into Config
      *
      * @return array (2D array; each sub-array has keys Translator::INFO_*)
      */
     public static final function getAvailableLanguages() {
-        return null;
+        $f = System::findAllFiles("../App/Locale", array(".", ".."));
+        $t = array();
+        foreach ($f as $k => $v){
+            $f[$k] = substr(str_replace("/", "\\", $v), 2, -4);
+            if(class_exists($f[$k]) && preg_match("/Translator$/i", $f[$k]) === 1){
+                $t[] = $f[$k]::langInfo();
+            }
+        }
+        return $t;
     }
     
     /**
