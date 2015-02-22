@@ -3,15 +3,25 @@
 namespace App;
 
 use \Phoenix\Locale\IApplicationTranslator;
-use \Phoenix\Utils\System;
 
 /**
  * App translator.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  */
 class AppTranslator implements IApplicationTranslator {
+    const DEFAULT_LANGUAGE_INDEX = 0;
+    private static $languages = array (
+                    0 => array (
+                                    IApplicationTranslator::LANG_NAME => "čeština",
+                                    IApplicationTranslator::LANG_PREFIX => "Cz" 
+                    ),
+                    1 => array (
+                                    IApplicationTranslator::LANG_NAME => "english",
+                                    IApplicationTranslator::LANG_PREFIX => "En" 
+                    ) 
+    );
 
     /**
      * AppTranslator constructor.
@@ -24,22 +34,22 @@ class AppTranslator implements IApplicationTranslator {
      *
      * @todo
      *
-     * @return array 
+     * @return array (2D array; each sub-array has keys IApplicationTranslator::LANG_*)
      */
     public static final function getAvailableLanguages() {
-        return null;
+        return self::$languages;
     }
-    
+
     /**
-     * Get default language fully namespaced class name.
+     * Get default language.
      * This language is defaultly used when user do not select any language.
      *
      * @todo
      *
-     * @return string
+     * @return array (1D array has keys IApplicationTranslator::LANG_*)
      */
-    public static final function getDefaultLanguage(){
-        return "En";
+    public static final function getDefaultLanguage() {
+        return self::$languages[self::DEFAULT_LANGUAGE_INDEX];
     }
 }
 ?>
