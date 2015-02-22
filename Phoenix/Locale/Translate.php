@@ -3,46 +3,47 @@
 namespace Phoenix\Locale;
 
 use \Phoenix\Utils;
+use \Phoenix\Locale\IApplicationTranslator;
 use \App\AppTranslator;
 
 /**
- * Translate is Translator singleton wrapper.
+ * Translate is wrapper for ModuleTranslators.
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
  *        
  */
 class Translate {
-    private static $translator = null;
 
     private function __construct() {
     }
 
     /**
-     * Get string or string pattern from actual Translator.
+     * Get string or string pattern from ModuleTranslator.
      *
+     * @param string $translator_module            
      * @param integer $key
-     *            constant defined in AppTranslator
+     *            constant defined in \App\Locale\Def\ModuleDefinition
+     * @param string $language        
+     *     
      * @return string
      */
-    public static function get($key) {
-        if (empty(self::$translator)) {
-            self::initTranslator();
+    public static function get($translator_module, $key, $language = null) {
+        if (empty($language)) {
+            $language = AppTranslator::getDefaultLanguage()[IApplicationTranslator::LANG_PREFIX];
         }
-        return self::$translator->get($key);
+        $t = "\App\Locale\Lang\\" . $language . "\\" . $translator_module . "Translator";
+        return $t::get($key);
     }
 
     /**
-     * Print htmlspecialchars(string) from actual Translator.
+     * Print htmlspecialchars(string) from ModuleTranslator.
      *
      * @param integer $key
      *            constant defined in AppTranslator
      */
-    public static function es($key) {
-        if (empty(self::$translator)) {
-            self::initTranslator();
-        }
-        echo htmlspecialchars(self::$translator->get($key));
+    public static function es($translator_module, $key, $language = null) {
+        echo htmlspecialchars(self::get($translator_module, $key, $language));
     }
 
     /**
@@ -51,38 +52,8 @@ class Translate {
      * @param integer $key
      *            constant defined in AppTranslator
      */
-    public static function e($key) {
-        if (empty(self::$translator)) {
-            self::initTranslator();
-        }
-        echo self::$translator->get($key);
-    }
-
-    /**
-     * Reinitialize translator to new language.
-     *
-     * @param string $class_name
-     *            may be fully namespaced class name or only end class name (yourClassName) in namespace \App\Locale\yourClassName
-     */
-    public static function changeLang($class_name) {
-        self::initTranslator($class_name);
-    }
-
-    /**
-     * Create new translator object.
-     *
-     * @todo validation of $class_name on fns or class
-     * @todo load from session user lang
-     *      
-     * @param string $class_name
-     *            may be fully namespaced class name or only end class name (yourClassName) in namespace \App\Locale\yourClassName
-     */
-    private static function initTranslator($class_name = null) {
-        if (empty($class_name)) {
-            // first load from session
-            $class_name = AppTranslator::getDefaultTranslator();
-        }
-        self::$translator = new $class_name();
+    public static function e($translator_module, $key, $language = null) {
+        echo self::get($translator_module, $key, $language);
     }
 }
 ?>
