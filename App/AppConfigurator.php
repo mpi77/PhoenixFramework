@@ -8,12 +8,12 @@ use \Phoenix\Exceptions\NoticeException;
 use \Phoenix\Exceptions\WarningException;
 use \Phoenix\Exceptions\FailureException;
 use \Phoenix\Exceptions\FrameworkExceptions as FX;
-use \App\AppTranslator as AT;
+use \App\Locale\Def\ExceptionDefinition as ED;
 
 /**
  * Application configurator.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  *        
  */
@@ -62,7 +62,7 @@ class AppConfigurator extends Configurator {
      */
     protected final function registerNoticeExceptions() {
         NoticeException::setArray(array (
-                        FX::N_UNKNOWN => AT::N_UNKNOWN 
+                        FX::N_UNKNOWN => ED::N_UNKNOWN 
         ));
     }
 
@@ -71,22 +71,22 @@ class AppConfigurator extends Configurator {
      */
     protected final function registerWarningExceptions() {
         WarningException::setArray(array (
-                        FX::W_UNKNOWN => AT::W_UNKNOWN,
-                        FX::W_CLASS_NOT_FOUND => AT::W_CLASS_NOT_FOUND,
-                        FX::W_ACTION_IS_NOT_CALLABLE => AT::W_ACTION_IS_NOT_CALLABLE,
-                        FX::W_INVALID_PARAMETERS => AT::W_INVALID_PARAMETERS,
-                        FX::W_PERMISSION_DENIED => AT::W_PERMISSION_DENIED,
-                        FX::W_INVALID_TOKEN => AT::W_INVALID_TOKEN,
-                        FX::W_DB_INVALID_SQL_SELECT => AT::W_DB_INVALID_SQL_SELECT,
-                        FX::W_DB_INVALID_SQL_ACTION => AT::W_DB_INVALID_SQL_ACTION,
-                        FX::W_DB_UNABLE_VERIFY_RESULT => AT::W_DB_UNABLE_VERIFY_RESULT,
-                        FX::W_DB_UNABLE_BEGIN_TRANSACTION => AT::W_DB_UNABLE_BEGIN_TRANSACTION,
-                        FX::W_DB_UNABLE_COMMIT_TRANSACTION => AT::W_DB_UNABLE_COMMIT_TRANSACTION,
-                        FX::W_DB_UNABLE_ROLLBACK_TRANSACTION => AT::W_DB_UNABLE_ROLLBACK_TRANSACTION,
-                        FX::W_ROUTER_INVALID_ROUTE => AT::W_ROUTER_INVALID_ROUTE,
-                        FX::W_ROUTER_INVALID_ROUTE_ACTION => AT::W_ROUTER_INVALID_ROUTE_ACTION,
-                        FX::W_RESPONSE_INVALID_FORMAT => AT::W_RESPONSE_INVALID_FORMAT,
-                        FX::W_RESPONSE_UNSUPPORTED_FORMAT => AT::W_RESPONSE_UNSUPPORTED_FORMAT 
+                        FX::W_UNKNOWN => ED::W_UNKNOWN,
+                        FX::W_CLASS_NOT_FOUND => ED::W_CLASS_NOT_FOUND,
+                        FX::W_ACTION_IS_NOT_CALLABLE => ED::W_ACTION_IS_NOT_CALLABLE,
+                        FX::W_INVALID_PARAMETERS => ED::W_INVALID_PARAMETERS,
+                        FX::W_PERMISSION_DENIED => ED::W_PERMISSION_DENIED,
+                        FX::W_INVALID_TOKEN => ED::W_INVALID_TOKEN,
+                        FX::W_DB_INVALID_SQL_SELECT => ED::W_DB_INVALID_SQL_SELECT,
+                        FX::W_DB_INVALID_SQL_ACTION => ED::W_DB_INVALID_SQL_ACTION,
+                        FX::W_DB_UNABLE_VERIFY_RESULT => ED::W_DB_UNABLE_VERIFY_RESULT,
+                        FX::W_DB_UNABLE_BEGIN_TRANSACTION => ED::W_DB_UNABLE_BEGIN_TRANSACTION,
+                        FX::W_DB_UNABLE_COMMIT_TRANSACTION => ED::W_DB_UNABLE_COMMIT_TRANSACTION,
+                        FX::W_DB_UNABLE_ROLLBACK_TRANSACTION => ED::W_DB_UNABLE_ROLLBACK_TRANSACTION,
+                        FX::W_ROUTER_INVALID_ROUTE => ED::W_ROUTER_INVALID_ROUTE,
+                        FX::W_ROUTER_INVALID_ROUTE_ACTION => ED::W_ROUTER_INVALID_ROUTE_ACTION,
+                        FX::W_RESPONSE_INVALID_FORMAT => ED::W_RESPONSE_INVALID_FORMAT,
+                        FX::W_RESPONSE_UNSUPPORTED_FORMAT => ED::W_RESPONSE_UNSUPPORTED_FORMAT 
         ));
     }
 
@@ -95,11 +95,11 @@ class AppConfigurator extends Configurator {
      */
     protected final function registerFailureExceptions() {
         FailureException::setArray(array (
-                        FX::F_UNKNOWN => AT::F_UNKNOWN,
-                        FX::F_MISSING_CONFIG_DB => AT::F_MISSING_CONFIG_DB,
-                        FX::F_UNABLE_CONNECT_DB => AT::F_UNABLE_CONNECT_DB,
-                        FX::F_UNABLE_SAVE_WARNING => AT::F_UNABLE_SAVE_WARNING,
-                        FX::F_UNABLE_SET_DB_CHARSET => AT::F_UNABLE_SET_DB_CHARSET 
+                        FX::F_UNKNOWN => ED::F_UNKNOWN,
+                        FX::F_MISSING_CONFIG_DB => ED::F_MISSING_CONFIG_DB,
+                        FX::F_UNABLE_CONNECT_DB => ED::F_UNABLE_CONNECT_DB,
+                        FX::F_UNABLE_SAVE_WARNING => ED::F_UNABLE_SAVE_WARNING,
+                        FX::F_UNABLE_SET_DB_CHARSET => ED::F_UNABLE_SET_DB_CHARSET 
         ));
     }
 }

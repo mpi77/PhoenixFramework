@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Locale\Cz;
+namespace App\Locale\Lang\Cz;
 
 use \Phoenix\Locale\IModuleTranslator;
+use \App\Locale\Def\FrameworkDefinition as FD;
 
 /**
  * Framework translator.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  *        
  */
 class FrameworkTranslator implements IModuleTranslator {
     
     /**
-     * Maps self::constants to strings.
+     * Maps def::constants to strings.
      *
      * @var array
      */
