@@ -2,14 +2,13 @@
 
 namespace Phoenix\Locale;
 
-use \Phoenix\Utils;
 use \Phoenix\Locale\IApplicationTranslator;
 use \App\AppTranslator;
 
 /**
  * Translate is wrapper for ModuleTranslators.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *        
  */
@@ -36,6 +35,9 @@ class Translate {
         }
         if (empty($language)) {
             $language = AppTranslator::getDefaultLanguage()[IApplicationTranslator::LANG_PREFIX];
+            if (empty($language)) {
+                return IModuleTranslator::DEFAULT_VALUE;
+            }
         }
         $t = "\App\Locale\Lang\\" . $language . "\\" . $translator_module . "Translator";
         return (class_exists($t)) ? $t::get($key) : IModuleTranslator::DEFAULT_VALUE;
@@ -56,7 +58,7 @@ class Translate {
     }
 
     /**
-     * Print string from actual Translator.
+     * Print string from ModuleTranslator.
      *
      * @param string $translator_module
      *            call \App\Locale\Def\ModuleDefinition::getModuleName()
