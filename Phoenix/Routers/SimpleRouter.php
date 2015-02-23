@@ -8,7 +8,7 @@ use \Phoenix\Routers\IRoute;
 /**
  * SimpleRouter
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  *        
  */
@@ -61,6 +61,7 @@ class SimpleRouter implements IRouter {
      * @return boolean => true (if route exists) | false (if route doesn't exist)
      */
     public static function isRoute($route_name) {
+        self::initRouter();
         return array_key_exists(strtolower($route_name), self::$table);
     }
 
@@ -92,7 +93,9 @@ class SimpleRouter implements IRouter {
      */
     private static function initRouter() {
         if (empty(self::$table) || !is_array(self::$table)) {
-            self::$table = array ();
+            self::$table = array (
+                            self::DEFAULT_EMPTY_ROUTE => new SimpleRoute("IndexModel", "IndexView", "IndexController") 
+            );
         }
     }
 }

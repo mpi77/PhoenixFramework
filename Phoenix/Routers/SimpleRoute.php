@@ -6,7 +6,7 @@ use \Phoenix\Routers\IRoute;
 /**
  * SimpleRoute object.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *        
  */
@@ -59,7 +59,7 @@ class SimpleRoute implements IRoute {
     }
 
     public function __toString() {
-        return "Route{model=" . $this->model . ", view=" . $this->view . ", controller=" . $this->controller . "}";
+        return "SimpleRoute{model=" . $this->model . ", view=" . $this->view . ", controller=" . $this->controller . "}";
     }
 }
 ?>
