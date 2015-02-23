@@ -7,7 +7,7 @@ use \Phoenix\Locale\IModuleDefinition;
 /**
  * Exception definition.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  *        
  */
@@ -40,5 +40,14 @@ class ExceptionDefinition implements IModuleDefinition {
     
     /* notice exceptions */
     const N_UNKNOWN = 500;
+
+    /**
+     * Get module name.
+     *
+     * @return string
+     */
+    public static function getModuleName() {
+        return "Exception";
+    }
 }
 ?>
