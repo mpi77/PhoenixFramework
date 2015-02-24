@@ -1,11 +1,19 @@
 <?php
 
+namespace Phoenix\Http;
+
+use \Exception;
+use \Phoenix\Http\HtmlResponse;
+use \Phoenix\Http\JsonResponse;
+use \Phoenix\Http\XmlResponse;
+
 /**
  * Root response object.
- * 
- * @version 1.5
+ *
+ * @version 1.6
  * @author MPI
- * */
+ *        
+ */
 abstract class Response {
     const RESPONSE_UNKNOWN = 0;
     const RESPONSE_HTML = 1;
@@ -18,11 +26,18 @@ abstract class Response {
     const CHARSET_JSON = "utf-8";
     const CHARSET_XML = "utf-8";
     private $exception;
-    private $headerContentType;
-    private $headerCharset;
+    private $header_content_type;
+    private $header_charset;
 
-    public function __construct($contentType = null, $charset = null, Exception $e = null) {
-        $this->setHeader($contentType, $charset);
+    /**
+     * Response constructor.
+     *
+     * @param string $content_type            
+     * @param string $charset            
+     * @param Exception $e            
+     */
+    public function __construct($content_type = null, $charset = null, Exception $e = null) {
+        $this->setHeader($content_type, $charset);
         $this->setException($e);
     }
 
@@ -63,22 +78,22 @@ abstract class Response {
     /**
      * Set response header.
      *
-     * @param string $contentType            
+     * @param string $content_type            
      * @param string $charset            
      */
-    public final function setHeader($contentType, $charset) {
-        $this->headerContentType = $contentType;
-        $this->headerCharset = $charset;
+    public final function setHeader($content_type, $charset) {
+        $this->header_content_type = $content_type;
+        $this->header_charset = $charset;
     }
 
     /**
      * Send response header.
      */
     protected final function sendHeader() {
-        if (empty($this->headerContentType) || empty($this->headerCharset)) {
+        if (empty($this->header_content_type) || empty($this->header_charset)) {
             $this->setHeader(self::CONTENT_TYPE_HTML, self::CHARSET_HTML);
         }
-        header("Content-Type: " . $this->headerContentType . "; charset=" . $this->headerCharset);
+        header("Content-Type: " . $this->header_content_type . "; charset=" . $this->header_charset);
     }
 
     /**
@@ -104,17 +119,17 @@ abstract class Response {
                 return new HtmlResponse();
         }
     }
-    
+
     /**
      * Is output fomat valid.
      *
      * @param integer $format
      *            constants from Response class with preffix RESPONSE_*
-     *
+     *            
      * @return boolean
      */
     public static final function isValidResponseFormat($format) {
-        if(!is_numeric($format)){
+        if (!is_numeric($format)) {
             return false;
         }
         

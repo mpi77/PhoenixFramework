@@ -1,19 +1,36 @@
 <?php
 
+namespace Phoenix\Http;
+
+use \Phoenix\Core\Config;
+use \Phoenix\Utils\System;
+use \Phoenix\Http\Response;
+use \Phoenix\Exceptions\NoticeException;
+use \Phoenix\Exceptions\WarningException;
+
 /**
  * Html response object.
- * 
- * @version 1.9
+ *
+ * @version 1.10
  * @author MPI
- * */
+ *        
+ * @todo TemplateData
+ */
 final class HtmlResponse extends Response {
-    private $templateData;
-    private $templateFile;
+    private $template_data;
+    private $template_file;
 
-    public function __construct($templateFile = null, TemplateData $templateData = null, Exception $e = null) {
+    /**
+     * HtmlResponse constructor.
+     *
+     * @param string $template_file            
+     * @param TemplateData $template_data            
+     * @param Exception $e            
+     */
+    public function __construct($template_file = null, TemplateData $template_data = null, Exception $e = null) {
         parent::__construct(Response::CONTENT_TYPE_HTML, Response::CHARSET_HTML, $e);
-        $this->setTemplateData($templateData);
-        $this->setTemplateFile($templateFile);
+        $this->setTemplateData($template_data);
+        $this->setTemplateFile($template_file);
     }
 
     /**
@@ -21,13 +38,15 @@ final class HtmlResponse extends Response {
      */
     public function send() {
         $e = $this->getException();
-        $tpd = $this->templateData;
+        $tpd = $this->template_data;
         if (is_null($e) || $e instanceof NoticeException || $e instanceof WarningException) {
             // send header
             $this->sendHeader();
             
+            $templates_path = Config::get(Config::KEY_DIR_APP) . "/Templates/";
+            
             // include Master header template
-            include 'gui/template/MasterHeaderTemplate.php';
+            include $templates_path . "MasterHeaderTemplate.php";
             
             // make exception box
             if (!is_null($e)) {
@@ -35,14 +54,14 @@ final class HtmlResponse extends Response {
             }
             
             // make content (only for null or Notice exception)
-            if ((is_null($e) || $e instanceof NoticeException) && !empty($this->templateFile) && is_file($this->templateFile)) {
-                include $this->templateFile;
+            if ((is_null($e) || $e instanceof NoticeException) && !empty($this->template_file) && is_file($this->template_file)) {
+                include $this->template_file;
             }
             
             // include Master footer template
-            include 'gui/template/MasterFooterTemplate.php';
+            include $templates_path . "MasterFooterTemplate.php";
         } else {
-            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
+            System::redirect(Config::get(Config::KEY_SITE_FQDN) . Config::get(Config::KEY_SHUTDOWN_PAGE));
         }
     }
 
@@ -52,27 +71,27 @@ final class HtmlResponse extends Response {
      * @return string
      */
     public function __toString() {
-        return sprintf("HtmlResponse{templateFile=%s}", $this->templateFile);
+        return sprintf("HtmlResponse{template_file=%s}", $this->template_file);
     }
 
     /**
-     * Set response templateData.
+     * Set response template data.
      *
-     * @param TemplateData $templateData            
+     * @param TemplateData $template_data            
      */
-    public function setTemplateData(TemplateData $templateData = null) {
-        if (!is_null($templateData)) {
-            $this->templateData = $templateData;
+    public function setTemplateData(TemplateData $template_data = null) {
+        if (!is_null($template_data)) {
+            $this->template_data = $template_data;
         }
     }
 
     /**
-     * Set response templateFile.
+     * Set response template file.
      *
-     * @param string $templateFile            
+     * @param string $template_file            
      */
-    public function setTemplateFile($templateFile) {
-        $this->templateFile = $templateFile;
+    public function setTemplateFile($template_file) {
+        $this->template_file = $template_file;
     }
 
     /**

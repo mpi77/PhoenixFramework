@@ -1,11 +1,16 @@
 <?php
 
+namespace Phoenix\Http;
+
+use \Phoenix\Http\Response;
+
 /**
  * Xml response object.
- * 
- * @version 1.1
+ *
+ * @version 1.2
  * @author MPI
- * */
+ *        
+ */
 final class XmlResponse extends Response {
 
     public function __construct(Exception $e = null) {

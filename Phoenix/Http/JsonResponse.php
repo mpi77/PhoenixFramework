@@ -1,11 +1,16 @@
 <?php
 
+namespace Phoenix\Http;
+
+use \Phoenix\Http\Response;
+
 /**
  * Json response object.
- * 
- * @version 1.1
+ *
+ * @version 1.2
  * @author MPI
- * */
+ *        
+ */
 final class JsonResponse extends Response {
 
     public function __construct(Exception $e = null) {
