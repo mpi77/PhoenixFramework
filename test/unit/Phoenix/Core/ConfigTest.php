@@ -2,7 +2,7 @@
 /**
  * Config unit test.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
 include '../../../../Phoenix/Core/Config.php';
@@ -33,6 +33,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(0, Config::get(Config::KEY_ENVIRONMENT));
         $this->assertSame(4194304, Config::get(Config::KEY_LOG_SIZE));
         $this->assertEquals("Europe/Prague", Config::get(Config::KEY_TIME_ZONE));
+        $this->assertFalse(Config::get(Config::KEY_FORCE_HTTPS));
         $this->assertSame(true, Config::get(Config::KEY_SESSION_INACTIVITY_ENABLED));
         $this->assertSame(1800, Config::get(Config::KEY_SESSION_INACTIVITY_TIMEOUT));
         $this->assertEquals("user/inactivity/", Config::get(Config::KEY_SESSION_INACTIVITY_REDIRECT_PATH));
@@ -48,6 +49,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue(Config::get(2000));
         Config::set(2001, "string");
         $this->assertSame("string", Config::get(2001));
+        
+        // enable https
+        Config::set(Config::KEY_FORCE_HTTPS, true);
+        $this->assertTrue(Config::get(Config::KEY_FORCE_HTTPS));
     }
     
     public function testConfigUndefinedKeys(){
@@ -182,6 +187,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
         /* modify user defined config */
         Config::set(2001, "XDD");
         $this->assertSame("string", Config::get(2001));
+        
+        Config::set(Config::KEY_FORCE_HTTPS, false);
+        $this->assertTrue(Config::get(Config::KEY_FORCE_HTTPS));
         
         /* modify DIR_ROOT */
         Config::set(Config::KEY_DIR_ROOT, "/srv/www/88");

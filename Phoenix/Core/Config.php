@@ -5,7 +5,7 @@ namespace Phoenix\Core;
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.13
+ * @version 1.14
  * @author MPI
  *        
  */
@@ -30,6 +30,7 @@ class Config {
     const KEY_ENVIRONMENT = 23;
     const KEY_LOG_SIZE = 24;
     const KEY_TIME_ZONE = 25;
+    const KEY_FORCE_HTTPS = 26;
     const KEY_SESSION_INACTIVITY_ENABLED = 30;
     const KEY_SESSION_INACTIVITY_TIMEOUT = 31;
     const KEY_SESSION_INACTIVITY_REDIRECT_PATH = 32;
@@ -55,6 +56,7 @@ class Config {
     const DEFAULT_ENVIRONMENT = 0;
     const DEFAULT_LOG_SIZE = 4194304;
     const DEFAULT_TIME_ZONE = "Europe/Prague";
+    const DEFAULT_FORCE_HTTPS = false;
     const DEFAULT_SESSION_INACTIVITY_ENABLED = true;
     const DEFAULT_SESSION_INACTIVITY_TIMEOUT = 1800;
     const DEFAULT_SESSION_INACTIVITY_REDIRECT_PATH = "user/inactivity/";
@@ -298,6 +300,7 @@ class Config {
                         self::KEY_ENVIRONMENT => self::DEFAULT_ENVIRONMENT,
                         self::KEY_LOG_SIZE => self::DEFAULT_LOG_SIZE,
                         self::KEY_TIME_ZONE => self::DEFAULT_TIME_ZONE,
+                        self::KEY_FORCE_HTTPS => self::DEFAULT_FORCE_HTTPS,
                         self::KEY_SESSION_INACTIVITY_ENABLED => self::DEFAULT_SESSION_INACTIVITY_ENABLED,
                         self::KEY_SESSION_INACTIVITY_TIMEOUT => self::DEFAULT_SESSION_INACTIVITY_TIMEOUT,
                         self::KEY_SESSION_INACTIVITY_REDIRECT_PATH => self::DEFAULT_SESSION_INACTIVITY_REDIRECT_PATH,
