@@ -2,12 +2,13 @@
 
 namespace Phoenix\Http;
 
+use \Exception;
 use \Phoenix\Http\Response;
 
 /**
  * Json response object.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  *        
  */

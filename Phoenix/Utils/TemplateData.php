@@ -1,15 +1,23 @@
 <?php
 
+namespace Phoenix\Utils;
+
 /**
  * Root template data object.
  *
- * @version 1.8
+ * @version 1.9
  * @author MPI
- * */
+ *        
+ */
 class TemplateData {
     const NOT_FOUND = null;
     private $data;
 
+    /**
+     * TemplateData constructor.
+     *
+     * @param array $data            
+     */
     public function __construct($data = null) {
         if (is_null($data)) {
             $this->data = array ();
@@ -83,12 +91,12 @@ class TemplateData {
      * Print string from template object.
      *
      * @param string $key            
-     * @param boolean $enableHtmlspecialchars
+     * @param boolean $enable_htmlspecialchars
      *            default false
      */
-    public function e($key, $enableHtmlspecialchars = false) {
+    public function e($key, $enable_htmlspecialchars = false) {
         if (is_string($key) && array_key_exists($key, $this->data) && is_string($this->data[$key])) {
-            echo ($enableHtmlspecialchars === true) ? htmlspecialchars($this->data[$key]) : $this->data[$key];
+            echo ($enable_htmlspecialchars === true) ? htmlspecialchars($this->data[$key]) : $this->data[$key];
         }
     }
 }

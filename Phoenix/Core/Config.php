@@ -5,7 +5,7 @@ namespace Phoenix\Core;
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.12
+ * @version 1.13
  * @author MPI
  *        
  */
@@ -23,6 +23,7 @@ class Config {
     const KEY_DIR_VENDOR = 15;
     const KEY_DIR_CACHE = 16;
     const KEY_DIR_WWW = 17;
+    const KEY_DIR_APP_TEMPLATES = 18;
     const KEY_SITE_FQDN = 20;
     const KEY_SITE_BASE = 21;
     const KEY_SHUTDOWN_PAGE = 22;
@@ -47,6 +48,7 @@ class Config {
     const DEFAULT_DIR_VENDOR = "/vendor";
     const DEFAULT_DIR_CACHE = "/cache";
     const DEFAULT_DIR_WWW = "/www";
+    const DEFAULT_DIR_APP_TEMPLATES = "/Templates";
     const DEFAULT_SITE_FQDN = "http://localhost/phoenix/";
     const DEFAULT_SITE_BASE = "/phoenix/";
     const DEFAULT_SHUTDOWN_PAGE = "500";
@@ -147,8 +149,11 @@ class Config {
             case self::KEY_DIR_PHOENIX :
             case self::KEY_DIR_TEMP :
             case self::KEY_DIR_VENDOR :
-            case self::KEY_DIR_WWW:
+            case self::KEY_DIR_WWW :
                 return self::$config[self::KEY_DIR_ROOT] . self::$config[$key];
+                break;
+            case self::KEY_DIR_APP_TEMPLATES :
+                return self::$config[self::KEY_DIR_ROOT] . self::$config[self::KEY_DIR_APP] . self::$config[$key];
                 break;
             default :
                 return null;
@@ -276,7 +281,7 @@ class Config {
     private static function setConfigDefaults() {
         $dir_root = substr(self::DEFAULT_DIR_ROOT, 0, strrpos(self::DEFAULT_DIR_ROOT, "/")); // remove /Core
         $dir_root = substr($dir_root, 0, strrpos($dir_root, "/")); // remove /Phoenix
-        // $dir_root = self::DEFAULT_DIR_ROOT . "/../..";
+                                                                   // $dir_root = self::DEFAULT_DIR_ROOT . "/../..";
         self::$config = array (
                         self::KEY_DIR_ROOT => $dir_root,
                         self::KEY_DIR_APP => self::DEFAULT_DIR_APP,
@@ -286,6 +291,7 @@ class Config {
                         self::KEY_DIR_VENDOR => self::DEFAULT_DIR_VENDOR,
                         self::KEY_DIR_CACHE => self::DEFAULT_DIR_CACHE,
                         self::KEY_DIR_WWW => self::DEFAULT_DIR_WWW,
+                        self::KEY_DIR_APP_TEMPLATES => self::DEFAULT_DIR_APP_TEMPLATES,
                         self::KEY_SITE_FQDN => self::DEFAULT_SITE_FQDN,
                         self::KEY_SITE_BASE => self::DEFAULT_SITE_BASE,
                         self::KEY_SHUTDOWN_PAGE => self::DEFAULT_SHUTDOWN_PAGE,

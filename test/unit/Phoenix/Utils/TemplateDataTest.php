@@ -2,10 +2,12 @@
 /**
  * Template data unit test.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  * */
-include '../../app/TemplateData.class.php';
+include '../../../../Phoenix/Utils/TemplateData.php';
+
+use \Phoenix\Utils\TemplateData;
 class TemplateDataTest extends PHPUnit_Framework_TestCase {
     private $data;
 

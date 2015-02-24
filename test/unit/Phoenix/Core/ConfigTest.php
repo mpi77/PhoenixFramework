@@ -2,7 +2,7 @@
 /**
  * Config unit test.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  * */
 include '../../../../Phoenix/Core/Config.php';
@@ -26,6 +26,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("/vendor", Config::get(Config::KEY_DIR_VENDOR));
         $this->assertEquals("/cache", Config::get(Config::KEY_DIR_CACHE));
         $this->assertEquals("/www", Config::get(Config::KEY_DIR_WWW));
+        $this->assertEquals("/Templates", Config::get(Config::KEY_DIR_APP_TEMPLATES));
         $this->assertEquals("http://localhost/phoenix/", Config::get(Config::KEY_SITE_FQDN));
         $this->assertEquals("/phoenix/", Config::get(Config::KEY_SITE_BASE));
         $this->assertEquals("500", Config::get(Config::KEY_SHUTDOWN_PAGE));
@@ -81,6 +82,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("/App", Config::get(Config::KEY_DIR_APP));
         $this->assertEquals("/srv/www", Config::getAbsoluteFolderPath(Config::KEY_DIR_ROOT));
         $this->assertEquals("/srv/www/App", Config::getAbsoluteFolderPath(Config::KEY_DIR_APP));
+        $this->assertEquals("/srv/www/App/Templates", Config::getAbsoluteFolderPath(Config::KEY_DIR_APP_TEMPLATES));
         $this->assertNull(Config::getAbsoluteFolderPath(999));
     }
     

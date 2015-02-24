@@ -2,8 +2,10 @@
 
 namespace Phoenix\Http;
 
+use \Exception;
 use \Phoenix\Core\Config;
 use \Phoenix\Utils\System;
+use \Phoenix\Utils\TemplateData;
 use \Phoenix\Http\Response;
 use \Phoenix\Exceptions\NoticeException;
 use \Phoenix\Exceptions\WarningException;
@@ -11,21 +13,26 @@ use \Phoenix\Exceptions\WarningException;
 /**
  * Html response object.
  *
- * @version 1.10
+ * @version 1.11
  * @author MPI
  *        
  * @todo TemplateData
  */
 final class HtmlResponse extends Response {
+    const HEADER_TEMPLATE_FILE = "MasterHeaderTemplate.php";
+    const FOOTER_TEMPLATE_FILE = "MasterFooterTemplate.php";
     private $template_data;
     private $template_file;
 
     /**
      * HtmlResponse constructor.
      *
-     * @param string $template_file            
-     * @param TemplateData $template_data            
-     * @param Exception $e            
+     * @param string $template_file
+     *            default null
+     * @param TemplateData $template_data
+     *            default null
+     * @param Exception $e
+     *            default null
      */
     public function __construct($template_file = null, TemplateData $template_data = null, Exception $e = null) {
         parent::__construct(Response::CONTENT_TYPE_HTML, Response::CHARSET_HTML, $e);
@@ -38,15 +45,17 @@ final class HtmlResponse extends Response {
      */
     public function send() {
         $e = $this->getException();
-        $tpd = $this->template_data;
+        $tpd = $this->template_data; // variable $tpd is accessible in each template file
         if (is_null($e) || $e instanceof NoticeException || $e instanceof WarningException) {
             // send header
             $this->sendHeader();
             
-            $templates_path = Config::get(Config::KEY_DIR_APP) . "/Templates/";
+            $templates_path = Config::get(Config::KEY_DIR_APP_TEMPLATES);
             
             // include Master header template
-            include $templates_path . "MasterHeaderTemplate.php";
+            if (!empty($templates_path) && is_file($templates_path . self::HEADER_TEMPLATE_FILE)) {
+                include $templates_path . self::HEADER_TEMPLATE_FILE;
+            }
             
             // make exception box
             if (!is_null($e)) {
@@ -59,7 +68,9 @@ final class HtmlResponse extends Response {
             }
             
             // include Master footer template
-            include $templates_path . "MasterFooterTemplate.php";
+            if (!empty($templates_path) && is_file($templates_path . self::FOOTER_TEMPLATE_FILE)) {
+                include $templates_path . self::FOOTER_TEMPLATE_FILE;
+            }
         } else {
             System::redirect(Config::get(Config::KEY_SITE_FQDN) . Config::get(Config::KEY_SHUTDOWN_PAGE));
         }
@@ -104,7 +115,9 @@ final class HtmlResponse extends Response {
         if (!is_null($this->getException())) {
             $class = "alert-success";
             $icon = "fa-info";
-            switch (get_class($this->getException())) {
+            $s = get_class($this->getException());
+            $s = substr($s, strrpos($s, "\\") + 1);
+            switch ($s) {
                 case "NoticeException" :
                     $class = "alert-info";
                     $icon = "fa-info";
