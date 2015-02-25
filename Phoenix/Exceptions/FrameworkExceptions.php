@@ -13,7 +13,7 @@ namespace Phoenix\Exceptions;
  * in AppConfigurator should be an integer greater 
  * than 1000.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  *        
  */
@@ -38,6 +38,7 @@ class FrameworkExceptions {
     const W_ROUTER_INVALID_ROUTE_ACTION = 51;
     const W_RESPONSE_INVALID_FORMAT = 60;
     const W_RESPONSE_UNSUPPORTED_FORMAT = 61;
+    const W_URL_UNSUPPORTED_FORMAT = 70;
     
     /* failure exceptions */
     const F_UNKNOWN = 0;
