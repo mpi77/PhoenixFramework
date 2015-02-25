@@ -4,12 +4,12 @@ namespace Phoenix\Utils;
 
 use \Phoenix\Core\Config;
 use \Phoenix\Utils\System;
-//use \Phoenix\Utils\Security;
+// use \Phoenix\Utils\Security;
 
 /**
  * Session utils.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  *        
  */
@@ -30,7 +30,7 @@ class Session {
     }
 
     /**
-     * Initialize session witch defined structure.
+     * Initialize session with defined structure.
      *
      * @todo set default value KEY_CFG_PAGE_SIZE
      * @todo run Security functions
@@ -41,7 +41,7 @@ class Session {
         /* set user fefaults */
         if (!array_key_exists(self::KEY_USER_UID, $_SESSION[$site_fqdn]) || !array_key_exists(self::KEY_USER_GID, $_SESSION[$site_fqdn]) || !array_key_exists(self::KEY_USER_AUTH, $_SESSION[$site_fqdn]) || !array_key_exists(self::KEY_USER_TYPE, $_SESSION[$site_fqdn]) || !array_key_exists(self::KEY_USER_LANG, $_SESSION[$site_fqdn])) {
             self::loadUserDefaults();
-            //Security::initAuthToken();
+            // Security::initAuthToken();
         }
         
         /* set cfg defaults */
@@ -51,20 +51,20 @@ class Session {
         
         /* run session attack detection */
         if (self::get(self::KEY_USER_AUTH) === true) {
-            //Security::checkSessionInactivity();
-            //Security::checkSessionFixation();
+            // Security::checkSessionInactivity();
+            // Security::checkSessionFixation();
         }
     }
 
     /**
      * Get value in Session for given key.
      *
-     * @param integer $key
-     *            predefined constant Session::KEY_ (integer key); can be self defined integer constant (convention is integer grater than 1000)
+     * @param integer|string $key
+     *            predefined constant Session::KEY_ (integer key); can be self defined string or integer constant (convention is integer grater than 1000)
      * @return NULL|mixed
      */
     public static function get($key) {
-        if (!is_int($key)) {
+        if (!is_int($key) && !is_string($key)) {
             return null;
         }
         $site_fqdn = Config::get(Config::KEY_SITE_FQDN);
@@ -74,13 +74,13 @@ class Session {
     /**
      * Set Session value for given key.
      *
-     * @param integer $key
-     *            predefined constant Session::KEY_ (integer key); can be self defined integer constant (convention is integer grater than 1000)
+     * @param integer|string $key
+     *            predefined constant Session::KEY_ (integer key); can be self defined string or integer constant (convention is integer grater than 1000)
      * @param mixed $value            
      * @return boolean
      */
     public static function set($key, $value) {
-        if (!is_int($key)) {
+        if (!is_int($key) && !is_string($key)) {
             return false;
         }
         if (self::$registrationEnabled === true) {
@@ -104,6 +104,22 @@ class Session {
      */
     public static function isRegistrationEnabled() {
         return self::$registrationEnabled;
+    }
+
+    /**
+     * Start new session.
+     */
+    public static function start() {
+        session_start();
+        self::init();
+    }
+
+    /**
+     * Close current session.
+     */
+    public static function close() {
+        session_unset();
+        session_destroy();
     }
 
     /**
