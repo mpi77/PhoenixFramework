@@ -9,7 +9,7 @@ use Phoenix\Exceptions\FrameworkExceptions;
  * Url object.
  * It is based on URI Syntax (RFC 3986).
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  *        
  */
@@ -75,7 +75,7 @@ class Url {
     /**
      * Url constructor.
      *
-     * @param string $url            
+     * @param string $url [optional]            
      * @throws Phoenix\Exceptions\WarningException if URL is unsupported
      */
     public function __construct($url) {
@@ -96,9 +96,7 @@ class Url {
             if ($this->path === "" && ($this->scheme === "http" || $this->scheme === "https")) {
                 $this->path = "/";
             }
-        } else {
-            throw new WarningException(FrameworkExceptions::W_URL_UNSUPPORTED_FORMAT);
-        }
+        } 
     }
 
     /**
