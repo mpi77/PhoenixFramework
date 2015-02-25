@@ -8,7 +8,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Exception translator.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  *        
  */
@@ -41,6 +41,7 @@ class ExceptionTranslator implements IModuleTranslator {
                     ED::W_ROUTER_INVALID_ROUTE_ACTION => "Action is invalid.",
                     ED::W_RESPONSE_INVALID_FORMAT => "Invalid response format.",
                     ED::W_RESPONSE_UNSUPPORTED_FORMAT => "Response format is not supported.",
+                    ED::W_URL_UNSUPPORTED_FORMAT => "URL format is not supported.",
                     ED::N_UNKNOWN => "Unknown notice." 
     );
 

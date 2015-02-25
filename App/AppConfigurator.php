@@ -13,7 +13,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Application configurator.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  *        
  */
@@ -48,6 +48,7 @@ class AppConfigurator extends Configurator {
     protected final function registerConfiguration() {
         Config::set(Config::KEY_SITE_FQDN, "http://localhost/phoenix/www");
         Config::set(Config::KEY_SITE_BASE, "/phoenix/");
+        Config::set(Config::KEY_FORCE_HTTPS, false);
         Config::setDatabasePool(Config::get(Config::KEY_DB_PRIMARY_POOL), "mysql", "localhost", "3306", "phoenix", "phoenix", "phoenix", "utf8");
     }
 
@@ -86,7 +87,8 @@ class AppConfigurator extends Configurator {
                         FX::W_ROUTER_INVALID_ROUTE => ED::W_ROUTER_INVALID_ROUTE,
                         FX::W_ROUTER_INVALID_ROUTE_ACTION => ED::W_ROUTER_INVALID_ROUTE_ACTION,
                         FX::W_RESPONSE_INVALID_FORMAT => ED::W_RESPONSE_INVALID_FORMAT,
-                        FX::W_RESPONSE_UNSUPPORTED_FORMAT => ED::W_RESPONSE_UNSUPPORTED_FORMAT 
+                        FX::W_RESPONSE_UNSUPPORTED_FORMAT => ED::W_RESPONSE_UNSUPPORTED_FORMAT,
+                        FX::W_URL_UNSUPPORTED_FORMAT => ED::W_URL_UNSUPPORTED_FORMAT 
         ));
     }
 
