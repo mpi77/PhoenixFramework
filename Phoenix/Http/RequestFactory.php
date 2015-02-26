@@ -10,7 +10,7 @@ use \Phoenix\Utils\System;
 /**
  * Request factory object.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  *        
  */
@@ -191,16 +191,22 @@ class RequestFactory {
         return new Request($url, $method, $post, $files, $cookies, $headers, $remoteAddr, $remoteHost);
     }
 
-    function rebuildFiles(&$file_post) {
-        $file_ary = array ();
-        $file_count = count($file_post["name"]);
+    /**
+     * Rebuild Files array.
+     * Output structure is FILES[string pool][int][name,type,tmp_name,error,size].
+     *
+     * @param array $file_post            
+     * @return array
+     */
+    private function rebuildFiles(&$files) {
+        $r = array ();
         
-        for($i = 0; $i < $file_count; $i++) {
-            if (empty($file_post["name"][$i])) {
+        for($i = 0; $i < count($files["name"]); $i++) {
+            if (empty($files["name"][$i])) {
                 continue;
             }
             
-            $name = $file_post["name"][$i];
+            $name = $files["name"][$i];
             if (get_magic_quotes_gpc()) {
                 $name = stripSlashes($name);
             }
@@ -208,14 +214,14 @@ class RequestFactory {
                 $name = "renamed";
             }
             
-            $file_ary[$i]["name"] = $name;
-            $file_ary[$i]["type"] = $file_post["type"][$i];
-            $file_ary[$i]["tmp_name"] = $file_post["tmp_name"][$i];
-            $file_ary[$i]["error"] = $file_post["error"][$i];
-            $file_ary[$i]["size"] = $file_post["size"][$i];
+            $r[$i]["name"] = $name;
+            $r[$i]["type"] = $files["type"][$i];
+            $r[$i]["tmp_name"] = $files["tmp_name"][$i];
+            $r[$i]["error"] = $files["error"][$i];
+            $r[$i]["size"] = $files["size"][$i];
         }
         
-        return $file_ary;
+        return $r;
     }
 }
 ?>
