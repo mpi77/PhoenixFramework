@@ -7,7 +7,7 @@ use \Phoenix\Http\Url;
 /**
  * Root request object.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  *        
  */
@@ -68,8 +68,8 @@ class Request {
     /**
      * Request constructor.
      *
-     * @param Url $url
-     * @param string $method
+     * @param Url $url            
+     * @param string $method            
      * @param string $post
      *            [optional]
      * @param string $files
@@ -128,7 +128,7 @@ class Request {
      * @param string $key
      *            [optional]
      * @param mixed $default
-     *            default value, [optional]
+     *            [optional] default value
      * @return mixed
      */
     public function getPost($key = null, $default = null) {
@@ -143,18 +143,33 @@ class Request {
 
     /**
      * Returns uploaded file.
+     * Structure is FILES[string pool][int][name,type,tmp_name,error,size].
      *
-     * @todo
-     *
-     * @param string $key            
-     * @return array|null
+     * @param string $pool
+     *            find file in FILES[$pool]
+     * @param string $file_name
+     *            find file by file name in FILES[$pool][int][$file_name]
+     * @param mixed $default
+     *            [optional] returns if file was not found
+     * @return mixed
      */
-    public function getFile($key) {
-        return null;
+    public function getFile($pool, $file_name, $default = null) {
+        if(empty($pool) || !is_string($pool)){
+            return $default;
+        }
+        if(is_string($file_name)){
+            foreach ($this->files[$pool] as $v){
+                if($v["name"] == $file_name){
+                    return $v;
+                }
+            }
+        } 
+        return $default;
     }
 
     /**
      * Returns uploaded files.
+     * Structure is FILES[string pool][int][name,type,tmp_name,error,size].
      *
      * @return array
      */
@@ -167,7 +182,7 @@ class Request {
      *
      * @param string $key            
      * @param mixed $default
-     *            default value, [optional]
+     *            [optional] default value
      * @return mixed
      */
     public function getCookie($key, $default = null) {
@@ -227,7 +242,7 @@ class Request {
      *
      * @param string $header            
      * @param mixed $default
-     *            default value, [optional]
+     *            [optional] default value
      * @return mixed
      */
     public function getHeader($header, $default = null) {
