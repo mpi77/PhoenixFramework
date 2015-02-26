@@ -3,24 +3,25 @@
 namespace Phoenix\Http;
 
 use \Phoenix\Http\Url;
+use \Phoenix\Http\Request;
 use \Phoenix\Utils\Strings;
-use Phoenix\Utils\System;
+use \Phoenix\Utils\System;
 
 /**
  * Request factory object.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  *        
  */
 class RequestFactory {
     /**
+     * valid chars
      *
      * @internal
      *
      */
-    const CHARS = "#^[\x09\x0A\x0D\x20-\x7E\xA0-\x{10FFFF}]*+\z#u";
-    
+    const CHARS = '#^[\x09\x0A\x0D\x20-\x7E\xA0-\x{10FFFF}]*+\z#u';
     /**
      *
      * @var array
@@ -36,8 +37,7 @@ class RequestFactory {
      *
      * @var bool
      */
-    private $binary = FALSE;
-    
+    private $binary = false;
     /**
      *
      * @var array
@@ -45,9 +45,9 @@ class RequestFactory {
     private $proxies = array ();
 
     /**
-     * Sets the binary mode.
-     * 
-     * @param bool $binary            
+     *
+     * @param bool $binary
+     *            [optional] default is true
      * @return self
      */
     public function setBinary($binary = true) {
@@ -56,7 +56,7 @@ class RequestFactory {
     }
 
     /**
-     * Sets the proxy.
+     * Sets proxy.
      *
      * @param array|string $proxy            
      * @return self
@@ -67,12 +67,13 @@ class RequestFactory {
     }
 
     /**
-     * Creates current HttpRequest object.
+     * Creates current Request object.
      *
      * @return Phoenix\Http\Request
      */
     public function createRequest() {
-        // DETECTS URI, base path and script path of the request.
+        
+        // prepare Url of the request.
         $url = new Url();
         $url->setScheme(!empty($_SERVER["HTTPS"]) && strcasecmp($_SERVER["HTTPS"], "off") ? "https" : "http");
         $url->setUser(isset($_SERVER["PHP_AUTH_USER"]) ? $_SERVER["PHP_AUTH_USER"] : "");
@@ -89,67 +90,38 @@ class RequestFactory {
         }
         
         // path & query
-        if (isset($_SERVER["REQUEST_URI"])) { // Apache, IIS 6.0
-            $requestUrl = $_SERVER["REQUEST_URI"];
-        } elseif (isset($_SERVER["ORIG_PATH_INFO"])) { // IIS 5.0 (PHP as CGI ?)
-            $requestUrl = $_SERVER["ORIG_PATH_INFO"];
-            if (isset($_SERVER["QUERY_STRING"]) && $_SERVER["QUERY_STRING"] != "") {
-                $requestUrl .= "?" . $_SERVER["QUERY_STRING"];
-            }
-        } else {
-            $requestUrl = "";
-        }
-        
-        // $requestUrl = Strings::replace($requestUrl, $this->urlFilters["url"]);
+        $requestUrl = isset($_SERVER["REQUEST_URI"]) ? $_SERVER["REQUEST_URI"] : "/";
         $requestUrl = preg_replace(array_keys($this->urlFilters["url"]), array_values($this->urlFilters["url"]), $requestUrl);
         $tmp = explode("?", $requestUrl, 2);
-        // $url->setPath(Strings::replace($tmp[0], $this->urlFilters["path"]));
-        $url->setPath(preg_replace(array_keys($this->urlFilters["path"]), array_values($this->urlFilters["path"]), $tmp[0]));
+        $path = Strings::fixEncoding(preg_replace(array_keys($this->urlFilters["path"]), array_values($this->urlFilters["path"]), $tmp[0]));
+        $url->setPath($path);
         $url->setQuery(isset($tmp[1]) ? $tmp[1] : "");
         
-        // normalized url
-        $url->canonicalize();
-        $url->setPath(Strings::fixEncoding($url->getPath()));
-        
         // detect script path
-        if (isset($_SERVER["SCRIPT_NAME"])) {
-            $script = $_SERVER["SCRIPT_NAME"];
-        } elseif (isset($_SERVER["DOCUMENT_ROOT"], $_SERVER["SCRIPT_FILENAME"]) && strncmp($_SERVER["DOCUMENT_ROOT"], $_SERVER["SCRIPT_FILENAME"], strlen($_SERVER["DOCUMENT_ROOT"])) === 0) {
-            $script = "/" . ltrim(strtr(substr($_SERVER["SCRIPT_FILENAME"], strlen($_SERVER["DOCUMENT_ROOT"])), "\\", "/"), "/");
-        } else {
-            $script = "/";
+        $script = isset($_SERVER["SCRIPT_NAME"]) ? $_SERVER["SCRIPT_NAME"] : "";
+        if ($path !== $script) {
+            $max = min(strlen($path), strlen($script));
+            for($i = 0; $i < $max && $path[$i] === $script[$i]; $i++)
+                ;
+            $path = $i ? substr($path, 0, strrpos($path, "/", $i - $max - 1) + 1) : "/";
         }
-        
-        // @todo
-        $path = strtolower($url->getPath()) . "/";
-        $script = strtolower($script) . "/";
-        $max = min(strlen($path), strlen($script));
-        for($i = 0; $i < $max; $i++) {
-            if ($path[$i] !== $script[$i]) {
-                break;
-            } elseif ($path[$i] === "/") {
-                $url->setPath(substr($url->getPath(), 0, $i + 1));
-            }
-        }
+        // $url->setScriptPath($path);
         
         // GET, POST, COOKIE
         $useFilter = (!in_array(ini_get("filter.default"), array (
                         "",
                         "unsafe_raw" 
         )) || ini_get("filter.default_flags"));
-        
-        parse_str($url->getQuery(), $query);
-        if (!$query) {
-            $query = $useFilter ? filter_input_array(INPUT_GET, FILTER_UNSAFE_RAW) : (empty($_GET) ? array () : $_GET);
-            $url->setQuery($query);
-        }
+        $query = $url->getQueryParameters();
         $post = $useFilter ? filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW) : (empty($_POST) ? array () : $_POST);
         $cookies = $useFilter ? filter_input_array(INPUT_COOKIE, FILTER_UNSAFE_RAW) : (empty($_COOKIE) ? array () : $_COOKIE);
+        if (get_magic_quotes_gpc()) {
+            $post = Strings::stripslashes($post, $useFilter);
+            $cookies = Strings::stripslashes($cookies, $useFilter);
+        }
         
-        $gpc = (bool) get_magic_quotes_gpc();
-        
-        // remove quotes, control characters and check encoding
-        if ($gpc || !$this->binary) {
+        // remove invalid characters
+        if (!$this->binary) {
             $list = array (
                             & $query,
                             & $post,
@@ -157,73 +129,28 @@ class RequestFactory {
             );
             while (list ( $key, $val ) = each($list)) {
                 foreach ($val as $k => $v) {
-                    unset($list[$key][$k]);
-                    
-                    if ($gpc) {
-                        $k = stripslashes($k);
-                    }
-                    
-                    if (!$this->binary && is_string($k) && (!preg_match(self::CHARS, $k) || preg_last_error())) {
-                        // invalid key -> ignore
+                    if (is_string($k) && (!preg_match(self::CHARS, $k) || preg_last_error())) {
+                        unset($list[$key][$k]);
                     } elseif (is_array($v)) {
                         $list[$key][$k] = $v;
                         $list[] = & $list[$key][$k];
-                    } else {
-                        if ($gpc && !$useFilter) {
-                            $v = stripSlashes($v);
-                        }
-                        if (!$this->binary && (!preg_match(self::CHARS, $v) || preg_last_error())) {
-                            $v = "";
-                        }
-                        $list[$key][$k] = $v;
+                    } elseif (!preg_match(self::CHARS, $v) || preg_last_error()) {
+                        $list[$key][$k] = "";
                     }
                 }
             }
             unset($list, $key, $val, $k, $v);
         }
+        $url->setQuery($query);
         
-        // @todo
-        // FILES and create FileUpload objects
+        // FILES
         $files = array ();
-        $list = array ();
         if (!empty($_FILES)) {
             foreach ($_FILES as $k => $v) {
                 if (!$this->binary && is_string($k) && (!preg_match(self::CHARS, $k) || preg_last_error())) {
                     continue;
                 }
-                // $v["@"] = & $files[$k];
-                $list[] = $v;
-            }
-        }
-        
-        while (list ( , $v ) = each($list)) {
-            if (!isset($v["name"])) {
-                continue;
-            } elseif (!is_array($v["name"])) {
-                if ($gpc) {
-                    $v["name"] = stripSlashes($v["name"]);
-                }
-                if (!$this->binary && (!preg_match(self::CHARS, $v["name"]) || preg_last_error())) {
-                    $v["name"] = "";
-                }
-                if ($v["error"] !== UPLOAD_ERR_NO_FILE) {
-                    // $v["@"] = new FileUpload($v);
-                }
-                continue;
-            }
-            
-            foreach ($v["name"] as $k => $foo) {
-                if (!$this->binary && is_string($k) && (!preg_match(self::CHARS, $k) || preg_last_error())) {
-                    continue;
-                }
-                $list[] = array (
-                                "name" => $v["name"][$k],
-                                "type" => $v["type"][$k],
-                                "size" => $v["size"][$k],
-                                "tmp_name" => $v["tmp_name"][$k],
-                                "error" => $v["error"][$k] 
-                );
-                // "@" => & $v["@"][$k]
+                $files[$k] = $this->rebuildFiles($_FILES[$k]);
             }
         }
         
@@ -241,7 +168,6 @@ class RequestFactory {
                 $headers[strtr($k, "_", "-")] = $v;
             }
         }
-        
         $remoteAddr = isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : NULL;
         $remoteHost = isset($_SERVER["REMOTE_HOST"]) ? $_SERVER["REMOTE_HOST"] : NULL;
         
@@ -257,13 +183,39 @@ class RequestFactory {
                 break;
             }
         }
-        
         $method = isset($_SERVER["REQUEST_METHOD"]) ? $_SERVER["REQUEST_METHOD"] : NULL;
         if ($method === "POST" && isset($_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"]) && preg_match("#^[A-Z]+\z#", $_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"])) {
             $method = $_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"];
         }
         
         return new Request($url, $method, $post, $files, $cookies, $headers, $remoteAddr, $remoteHost);
+    }
+
+    function rebuildFiles(&$file_post) {
+        $file_ary = array ();
+        $file_count = count($file_post["name"]);
+        
+        for($i = 0; $i < $file_count; $i++) {
+            if (empty($file_post["name"][$i])) {
+                continue;
+            }
+            
+            $name = $file_post["name"][$i];
+            if (get_magic_quotes_gpc()) {
+                $name = stripSlashes($name);
+            }
+            if (!$this->binary && is_string($name) && (!preg_match(self::CHARS, $name) || preg_last_error())) {
+                $name = "renamed";
+            }
+            
+            $file_ary[$i]["name"] = $name;
+            $file_ary[$i]["type"] = $file_post["type"][$i];
+            $file_ary[$i]["tmp_name"] = $file_post["tmp_name"][$i];
+            $file_ary[$i]["error"] = $file_post["error"][$i];
+            $file_ary[$i]["size"] = $file_post["size"][$i];
+        }
+        
+        return $file_ary;
     }
 }
 ?>

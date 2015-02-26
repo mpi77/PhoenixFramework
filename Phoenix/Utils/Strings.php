@@ -5,7 +5,7 @@ namespace Phoenix\Utils;
 /**
  * String utils.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  *        
  */
@@ -31,6 +31,22 @@ class Strings {
         } else {
             return htmlspecialchars_decode(htmlspecialchars($s, ENT_NOQUOTES | ENT_IGNORE, "UTF-8"), ENT_NOQUOTES);
         }
+    }
+
+    /**
+     * Strips slashes.
+     *
+     * @param string|array $arr            
+     * @param bool $onlyKeys
+     *            [optional] default false
+     *            
+     */
+    public static function stripSlashes($arr, $onlyKeys = false) {
+        $res = array ();
+        foreach ($arr as $k => $v) {
+            $res[stripslashes($k)] = is_array($v) ? self::stripSlashes($v, $onlyKeys) : ($onlyKeys ? $v : stripslashes($v));
+        }
+        return $res;
     }
 }
 ?>

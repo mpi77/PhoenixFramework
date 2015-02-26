@@ -9,7 +9,7 @@ use Phoenix\Exceptions\FrameworkExceptions;
  * Url object.
  * It is based on URI Syntax (RFC 3986).
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  *        
  */
@@ -75,10 +75,11 @@ class Url {
     /**
      * Url constructor.
      *
-     * @param string $url [optional]            
+     * @param string $url
+     *            [optional]
      * @throws Phoenix\Exceptions\WarningException if URL is unsupported
      */
-    public function __construct($url) {
+    public function __construct($url = null) {
         if (is_string($url)) {
             $parts = @parse_url($url);
             if ($parts === false) {
@@ -96,7 +97,7 @@ class Url {
             if ($this->path === "" && ($this->scheme === "http" || $this->scheme === "https")) {
                 $this->path = "/";
             }
-        } 
+        }
     }
 
     /**
@@ -252,11 +253,22 @@ class Url {
     }
 
     /**
+     * Returns query parameters of URI.
+     *
+     * @return array
+     */
+    public function getQueryParameters() {
+        $r = array ();
+        parse_str($this->query, $r);
+        return $r;
+    }
+
+    /**
      * Returns query parameter of URI.
      *
      * @param string $name            
      * @param mixed $default
-     *            default is null
+     *            [optional] default is null
      * @return mixed
      */
     public function getQueryParameter($name, $default = null) {
@@ -412,7 +424,7 @@ class Url {
      * @param string $s
      *            string to decode
      * @param string $reserved
-     *            reserved characters; default is %;/?:@&=+,$
+     *            [optional] reserved characters; default is %;/?:@&=+,$
      * @return string
      */
     public static function unescape($s, $reserved = "%;/?:@&=+$,") {
