@@ -7,7 +7,7 @@ use \Phoenix\Http\Url;
 /**
  * Root request object.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  *        
  */
@@ -157,7 +157,7 @@ class Request {
         if(empty($pool) || !is_string($pool)){
             return $default;
         }
-        if(is_string($file_name)){
+        if(is_string($file_name) && array_key_exists($pool, $this->files) && !empty($this->files)){
             foreach ($this->files[$pool] as $v){
                 if($v["name"] == $file_name){
                     return $v;
@@ -302,7 +302,7 @@ class Request {
      * Parse Accept-Language header and returns preferred language.
      *
      * @param array $langs
-     *            supported languages
+     *            supported languages; example array("cs", "en", "it")
      * @return string|null
      */
     public function detectLanguage(array $langs) {
