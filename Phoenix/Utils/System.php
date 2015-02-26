@@ -5,7 +5,7 @@ namespace Phoenix\Utils;
 /**
  * System class provides some "tool" functions.
  *
- * @version 1.24
+ * @version 1.25
  * @author MPI
  *        
  */
@@ -283,30 +283,10 @@ class System {
     }
 
     /**
-     * Find all files in given directory.
-     *
-     * @param string $dir
-     *            where start listing
-     * @param array $exclude
-     *            with names to exlude from result
-     * @return 1D string array
+     * @deprecated
      */
     public static function findAllFiles($dir, $exclude) {
-        $root = scandir($dir);
-        $result = array ();
-        foreach ($root as $value) {
-            if (in_array($value, $exclude)) {
-                continue;
-            }
-            if (is_file("$dir/$value")) {
-                $result[] = "$dir/$value";
-                continue;
-            }
-            foreach (self::findAllFiles("$dir/$value", $exclude) as $value) {
-                $result[] = $value;
-            }
-        }
-        return $result;
+        return null;
     }
 
     /**
@@ -327,38 +307,17 @@ class System {
     }
 
     /**
-     * Compare given 1D arrays.
-     * If all values from array $a are on same index in array $b, return true.
-     *
-     * @param array $a            
-     * @param array $b            
-     * @return boolean
+     * @deprecated
      */
     public static function isArraySame($a, $b) {
-        if (count($a) != count($b))
-            return false;
-        for($i = 0; $i < count($a); $i++) {
-            if ($a[$i] != $b[$i] || empty($a[$i]) != empty($b[$i]))
-                return false;
-        }
-        return true;
+        return null;
     }
 
     /**
-     * Check if given array is multidimensional.
-     *
-     * @param array $a            
-     * @return boolean
+     * @deprecated
      */
     public static function isArrayMultidimensional($a) {
-        if (!is_array($a)) {
-            return false;
-        }
-        foreach ($a as $v) {
-            if (is_array($v))
-                return true;
-        }
-        return false;
+        return null;
     }
 
     /**
@@ -424,88 +383,24 @@ class System {
     }
 
     /**
-     * Trim&slash on 1D integer indexed array.
-     * If item value is null, this item is added at same place.
-     *
-     * @param boolean $trim
-     *            (true = make trim)
-     * @param boolean $slash
-     *            (true = make addslashes)
-     * @return 1D array
+     * @deprecated
      */
     public static function trimSlashArray1d($array, $trim = false, $slash = false) {
-        $a = array ();
-        for($i = 0; $i < count($array); $i++) {
-            $tmp = null;
-            if (!empty($array[$i])) {
-                if ($trim === true)
-                    $tmp = trim($array[$i]);
-                if ($slash === true)
-                    $tmp = addslashes($tmp);
-            }
-            array_push($a, $tmp);
-        }
-        return $a;
+        return null;
     }
 
     /**
-     * Trim&slash on 1D string associative indexed array.
-     * If item value is null, this item is added at same place.
-     *
-     * @param boolean $trim
-     *            (true = make trim)
-     * @param boolean $slash
-     *            (true = make addslashes)
-     * @return 1D array
+     * @deprecated
      */
     public static function trimSlashArray1dAssociative($array, $trim = false, $slash = false) {
-        $a = array ();
-        foreach ($array as $k => $v) {
-            $tmp = null;
-            if (!empty($v)) {
-                if ($trim === true)
-                    $tmp = trim($v);
-                if ($slash === true)
-                    $tmp = addslashes($tmp);
-            }
-            $a[$k] = $tmp;
-        }
-        return $a;
+        return null;
     }
 
     /**
-     * Trim&slash on multidimensional string indexed array.
-     * If item value is null, this item is added at the same place.
-     * Trim&slash are made also on string indexes.
-     *
-     * @param boolean $trim_*
-     *            (true = make trim)
-     * @param boolean $slash_*
-     *            (true = make addslashes)
-     * @return mixed array
+     * @deprecated
      */
     public static function trimSlashMultidimAssocArray($array, $trim_key = true, $slash_key = true, $trim_value = true, $slash_value = true) {
-        $r = array ();
-        foreach ($array as $k => $v) {
-            $tmp_value = null;
-            $tmp_key = null;
-            if (is_array($v)) {
-                $tmp_value = self::trimSlashMultidimAssocArray($v, $trim_key, $slash_key, $trim_value, $slash_value);
-            } else {
-                if (!empty($v)) {
-                    if ($trim_value === true) {
-                        $tmp_value = trim($v);
-                    }
-                    if ($slash_value === true) {
-                        $tmp_value = addslashes($tmp_value);
-                    }
-                }
-            }
-            $tmp_key = ($trim_key ? trim($k) : $k);
-            $tmp_key = ($slash_key ? addslashes($tmp_key) : $tmp_key);
-            $r[$tmp_key] = $tmp_value;
-        }
-        return $r;
+        return null;
     }
 
     /**
@@ -701,17 +596,10 @@ class System {
     }
 
     /**
-     * Remove given files.
-     *
-     * @param mixed $files
-     *            string array with full names of files to remove
+     * @deprecated
      */
     public static function removeFiles($files) {
-        foreach ($files as $v) {
-            if (file_exists($v)) {
-                unlink($v);
-            }
-        }
+        return null;
     }
 
     /**
