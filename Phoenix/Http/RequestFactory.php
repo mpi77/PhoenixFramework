@@ -10,7 +10,7 @@ use \Phoenix\Utils\System;
 /**
  * Request factory object.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  *        
  */
@@ -215,7 +215,7 @@ class RequestFactory {
             
             $name = $files["name"][$i];
             if (get_magic_quotes_gpc()) {
-                $name = stripSlashes($name);
+                $name = Strings::stripslashes($name);
             }
             if (!self::$binary && is_string($name) && (!preg_match($reChars, $name) || preg_last_error())) {
                 $name = "renamed";
