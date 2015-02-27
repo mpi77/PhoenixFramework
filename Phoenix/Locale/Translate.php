@@ -8,7 +8,7 @@ use \App\AppTranslator;
 /**
  * Translate is wrapper for ModuleTranslators.
  *
- * @version 1.10
+ * @version 1.11
  * @author MPI
  *        
  */
@@ -54,7 +54,7 @@ class Translate {
      *            language prefix defined as IApplicationTranslator::LANG_PREFIX index in AppTranslator::$languages[i]; if is null then default language is selected
      */
     public static function es($translator_module, $key, $language = null) {
-        echo htmlspecialchars(self::get($translator_module, $key, $language));
+        echo htmlspecialchars(self::get($translator_module, $key, $language), ENT_HTML5, "UTF-8");
     }
 
     /**

@@ -13,7 +13,7 @@ use \Phoenix\Exceptions\WarningException;
 /**
  * Html response object.
  *
- * @version 1.12
+ * @version 1.13
  * @author MPI
  *        
  */
@@ -100,7 +100,7 @@ final class HtmlResponse extends Response {
      *
      * @param Phoenix\Utils\TemplateData $template_data            
      */
-    public function setTemplateData(TemplateData $template_data) {
+    public function setTemplateData(TemplateData $template_data = null) {
         if (!is_null($template_data)) {
             $this->template_data = $template_data;
         }

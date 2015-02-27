@@ -5,7 +5,7 @@ namespace Phoenix\Utils;
 /**
  * Root template data object.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *        
  */
@@ -92,11 +92,11 @@ class TemplateData {
      *
      * @param string $key            
      * @param boolean $enable_htmlspecialchars
-     *            default false
+     *            [optional] default false
      */
     public function e($key, $enable_htmlspecialchars = false) {
         if (is_string($key) && array_key_exists($key, $this->data) && is_string($this->data[$key])) {
-            echo ($enable_htmlspecialchars === true) ? htmlspecialchars($this->data[$key]) : $this->data[$key];
+            echo ($enable_htmlspecialchars === true) ? htmlspecialchars($this->data[$key], ENT_HTML5, "UTF-8") : $this->data[$key];
         }
     }
 }
