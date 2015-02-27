@@ -10,7 +10,7 @@ use \Phoenix\Utils\System;
 /**
  * Request factory object.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  *        
  */
@@ -21,7 +21,7 @@ class RequestFactory {
      * @internal
      *
      */
-    const CHARS = '#^[\x09\x0A\x0D\x20-\x7E\xA0-\x{10FFFF}]*+\z#u';
+    const CHARS = '\x09\x0A\x0D\x20-\x7E\xA0-\x{10FFFF}';
     /**
      *
      * @var array
@@ -93,34 +93,38 @@ class RequestFactory {
         $requestUrl = isset($_SERVER["REQUEST_URI"]) ? $_SERVER["REQUEST_URI"] : "/";
         $requestUrl = preg_replace(array_keys($this->urlFilters["url"]), array_values($this->urlFilters["url"]), $requestUrl);
         $tmp = explode("?", $requestUrl, 2);
-        $path = Strings::fixEncoding(preg_replace(array_keys($this->urlFilters["path"]), array_values($this->urlFilters["path"]), $tmp[0]));
+        $path = Url::unescape($tmp[0], '%/?#');
+        $path = Strings::fixEncoding(preg_replace(array_keys($this->urlFilters["path"]), array_values($this->urlFilters["path"]), $path));
         $url->setPath($path);
-        $url->setQuery(isset($tmp[1]) ? $tmp[1] : "");
+        // $url->setQuery(isset($tmp[1]) ? $tmp[1] : "");
         
         // detect script path
-        $script = isset($_SERVER["SCRIPT_NAME"]) ? $_SERVER["SCRIPT_NAME"] : "";
-        if ($path !== $script) {
-            $max = min(strlen($path), strlen($script));
-            for($i = 0; $i < $max && $path[$i] === $script[$i]; $i++)
+        $lpath = strtolower($path);
+        $script = isset($_SERVER["SCRIPT_NAME"]) ? strtolower($_SERVER["SCRIPT_NAME"]) : "";
+        if ($lpath !== $script) {
+            $max = min(strlen($lpath), strlen($script));
+            for($i = 0; $i < $max && $lpath[$i] === $script[$i]; $i++)
                 ;
-            $path = $i ? substr($path, 0, strrpos($path, "/", $i - $max - 1) + 1) : "/";
+            $path = $i ? substr($path, 0, strrpos($path, "/", $i - strlen($path) - 1) + 1) : "/";
         }
-        // $url->setScriptPath($path);
+        $url->setPath($path);
         
         // GET, POST, COOKIE
         $useFilter = (!in_array(ini_get("filter.default"), array (
                         "",
                         "unsafe_raw" 
         )) || ini_get("filter.default_flags"));
-        $query = $url->getQueryParameters();
+        $query = $useFilter ? filter_input_array(INPUT_GET, FILTER_UNSAFE_RAW) : (empty($_GET) ? array () : $_GET);
         $post = $useFilter ? filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW) : (empty($_POST) ? array () : $_POST);
         $cookies = $useFilter ? filter_input_array(INPUT_COOKIE, FILTER_UNSAFE_RAW) : (empty($_COOKIE) ? array () : $_COOKIE);
         if (get_magic_quotes_gpc()) {
+            $query = Strings::stripslashes($query, $useFilter);
             $post = Strings::stripslashes($post, $useFilter);
             $cookies = Strings::stripslashes($cookies, $useFilter);
         }
         
         // remove invalid characters
+        $reChars = '#^[' . self::CHARS . ']*+\z#u';
         if (!$this->binary) {
             $list = array (
                             & $query,
@@ -129,13 +133,13 @@ class RequestFactory {
             );
             while (list ( $key, $val ) = each($list)) {
                 foreach ($val as $k => $v) {
-                    if (is_string($k) && (!preg_match(self::CHARS, $k) || preg_last_error())) {
+                    if (is_string($k) && (!preg_match($reChars, $k) || preg_last_error())) {
                         unset($list[$key][$k]);
                     } elseif (is_array($v)) {
                         $list[$key][$k] = $v;
                         $list[] = & $list[$key][$k];
-                    } elseif (!preg_match(self::CHARS, $v) || preg_last_error()) {
-                        $list[$key][$k] = "";
+                    } else {
+                        $list[$key][$k] = (string) preg_replace('#[^' . self::CHARS . ']+#u', '', $v);
                     }
                 }
             }
@@ -147,7 +151,7 @@ class RequestFactory {
         $files = array ();
         if (!empty($_FILES)) {
             foreach ($_FILES as $k => $v) {
-                if (!$this->binary && is_string($k) && (!preg_match(self::CHARS, $k) || preg_last_error())) {
+                if (!$this->binary && is_string($k) && (!preg_match($reChars, $k) || preg_last_error())) {
                     continue;
                 }
                 $files[$k] = $this->rebuildFiles($_FILES[$k]);
@@ -200,6 +204,7 @@ class RequestFactory {
      */
     private function rebuildFiles(&$files) {
         $r = array ();
+        $reChars = '#^[' . self::CHARS . ']*+\z#u';
         
         for($i = 0; $i < count($files["name"]); $i++) {
             if (empty($files["name"][$i])) {
@@ -210,7 +215,7 @@ class RequestFactory {
             if (get_magic_quotes_gpc()) {
                 $name = stripSlashes($name);
             }
-            if (!$this->binary && is_string($name) && (!preg_match(self::CHARS, $name) || preg_last_error())) {
+            if (!$this->binary && is_string($name) && (!preg_match($reChars, $name) || preg_last_error())) {
                 $name = "renamed";
             }
             

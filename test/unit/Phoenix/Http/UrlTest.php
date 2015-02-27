@@ -2,7 +2,7 @@
 /**
  * Url unit test.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 include '../../../../Phoenix/Http/Url.php';
@@ -13,7 +13,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase {
     protected function setUp() {
         $this->url = null;
     }
-    
+
     public function testEmptyUrl() {
         $this->url = new Url();
         $this->assertEquals("", $this->url->getScheme());
@@ -47,7 +47,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase {
         
         $this->url->appendQuery("aa=bb");
         $this->url->appendQuery(array (
-                        "xx" => "uu"
+                        "xx" => "uu" 
         ));
         
         $this->assertEquals("sdp", $this->url->getScheme());
@@ -61,6 +61,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("/live/index.php", $this->url->getPath());
         $this->assertEquals("codec=xvid&bitrate=256&aa=bb&xx=uu", $this->url->getQuery());
         $this->assertEquals("xvid", $this->url->getQueryParameter("codec"));
+        $this->assertSame(array (
+                        "codec" => "xvid",
+                        "bitrate" => "256",
+                        "aa" => "bb",
+                        "xx" => "uu" 
+        ), $this->url->getQueryParameters());
         $this->assertEquals("lixx", $this->url->getFragment());
         $this->assertEquals("sdp://admin:pasw@domain.org:5589/live/index.php?codec=xvid&bitrate=256&aa=bb&xx=uu#lixx", $this->url->getAbsoluteUrl());
     }
@@ -77,6 +83,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("user:pass@www.localhost.com:1234", $this->url->getAuthority());
         $this->assertEquals("/phoenix/index.php", $this->url->getPath());
         $this->assertEquals("route=index&action=welcome", $this->url->getQuery());
+        $this->assertSame(array (
+                        "route" => "index",
+                        "action" => "welcome" 
+        ), $this->url->getQueryParameters());
         $this->assertEquals("hx", $this->url->getFragment());
         $this->assertEquals("index", $this->url->getQueryParameter("route"));
         $this->assertEquals("hxxp://user:pass@www.localhost.com:1234/phoenix/index.php?route=index&action=welcome#hx", $this->url->getAbsoluteUrl());
@@ -94,6 +104,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("www.localhost.net", $this->url->getAuthority());
         $this->assertEquals("/phoenix/index.php", $this->url->getPath());
         $this->assertEquals("route=index&action=welcome", $this->url->getQuery());
+        $this->assertSame(array (
+                        "route" => "index",
+                        "action" => "welcome" 
+        ), $this->url->getQueryParameters());
         $this->assertEquals("hx", $this->url->getFragment());
         $this->assertEquals("index", $this->url->getQueryParameter("route"));
         $this->assertEquals("http://www.localhost.net/phoenix/index.php?route=index&action=welcome#hx", $this->url->getAbsoluteUrl());
@@ -103,12 +117,16 @@ class UrlTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("", $this->url->getUser());
         $this->assertEquals("", $this->url->getPassword());
         $this->assertEquals("www.localhost.org", $this->url->getHost());
-        $this->assertEquals("80", $this->url->getPort());
+        $this->assertEquals("", $this->url->getPort());
         $this->assertEquals("/phoenix/", $this->url->getBasePath());
         $this->assertEquals("index.php?route=index&action=welcome#hx", $this->url->getRelativeUrl());
         $this->assertEquals("www.localhost.org", $this->url->getAuthority());
         $this->assertEquals("/phoenix/index.php", $this->url->getPath());
         $this->assertEquals("route=index&action=welcome", $this->url->getQuery());
+        $this->assertSame(array (
+                        "route" => "index",
+                        "action" => "welcome" 
+        ), $this->url->getQueryParameters());
         $this->assertEquals("hx", $this->url->getFragment());
         $this->assertEquals("index", $this->url->getQueryParameter("route"));
         $this->assertEquals("http://www.localhost.org/phoenix/index.php?route=index&action=welcome#hx", $this->url->getAbsoluteUrl());
@@ -126,6 +144,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("www.localhost.org", $this->url->getAuthority());
         $this->assertEquals("/phoenix/index.php", $this->url->getPath());
         $this->assertEquals("route=index&action=welcome", $this->url->getQuery());
+        $this->assertSame(array (
+                        "route" => "index",
+                        "action" => "welcome" 
+        ), $this->url->getQueryParameters());
         $this->assertEquals("hx", $this->url->getFragment());
         $this->assertEquals("index", $this->url->getQueryParameter("route"));
         $this->assertEquals("https://www.localhost.org/phoenix/index.php?route=index&action=welcome#hx", $this->url->getAbsoluteUrl());
@@ -135,12 +157,16 @@ class UrlTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("", $this->url->getUser());
         $this->assertEquals("", $this->url->getPassword());
         $this->assertEquals("www.localhost.net", $this->url->getHost());
-        $this->assertEquals("443", $this->url->getPort());
+        $this->assertEquals("", $this->url->getPort());
         $this->assertEquals("/phoenix/", $this->url->getBasePath());
         $this->assertEquals("index.php?route=index&action=welcome#hx", $this->url->getRelativeUrl());
         $this->assertEquals("www.localhost.net", $this->url->getAuthority());
         $this->assertEquals("/phoenix/index.php", $this->url->getPath());
         $this->assertEquals("route=index&action=welcome", $this->url->getQuery());
+        $this->assertSame(array (
+                        "route" => "index",
+                        "action" => "welcome" 
+        ), $this->url->getQueryParameters());
         $this->assertEquals("hx", $this->url->getFragment());
         $this->assertEquals("index", $this->url->getQueryParameter("route"));
         $this->assertEquals("https://www.localhost.net/phoenix/index.php?route=index&action=welcome#hx", $this->url->getAbsoluteUrl());
@@ -151,6 +177,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("index", $this->url->getQueryParameter("route"));
         $this->url->setQueryParameter("route", "RXX");
         $this->assertEquals("RXX", $this->url->getQueryParameter("route"));
+        $this->assertSame(array (
+                        "route" => "RXX",
+                        "action" => "welcome" 
+        ), $this->url->getQueryParameters());
     }
 
     public function testUrlModifications() {
@@ -180,6 +210,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("admin:pasw@domain.org:5589", $this->url->getAuthority());
         $this->assertEquals("/live/index.php", $this->url->getPath());
         $this->assertEquals("codec=xvid&bitrate=256&aa=bb&xx=uu", $this->url->getQuery());
+        $this->assertSame(array (
+                        "codec" => "xvid",
+                        "bitrate" => "256",
+                        "aa" => "bb",
+                        "xx" => "uu" 
+        ), $this->url->getQueryParameters());
         $this->assertEquals("xvid", $this->url->getQueryParameter("codec"));
         $this->assertEquals("lixx", $this->url->getFragment());
     }
@@ -194,6 +230,101 @@ class UrlTest extends \PHPUnit_Framework_TestCase {
         $this->url = new Url("hxxp://user:pass%40www.localhost.com:1234/phoenix/index.php?route=index&action=welcome#hx");
         $this->url->canonicalize();
         $this->assertEquals("hxxp://user:pass@www.localhost.com:1234/phoenix/index.php?route=index&action=welcome#hx", $this->url->getAbsoluteUrl());
+    }
+
+    public function testParsedHomepageUrl() {
+        $this->url = new Url("www.localhost.com?action=index");
+        $this->assertEquals("", $this->url->getScheme());
+        $this->assertEquals("", $this->url->getUser());
+        $this->assertEquals("", $this->url->getPassword());
+        $this->assertEquals("", $this->url->getHost());
+        $this->assertEquals("", $this->url->getPort());
+        $this->assertEquals("", $this->url->getBasePath());
+        $this->assertEquals("www.localhost.com?action=index", $this->url->getRelativeUrl());
+        $this->assertEquals("", $this->url->getAuthority());
+        $this->assertEquals("www.localhost.com", $this->url->getPath());
+        $this->assertEquals("action=index", $this->url->getQuery());
+        $this->assertSame(array (
+                        "action" => "index" 
+        ), $this->url->getQueryParameters());
+        $this->assertEquals("", $this->url->getFragment());
+        $this->assertEquals("", $this->url->getQueryParameter("route"));
+        $this->assertEquals("//www.localhost.com?action=index", $this->url->getAbsoluteUrl());
+    }
+
+    public function testRewritedUrl() {
+        $this->url = new Url("http://localhost.com/gallery/view/1/?sort=asc");
+        $this->url->setQuery(array (
+                        "route" => "page",
+                        "action" => "edit",
+                        "id" => "1" 
+        ));
+        $script = "/index.php";
+        $path = $this->url->getPath();
+        if ($path !== $script) {
+            $max = min(strlen($path), strlen($script));
+            for($i = 0; $i < $max && $path[$i] === $script[$i]; $i++)
+                ;
+            $path = $i ? substr($path, 0, strrpos($path, "/", $i - $max - 1) + 1) : "/";
+        }
+        $this->url->setPath($path);
+        
+        $this->assertEquals("http", $this->url->getScheme());
+        $this->assertEquals("", $this->url->getUser());
+        $this->assertEquals("", $this->url->getPassword());
+        $this->assertEquals("localhost.com", $this->url->getHost());
+        $this->assertEquals("", $this->url->getPort());
+        $this->assertEquals("/", $this->url->getBasePath());
+        $this->assertEquals("?route=page&action=edit&id=1", $this->url->getRelativeUrl());
+        $this->assertEquals("localhost.com", $this->url->getAuthority());
+        $this->assertEquals("/", $this->url->getPath());
+        $this->assertEquals("route=page&action=edit&id=1", $this->url->getQuery());
+        $this->assertSame(array (
+                        "route" => "page",
+                        "action" => "edit",
+                        "id" => "1" 
+        ), $this->url->getQueryParameters());
+        $this->assertEquals("", $this->url->getFragment());
+        $this->assertEquals("page", $this->url->getQueryParameter("route"));
+        $this->assertEquals("http://localhost.com/?route=page&action=edit&id=1", $this->url->getAbsoluteUrl());
+    }
+
+    public function testRewritedUrl2() {
+        $this->url = new Url("http://localhost.com/gallery/view/1/?sort=asc");
+        $this->url->appendQuery(array (
+                        "route" => "page",
+                        "action" => "edit",
+                        "id" => "1" 
+        ));
+        $script = "/index.php";
+        $path = $this->url->getPath();
+        if ($path !== $script) {
+            $max = min(strlen($path), strlen($script));
+            for($i = 0; $i < $max && $path[$i] === $script[$i]; $i++)
+                ;
+            $path = $i ? substr($path, 0, strrpos($path, "/", $i - $max - 1) + 1) : "/";
+        }
+        $this->url->setPath($path);
+        
+        $this->assertEquals("http", $this->url->getScheme());
+        $this->assertEquals("", $this->url->getUser());
+        $this->assertEquals("", $this->url->getPassword());
+        $this->assertEquals("localhost.com", $this->url->getHost());
+        $this->assertEquals("", $this->url->getPort());
+        $this->assertEquals("/", $this->url->getBasePath());
+        $this->assertEquals("?sort=asc&route=page&action=edit&id=1", $this->url->getRelativeUrl());
+        $this->assertEquals("localhost.com", $this->url->getAuthority());
+        $this->assertEquals("/", $this->url->getPath());
+        $this->assertEquals("sort=asc&route=page&action=edit&id=1", $this->url->getQuery());
+        $this->assertSame(array (
+                        "sort" => "asc",
+                        "route" => "page",
+                        "action" => "edit",
+                        "id" => "1" 
+        ), $this->url->getQueryParameters());
+        $this->assertEquals("", $this->url->getFragment());
+        $this->assertEquals("page", $this->url->getQueryParameter("route"));
+        $this->assertEquals("http://localhost.com/?sort=asc&route=page&action=edit&id=1", $this->url->getAbsoluteUrl());
     }
 }
 ?>

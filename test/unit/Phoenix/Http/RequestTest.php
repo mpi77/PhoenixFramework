@@ -2,7 +2,7 @@
 /**
  * Request unit test.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  * */
 include '../../../../Phoenix/Http/Url.php';
@@ -15,6 +15,32 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
 
     protected function setUp() {
         $this->request = null;
+    }
+    
+    public function testEmptyConstructor() {
+        $url = new Url();
+        
+        $this->request = new Request($url, null);
+        $this->assertSame($url, $this->request->getUrl());
+        $this->assertNull($this->request->getMethod());
+        $this->assertFalse($this->request->isMethod("GET"));
+        $this->assertFalse($this->request->isGet());
+        $this->assertFalse($this->request->isPost());
+        $this->assertFalse($this->request->isAjax());
+        $this->assertFalse($this->request->isHttp());
+        $this->assertFalse($this->request->isHttps());
+    
+        $this->assertNull($this->request->getCookie("test"));
+        $this->assertSame(array (), $this->request->getCookies());
+        $this->assertNull($this->request->getFile("unknown", "file"));
+        $this->assertSame(array (), $this->request->getFiles());
+        $this->assertNull($this->request->getHeader("unknown"));
+        $this->assertSame(array (), $this->request->getHeaders());
+        $this->assertSame(array (), $this->request->getPost());
+        $this->assertNull($this->request->getPost("unknown"));
+        $this->assertNull($this->request->getReferer());
+        $this->assertNull($this->request->getRemoteAddress());
+        $this->assertNull($this->request->getRemoteHost());
     }
 
     public function testMinimalConstructor() {

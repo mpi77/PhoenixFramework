@@ -4,12 +4,13 @@ namespace Phoenix\Http;
 
 use Phoenix\Exceptions\WarningException;
 use Phoenix\Exceptions\FrameworkExceptions;
+use Phoenix\Utils\Strings;
 
 /**
  * Url object.
  * It is based on URI Syntax (RFC 3986).
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  *        
  */
@@ -62,9 +63,9 @@ class Url {
     
     /**
      *
-     * @var string
+     * @var array
      */
-    private $query = "";
+    private $query = array ();
     
     /**
      *
@@ -81,22 +82,19 @@ class Url {
      */
     public function __construct($url = null) {
         if (is_string($url)) {
-            $parts = @parse_url($url);
-            if ($parts === false) {
+            $p = @parse_url($url);
+            if ($p === false) {
                 throw new WarningException(FrameworkExceptions::W_URL_UNSUPPORTED_FORMAT);
             }
             
-            foreach ($parts as $key => $val) {
-                $this->$key = $val;
-            }
-            
-            if (!$this->port && isset(self::$default_ports[$this->scheme])) {
-                $this->port = self::$default_ports[$this->scheme];
-            }
-            
-            if ($this->path === "" && ($this->scheme === "http" || $this->scheme === "https")) {
-                $this->path = "/";
-            }
+            $this->scheme = isset($p["scheme"]) ? $p["scheme"] : "";
+            $this->port = isset($p["port"]) ? $p["port"] : null;
+            $this->host = isset($p["host"]) ? rawurldecode($p["host"]) : "";
+            $this->user = isset($p["user"]) ? rawurldecode($p["user"]) : "";
+            $this->pass = isset($p["pass"]) ? rawurldecode($p["pass"]) : "";
+            $this->setPath(isset($p["path"]) ? $p["path"] : "");
+            $this->setQuery(isset($p["query"]) ? $p["query"] : array ());
+            $this->fragment = isset($p["fragment"]) ? rawurldecode($p["fragment"]) : "";
         }
     }
 
@@ -223,23 +221,22 @@ class Url {
     /**
      * Sets the query part of URI.
      *
-     * @param string|array $query            
+     * @param array|string $query            
      * @return self
      */
     public function setQuery($query) {
-        $this->query = (string) (is_array($query) ? http_build_query($query, "", "&") : $query);
+        $this->query = is_array($query) ? $query : self::parseQuery($query);
         return $this;
     }
 
     /**
      * Appends the query part of URI.
      *
-     * @param string|array $query            
+     * @param array|string $query            
      * @return self
      */
     public function appendQuery($query) {
-        $query = (string) (is_array($query) ? http_build_query($query, "", "&") : $query);
-        $this->query .= ($this->query === "" || $query === "") ? $query : "&" . $query;
+        $this->query = is_array($query) ? $this->query + $query : self::parseQuery($this->getQuery() . "&" . $query);
         return $this;
     }
 
@@ -249,7 +246,10 @@ class Url {
      * @return string
      */
     public function getQuery() {
-        return $this->query;
+        if (PHP_VERSION_ID < 50400) {
+            return str_replace("+", "%20", http_build_query($this->query, "", "&"));
+        }
+        return http_build_query($this->query, "", "&", PHP_QUERY_RFC3986);
     }
 
     /**
@@ -258,9 +258,7 @@ class Url {
      * @return array
      */
     public function getQueryParameters() {
-        $r = array ();
-        parse_str($this->query, $r);
-        return $r;
+        return $this->query;
     }
 
     /**
@@ -272,8 +270,7 @@ class Url {
      * @return mixed
      */
     public function getQueryParameter($name, $default = null) {
-        parse_str($this->query, $params);
-        return isset($params[$name]) ? $params[$name] : $default;
+        return isset($this->query[$name]) ? $this->query[$name] : $default;
     }
 
     /**
@@ -285,13 +282,7 @@ class Url {
      * @return self
      */
     public function setQueryParameter($name, $value) {
-        parse_str($this->query, $params);
-        if ($value === null) {
-            unset($params[$name]);
-        } else {
-            $params[$name] = $value;
-        }
-        $this->setQuery($params);
+        $this->query[$name] = $value;
         return $this;
     }
 
@@ -321,7 +312,7 @@ class Url {
      * @return string
      */
     public function getAbsoluteUrl() {
-        return $this->getHostUrl() . $this->path . ($this->query === "" ? "" : "?" . $this->query) . ($this->fragment === "" ? "" : "#" . $this->fragment);
+        return $this->getHostUrl() . $this->path . (($tmp = $this->getQuery()) ? "?" . $tmp : "") . ($this->fragment === "" ? "" : "#" . $this->fragment);
     }
 
     /**
@@ -330,16 +321,7 @@ class Url {
      * @return string
      */
     public function getAuthority() {
-        $authority = $this->host;
-        if ($this->port && (!isset(self::$default_ports[$this->scheme]) || $this->port !== self::$default_ports[$this->scheme])) {
-            $authority .= ":" . $this->port;
-        }
-        
-        if ($this->user !== "" && $this->scheme !== "http" && $this->scheme !== "https") {
-            $authority = $this->user . ($this->pass === "" ? "" : ":" . $this->pass) . "@" . $authority;
-        }
-        
-        return $authority;
+        return $this->host === "" ? "" : ($this->user !== "" && $this->scheme !== "http" && $this->scheme !== "https" ? rawurlencode($this->user) . ($this->pass === "" ? "" : ":" . rawurlencode($this->pass)) . "@" : "") . $this->host . ($this->port && (!isset(self::$default_ports[$this->scheme]) || $this->port !== self::$default_ports[$this->scheme]) ? ":" . $this->port : "");
     }
 
     /**
@@ -387,15 +369,15 @@ class Url {
      */
     public function isEqual($url) {
         $url = new self($url);
-        parse_str($url->query, $query);
+        $query = $url->query;
         sort($query);
-        parse_str($this->query, $query2);
+        $query2 = $this->query;
         sort($query2);
         $http = in_array($this->scheme, array (
-                        'http',
-                        'https' 
+                        "http",
+                        "https" 
         ), true);
-        return $url->scheme === $this->scheme && !strcasecmp(rawurldecode($url->host), rawurldecode($this->host)) && $url->port === $this->port && ($http || rawurldecode($url->user) === rawurldecode($this->user)) && ($http || rawurldecode($url->pass) === rawurldecode($this->pass)) && self::unescape($url->path, "%/") === self::unescape($this->path, "%/") && $query === $query2 && rawurldecode($url->fragment) === rawurldecode($this->fragment);
+        return $url->scheme === $this->scheme && !strcasecmp($url->host, $this->host) && $url->getPort() === $this->getPort() && ($http || $url->user === $this->user) && ($http || $url->pass === $this->pass) && self::unescape($url->path, "%/") === self::unescape($this->path, "%/") && $query === $query2 && $url->fragment === $this->fragment;
     }
 
     /**
@@ -404,9 +386,10 @@ class Url {
      * @return self
      */
     public function canonicalize() {
-        $this->path = $this->path === "" ? "/" : self::unescape($this->path, "%/");
-        $this->host = strtolower(rawurldecode($this->host));
-        $this->query = self::unescape(strtr($this->query, "+", " "), "%&;=+");
+        $this->path = preg_replace_callback('#[^!$&\'()*+,/:;=@%]+#', function ($m) {
+            return rawurlencode($m[0]);
+        }, self::unescape($this->path, "%/"));
+        $this->host = strtolower($this->host);
         return $this;
     }
 
@@ -432,11 +415,26 @@ class Url {
         // within a path segment, the characters "/", ";", "=", "?" are reserved
         // within a query component, the characters ";", "/", "?", ":", "@", "&", "=", "+", ",", "$" are reserved.
         if ($reserved !== "") {
-            $s = preg_replace_callback("#%(" . substr(chunk_split(bin2hex($reserved), 2, "|"), 0, -1) . ")#i", function ($m) {
+            $s = preg_replace_callback('#%(' . substr(chunk_split(bin2hex($reserved), 2, '|'), 0, -1) . ')#i', function ($m) {
                 return "%25" . strtoupper($m[1]);
             }, $s);
         }
         return rawurldecode($s);
     }
+
+    /**
+     * Parses query string.
+     *
+     * @param string $s            
+     * @return array
+     */
+    public static function parseQuery($s) {
+        parse_str($s, $res);
+        if (get_magic_quotes_gpc()) { // for PHP 5.3
+            $res = Strings::stripSlashes($res);
+        }
+        return $res;
+    }
 }
+
 ?>
