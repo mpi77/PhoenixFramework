@@ -10,7 +10,7 @@ use \Phoenix\Utils\System;
 /**
  * Request factory object.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  *        
  */
@@ -26,7 +26,7 @@ class RequestFactory {
      *
      * @var array
      */
-    public $urlFilters = array (
+    private static $urlFilters = array (
                     "path" => array (
                                     "/\/{2,}/" => "/" 
                     ),
@@ -37,33 +37,36 @@ class RequestFactory {
      *
      * @var bool
      */
-    private $binary = false;
+    private static $binary = false;
     /**
      *
      * @var array
      */
-    private $proxies = array ();
+    private static $proxies = array ();
+
+    private function __construct() {
+    }
 
     /**
      *
      * @param bool $binary
      *            [optional] default is true
-     * @return self
+     * @return boolean
      */
-    public function setBinary($binary = true) {
-        $this->binary = (bool) $binary;
-        return $this;
+    public static function setBinary($binary = true) {
+        self::$binary = (bool) $binary;
+        return true;
     }
 
     /**
      * Sets proxy.
      *
      * @param array|string $proxy            
-     * @return self
+     * @return boolean
      */
-    public function setProxy($proxy) {
-        $this->proxies = (array) $proxy;
-        return $this;
+    public static function setProxy($proxy) {
+        self::$proxies = (array) $proxy;
+        return true;
     }
 
     /**
@@ -71,7 +74,7 @@ class RequestFactory {
      *
      * @return Phoenix\Http\Request
      */
-    public function createRequest() {
+    public static function createRequest() {
         
         // prepare Url of the request.
         $url = new Url();
@@ -91,12 +94,11 @@ class RequestFactory {
         
         // path & query
         $requestUrl = isset($_SERVER["REQUEST_URI"]) ? $_SERVER["REQUEST_URI"] : "/";
-        $requestUrl = preg_replace(array_keys($this->urlFilters["url"]), array_values($this->urlFilters["url"]), $requestUrl);
+        $requestUrl = preg_replace(array_keys(self::$urlFilters["url"]), array_values(self::$urlFilters["url"]), $requestUrl);
         $tmp = explode("?", $requestUrl, 2);
         $path = Url::unescape($tmp[0], "%/?#");
-        $path = Strings::fixEncoding(preg_replace(array_keys($this->urlFilters["path"]), array_values($this->urlFilters["path"]), $path));
+        $path = Strings::fixEncoding(preg_replace(array_keys(self::$urlFilters["path"]), array_values(self::$urlFilters["path"]), $path));
         $url->setPath($path);
-        // $url->setQuery(isset($tmp[1]) ? $tmp[1] : "");
         
         // detect script path
         $lpath = strtolower($path);
@@ -125,7 +127,7 @@ class RequestFactory {
         
         // remove invalid characters
         $reChars = '/^[' . self::CHARS . ']*+\z/u';
-        if (!$this->binary) {
+        if (!self::$binary) {
             $list = array (
                             & $query,
                             & $post,
@@ -151,10 +153,10 @@ class RequestFactory {
         $files = array ();
         if (!empty($_FILES)) {
             foreach ($_FILES as $k => $v) {
-                if (!$this->binary && is_string($k) && (!preg_match($reChars, $k) || preg_last_error())) {
+                if (!self::$binary && is_string($k) && (!preg_match($reChars, $k) || preg_last_error())) {
                     continue;
                 }
-                $files[$k] = $this->rebuildFiles($_FILES[$k]);
+                $files[$k] = self::rebuildFiles($_FILES[$k]);
             }
         }
         
@@ -176,7 +178,7 @@ class RequestFactory {
         $remoteHost = isset($_SERVER["REMOTE_HOST"]) ? $_SERVER["REMOTE_HOST"] : NULL;
         
         // proxy
-        foreach ($this->proxies as $proxy) {
+        foreach (self::$proxies as $proxy) {
             if (System::ipMatch($remoteAddr, $proxy)) {
                 if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
                     $remoteAddr = trim(current(explode(",", $_SERVER["HTTP_X_FORWARDED_FOR"])));
@@ -202,7 +204,7 @@ class RequestFactory {
      * @param array $file_post            
      * @return array
      */
-    private function rebuildFiles(&$files) {
+    private static function rebuildFiles(&$files) {
         $r = array ();
         $reChars = '/^[' . self::CHARS . ']*+\z/u';
         
@@ -215,7 +217,7 @@ class RequestFactory {
             if (get_magic_quotes_gpc()) {
                 $name = stripSlashes($name);
             }
-            if (!$this->binary && is_string($name) && (!preg_match($reChars, $name) || preg_last_error())) {
+            if (!self::$binary && is_string($name) && (!preg_match($reChars, $name) || preg_last_error())) {
                 $name = "renamed";
             }
             

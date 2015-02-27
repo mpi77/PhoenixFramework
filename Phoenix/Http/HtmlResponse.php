@@ -4,38 +4,48 @@ namespace Phoenix\Http;
 
 use \Exception;
 use \Phoenix\Core\Config;
+use \Phoenix\Http\Response;
 use \Phoenix\Utils\System;
 use \Phoenix\Utils\TemplateData;
-use \Phoenix\Http\Response;
 use \Phoenix\Exceptions\NoticeException;
 use \Phoenix\Exceptions\WarningException;
 
 /**
  * Html response object.
  *
- * @version 1.11
+ * @version 1.12
  * @author MPI
  *        
- * @todo TemplateData
  */
 final class HtmlResponse extends Response {
+    const CONTENT_TYPE_HTML = "text/html";
+    const CHARSET_HTML = "utf-8";
     const HEADER_TEMPLATE_FILE = "MasterHeaderTemplate.php";
     const FOOTER_TEMPLATE_FILE = "MasterFooterTemplate.php";
+    
+    /**
+     *
+     * @var Phoenix\Utils\TemplateData
+     */
     private $template_data;
+    /**
+     *
+     * @var string
+     */
     private $template_file;
 
     /**
      * HtmlResponse constructor.
      *
      * @param string $template_file
-     *            default null
-     * @param TemplateData $template_data
-     *            default null
+     *            [optional] default null
+     * @param Phoenix\Utils\TemplateData $template_data
+     *            [optional] default null
      * @param Exception $e
-     *            default null
+     *            [optional] default null
      */
     public function __construct($template_file = null, TemplateData $template_data = null, Exception $e = null) {
-        parent::__construct(Response::CONTENT_TYPE_HTML, Response::CHARSET_HTML, $e);
+        parent::__construct(self::CONTENT_TYPE_HTML, self::CHARSET_HTML, $e);
         $this->setTemplateData($template_data);
         $this->setTemplateFile($template_file);
     }
@@ -88,9 +98,9 @@ final class HtmlResponse extends Response {
     /**
      * Set response template data.
      *
-     * @param TemplateData $template_data            
+     * @param Phoenix\Utils\TemplateData $template_data            
      */
-    public function setTemplateData(TemplateData $template_data = null) {
+    public function setTemplateData(TemplateData $template_data) {
         if (!is_null($template_data)) {
             $this->template_data = $template_data;
         }

@@ -3,38 +3,91 @@
 namespace Phoenix\Http;
 
 use \Exception;
-use \Phoenix\Http\HtmlResponse;
-use \Phoenix\Http\JsonResponse;
-use \Phoenix\Http\XmlResponse;
 
 /**
  * Root response object.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  *        
  */
 abstract class Response {
-    const RESPONSE_UNKNOWN = 0;
-    const RESPONSE_HTML = 1;
-    const RESPONSE_JSON = 2;
-    const RESPONSE_XML = 3;
-    const CONTENT_TYPE_HTML = "text/html";
-    const CONTENT_TYPE_JSON = "application/json";
-    const CONTENT_TYPE_XML = "application/xml";
-    const CHARSET_HTML = "utf-8";
-    const CHARSET_JSON = "utf-8";
-    const CHARSET_XML = "utf-8";
+    const DEFAULT_CONTENT_TYPE = "text/html";
+    const DEFAULT_CHARSET = "utf-8";
+    
+    /**
+     * HTTP 1.1 response code
+     */
+    const S100_CONTINUE = 100;
+    const S101_SWITCHING_PROTOCOLS = 101;
+    const S200_OK = 200;
+    const S201_CREATED = 201;
+    const S202_ACCEPTED = 202;
+    const S203_NON_AUTHORITATIVE_INFORMATION = 203;
+    const S204_NO_CONTENT = 204;
+    const S205_RESET_CONTENT = 205;
+    const S206_PARTIAL_CONTENT = 206;
+    const S300_MULTIPLE_CHOICES = 300;
+    const S301_MOVED_PERMANENTLY = 301;
+    const S302_FOUND = 302;
+    const S303_SEE_OTHER = 303;
+    const S303_POST_GET = 303;
+    const S304_NOT_MODIFIED = 304;
+    const S305_USE_PROXY = 305;
+    const S307_TEMPORARY_REDIRECT = 307;
+    const S400_BAD_REQUEST = 400;
+    const S401_UNAUTHORIZED = 401;
+    const S402_PAYMENT_REQUIRED = 402;
+    const S403_FORBIDDEN = 403;
+    const S404_NOT_FOUND = 404;
+    const S405_METHOD_NOT_ALLOWED = 405;
+    const S406_NOT_ACCEPTABLE = 406;
+    const S407_PROXY_AUTHENTICATION_REQUIRED = 407;
+    const S408_REQUEST_TIMEOUT = 408;
+    const S409_CONFLICT = 409;
+    const S410_GONE = 410;
+    const S411_LENGTH_REQUIRED = 411;
+    const S412_PRECONDITION_FAILED = 412;
+    const S413_REQUEST_ENTITY_TOO_LARGE = 413;
+    const S414_REQUEST_URI_TOO_LONG = 414;
+    const S415_UNSUPPORTED_MEDIA_TYPE = 415;
+    const S416_REQUESTED_RANGE_NOT_SATISFIABLE = 416;
+    const S417_EXPECTATION_FAILED = 417;
+    const S426_UPGRADE_REQUIRED = 426;
+    const S500_INTERNAL_SERVER_ERROR = 500;
+    const S501_NOT_IMPLEMENTED = 501;
+    const S502_BAD_GATEWAY = 502;
+    const S503_SERVICE_UNAVAILABLE = 503;
+    const S504_GATEWAY_TIMEOUT = 504;
+    const S505_HTTP_VERSION_NOT_SUPPORTED = 505;
+    
+    /**
+     *
+     * @var Exception
+     */
     private $exception;
+    
+    /**
+     *
+     * @var string
+     */
     private $header_content_type;
+    
+    /**
+     *
+     * @var string
+     */
     private $header_charset;
 
     /**
      * Response constructor.
      *
-     * @param string $content_type            
-     * @param string $charset            
-     * @param Exception $e            
+     * @param string $content_type
+     *            [optional] default null
+     * @param string $charset
+     *            [optional] default null
+     * @param Exception $e
+     *            [optional] default null
      */
     public function __construct($content_type = null, $charset = null, Exception $e = null) {
         $this->setHeader($content_type, $charset);
@@ -91,57 +144,9 @@ abstract class Response {
      */
     protected final function sendHeader() {
         if (empty($this->header_content_type) || empty($this->header_charset)) {
-            $this->setHeader(self::CONTENT_TYPE_HTML, self::CHARSET_HTML);
+            $this->setHeader(self::DEFAULT_CONTENT_TYPE, self::DEFAULT_CHARSET);
         }
         header("Content-Type: " . $this->header_content_type . "; charset=" . $this->header_charset);
-    }
-
-    /**
-     * Get new response object by given output format.
-     *
-     * @param integer $format
-     *            constants from Response class with preffix RESPONSE_*
-     *            
-     * @return (Html+Json+Xml)Response
-     */
-    public static final function responseFactory($format) {
-        switch ($format) {
-            case self::RESPONSE_HTML :
-                return new HtmlResponse();
-                break;
-            case self::RESPONSE_JSON :
-                return new JsonResponse();
-                break;
-            case self::RESPONSE_XML :
-                return new XmlResponse();
-                break;
-            default :
-                return new HtmlResponse();
-        }
-    }
-
-    /**
-     * Is output fomat valid.
-     *
-     * @param integer $format
-     *            constants from Response class with preffix RESPONSE_*
-     *            
-     * @return boolean
-     */
-    public static final function isValidResponseFormat($format) {
-        if (!is_numeric($format)) {
-            return false;
-        }
-        
-        switch ($format) {
-            case self::RESPONSE_HTML :
-            case self::RESPONSE_JSON :
-            case self::RESPONSE_XML :
-                return true;
-                break;
-            default :
-                return false;
-        }
     }
 }
 ?>

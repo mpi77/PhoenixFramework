@@ -8,14 +8,22 @@ use \Phoenix\Http\Response;
 /**
  * Xml response object.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  *        
  */
 final class XmlResponse extends Response {
+    const CONTENT_TYPE_XML = "application/xml";
+    const CHARSET_XML = "utf-8";
 
+    /**
+     * XmlResponse constructor.
+     *
+     * @param Exception $e
+     *            [optional] default null
+     */
     public function __construct(Exception $e = null) {
-        parent::__construct(Response::CONTENT_TYPE_XML, Response::CHARSET_XML, $e);
+        parent::__construct(self::CONTENT_TYPE_XML, self::CHARSET_XML, $e);
     }
 
     /**
