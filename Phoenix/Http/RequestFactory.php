@@ -10,7 +10,7 @@ use \Phoenix\Utils\System;
 /**
  * Request factory object.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  *        
  */
@@ -28,7 +28,7 @@ class RequestFactory {
      */
     public $urlFilters = array (
                     "path" => array (
-                                    "#/{2,}#" => "/" 
+                                    "/\/{2,}/" => "/" 
                     ),
                     "url" => array () 
     );
@@ -80,7 +80,7 @@ class RequestFactory {
         $url->setPassword(isset($_SERVER["PHP_AUTH_PW"]) ? $_SERVER["PHP_AUTH_PW"] : "");
         
         // host & port
-        if ((isset($_SERVER[$tmp = "HTTP_HOST"]) || isset($_SERVER[$tmp = "SERVER_NAME"])) && preg_match("#^([a-z0-9_.-]+|\[[a-f0-9:]+\])(:\d+)?\z#i", $_SERVER[$tmp], $pair)) {
+        if ((isset($_SERVER[$tmp = "HTTP_HOST"]) || isset($_SERVER[$tmp = "SERVER_NAME"])) && preg_match("/^([a-z0-9_.-]+|\[[a-f0-9:]+\])(:\d+)?\z/i", $_SERVER[$tmp], $pair)) {
             $url->setHost(strtolower($pair[1]));
             if (isset($pair[2])) {
                 $url->setPort(substr($pair[2], 1));
@@ -93,7 +93,7 @@ class RequestFactory {
         $requestUrl = isset($_SERVER["REQUEST_URI"]) ? $_SERVER["REQUEST_URI"] : "/";
         $requestUrl = preg_replace(array_keys($this->urlFilters["url"]), array_values($this->urlFilters["url"]), $requestUrl);
         $tmp = explode("?", $requestUrl, 2);
-        $path = Url::unescape($tmp[0], '%/?#');
+        $path = Url::unescape($tmp[0], "%/?#");
         $path = Strings::fixEncoding(preg_replace(array_keys($this->urlFilters["path"]), array_values($this->urlFilters["path"]), $path));
         $url->setPath($path);
         // $url->setQuery(isset($tmp[1]) ? $tmp[1] : "");
@@ -124,7 +124,7 @@ class RequestFactory {
         }
         
         // remove invalid characters
-        $reChars = '#^[' . self::CHARS . ']*+\z#u';
+        $reChars = '/^[' . self::CHARS . ']*+\z/u';
         if (!$this->binary) {
             $list = array (
                             & $query,
@@ -139,7 +139,7 @@ class RequestFactory {
                         $list[$key][$k] = $v;
                         $list[] = & $list[$key][$k];
                     } else {
-                        $list[$key][$k] = (string) preg_replace('#[^' . self::CHARS . ']+#u', '', $v);
+                        $list[$key][$k] = (string) preg_replace('/[^' . self::CHARS . ']+/u', "", $v);
                     }
                 }
             }
@@ -188,7 +188,7 @@ class RequestFactory {
             }
         }
         $method = isset($_SERVER["REQUEST_METHOD"]) ? $_SERVER["REQUEST_METHOD"] : NULL;
-        if ($method === "POST" && isset($_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"]) && preg_match("#^[A-Z]+\z#", $_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"])) {
+        if ($method === "POST" && isset($_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"]) && preg_match("/^[A-Z]+\z/", $_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"])) {
             $method = $_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"];
         }
         
@@ -204,7 +204,7 @@ class RequestFactory {
      */
     private function rebuildFiles(&$files) {
         $r = array ();
-        $reChars = '#^[' . self::CHARS . ']*+\z#u';
+        $reChars = '/^[' . self::CHARS . ']*+\z/u';
         
         for($i = 0; $i < count($files["name"]); $i++) {
             if (empty($files["name"][$i])) {
