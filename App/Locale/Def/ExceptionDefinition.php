@@ -7,7 +7,7 @@ use \Phoenix\Locale\IModuleDefinition;
 /**
  * Exception definition.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  *        
  */
@@ -19,6 +19,9 @@ class ExceptionDefinition implements IModuleDefinition {
     const F_UNABLE_CONNECT_DB = 102;
     const F_UNABLE_SET_DB_CHARSET = 103;
     const F_UNABLE_SAVE_WARNING = 104;
+    const F_RESPONSE_HEADERS_SENT = 105;
+    const F_RESPONSE_INVALID_HTTP_CODE = 106;
+    const F_URL_PARSE_ERROR = 107;
     
     /* warning exceptions */
     const W_UNKNOWN = 200;
@@ -37,7 +40,6 @@ class ExceptionDefinition implements IModuleDefinition {
     const W_ROUTER_INVALID_ROUTE_ACTION = 251;
     const W_RESPONSE_INVALID_FORMAT = 260;
     const W_RESPONSE_UNSUPPORTED_FORMAT = 261;
-    const W_URL_UNSUPPORTED_FORMAT = 270;
     
     /* notice exceptions */
     const N_UNKNOWN = 500;

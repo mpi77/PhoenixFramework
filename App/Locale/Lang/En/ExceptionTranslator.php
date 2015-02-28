@@ -8,7 +8,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Exception translator.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  *        
  */
@@ -25,6 +25,9 @@ class ExceptionTranslator implements IModuleTranslator {
                     ED::F_UNABLE_CONNECT_DB => "Unnable to connect to db server.",
                     ED::F_UNABLE_SET_DB_CHARSET => "Unable to set db charset.",
                     ED::F_UNABLE_SAVE_WARNING => "Unable to save warning to db.",
+                    ED::F_RESPONSE_HEADERS_SENT => "Unable to send headers.",
+                    ED::F_RESPONSE_INVALID_HTTP_CODE => "Unable to set http status code.",
+                    ED::F_URL_PARSE_ERROR => "Unable to parse url.",
                     ED::W_UNKNOWN => "Unknown warning.",
                     ED::W_CLASS_NOT_FOUND => "Missing required class.",
                     ED::W_ACTION_IS_NOT_CALLABLE => "Requested action is not runnable.",

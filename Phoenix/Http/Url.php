@@ -2,7 +2,7 @@
 
 namespace Phoenix\Http;
 
-use Phoenix\Exceptions\WarningException;
+use Phoenix\Exceptions\FailureException;
 use Phoenix\Exceptions\FrameworkExceptions;
 use Phoenix\Utils\Strings;
 
@@ -10,7 +10,7 @@ use Phoenix\Utils\Strings;
  * Url object.
  * It is based on URI Syntax (RFC 3986).
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  *        
  */
@@ -84,7 +84,7 @@ class Url {
         if (is_string($url)) {
             $p = @parse_url($url);
             if ($p === false) {
-                throw new WarningException(FrameworkExceptions::W_URL_UNSUPPORTED_FORMAT);
+                throw new FailureException(FrameworkExceptions::F_URL_PARSE_ERROR);
             }
             
             $this->scheme = isset($p["scheme"]) ? $p["scheme"] : "";

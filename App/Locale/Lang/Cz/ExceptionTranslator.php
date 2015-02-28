@@ -8,7 +8,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Exception translator.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  *        
  */
@@ -25,6 +25,9 @@ class ExceptionTranslator implements IModuleTranslator {
                     ED::F_UNABLE_CONNECT_DB => "Nepovedlo se spojit s databází.",
                     ED::F_UNABLE_SET_DB_CHARSET => "Nepovedlo se nastavit kódování spojení s databází.",
                     ED::F_UNABLE_SAVE_WARNING => "Nepovedlo se uložit chybu do databáze.",
+                    ED::F_RESPONSE_HEADERS_SENT => "Nepovedlo se odeslat hlavičky ve správném pořadí.",
+                    ED::F_RESPONSE_INVALID_HTTP_CODE => "Nepodařilo se nastavit správný kód odpovědi.",
+                    ED::F_URL_PARSE_ERROR => "Nepodařilo se vytvořit url adresu.",
                     ED::W_UNKNOWN => "Neznámá chyba.",
                     ED::W_CLASS_NOT_FOUND => "Požadovaná třída nebyla nalezena.",
                     ED::W_ACTION_IS_NOT_CALLABLE => "Zadanou akci nelze spustit.",
