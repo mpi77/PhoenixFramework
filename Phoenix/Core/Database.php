@@ -13,7 +13,7 @@ use \PDOException;
  * Database provides interaction between this program
  * and db server.
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
  *        
  */
@@ -237,5 +237,4 @@ class Database {
         }
     }
 }
-
 ?>

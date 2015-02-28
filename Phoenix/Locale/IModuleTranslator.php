@@ -5,7 +5,7 @@ namespace Phoenix\Locale;
 /**
  * Module translator interface.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  */
 interface IModuleTranslator {

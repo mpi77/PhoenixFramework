@@ -5,7 +5,7 @@ namespace Phoenix\Core;
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.14
+ * @version 1.15
  * @author MPI
  *        
  */

@@ -5,7 +5,7 @@ namespace Phoenix\Core;
 /**
  * Root configurator object.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  *        
  */

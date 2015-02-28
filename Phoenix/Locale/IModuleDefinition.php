@@ -5,7 +5,7 @@ namespace Phoenix\Locale;
 /**
  * Module definition interface.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  */
 interface IModuleDefinition {

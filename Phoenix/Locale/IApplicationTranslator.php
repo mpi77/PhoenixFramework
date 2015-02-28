@@ -5,7 +5,7 @@ namespace Phoenix\Locale;
 /**
  * Application translator interface.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  */
 interface IApplicationTranslator {
