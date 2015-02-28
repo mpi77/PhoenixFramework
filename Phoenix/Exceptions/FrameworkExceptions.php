@@ -13,7 +13,7 @@ namespace Phoenix\Exceptions;
  * in AppConfigurator should be an integer greater 
  * than 1000.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  *        
  */
@@ -46,5 +46,7 @@ class FrameworkExceptions {
     const F_UNABLE_CONNECT_DB = 2;
     const F_UNABLE_SET_DB_CHARSET = 3;
     const F_UNABLE_SAVE_WARNING = 4;
+    const F_RESPONSE_HEADERS_SENT = 5;
+    const F_RESPONSE_INVALID_HTTP_CODE = 6;
 }
 ?>
