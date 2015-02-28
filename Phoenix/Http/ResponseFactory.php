@@ -10,7 +10,7 @@ use \Phoenix\Http\XmlResponse;
 /**
  * Response factory object.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  *        
  */
@@ -28,11 +28,11 @@ class ResponseFactory {
      * If is constant unknown then returns HtmlResponse object.
      *
      * @param integer $format
-     *            constant from ResponseFactory class with preffix RESPONSE_*
+     *            [optional] constant from ResponseFactory class with preffix RESPONSE_*
      *            
      * @return (Html+Json+Xml)Response
      */
-    public static final function createResponse($format) {
+    public static final function createResponse($format = null) {
         switch ($format) {
             case self::RESPONSE_HTML :
                 return new HtmlResponse();
