@@ -2,7 +2,6 @@
 
 namespace Phoenix\Http;
 
-use \Exception;
 use \Phoenix\Http\HtmlResponse;
 use \Phoenix\Http\JsonResponse;
 use \Phoenix\Http\XmlResponse;
@@ -10,7 +9,7 @@ use \Phoenix\Http\XmlResponse;
 /**
  * Response factory object.
  *
- * @version 1.1
+ * @version 1.2
  * @author MPI
  *        
  */

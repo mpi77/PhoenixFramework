@@ -2,13 +2,13 @@
 
 namespace Phoenix\Http;
 
-use \Exception;
+use \Phoenix\Exceptions\BaseException;
 use \Phoenix\Http\Response;
 
 /**
  * Xml response object.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  *        
  */
@@ -19,11 +19,11 @@ final class XmlResponse extends Response {
     /**
      * XmlResponse constructor.
      *
-     * @param Exception $e
+     * @param Phoenix\Exceptions\BaseException $e
      *            [optional] default null
      */
-    public function __construct(Exception $e = null) {
-        parent::__construct(self::CONTENT_TYPE_XML, self::CHARSET_XML, $e);
+    public function __construct(BaseException $e = null) {
+        parent::__construct(Response::S200_OK, self::CONTENT_TYPE_XML, self::CHARSET_XML, $e);
     }
 
     /**
@@ -33,16 +33,16 @@ final class XmlResponse extends Response {
      *
      */
     public function send() {
-        $this->sendHeader();
     }
 
     /**
      * Get string representation of this response class.
      *
-     * @todo
+     * @return string
      *
      */
     public function __toString() {
+        return sprintf("XmlResponse{}");
     }
 }
 ?>

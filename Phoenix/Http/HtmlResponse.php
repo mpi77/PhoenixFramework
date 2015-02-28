@@ -2,18 +2,18 @@
 
 namespace Phoenix\Http;
 
-use \Exception;
 use \Phoenix\Core\Config;
 use \Phoenix\Http\Response;
 use \Phoenix\Utils\System;
 use \Phoenix\Utils\TemplateData;
+use \Phoenix\Exceptions\BaseException;
 use \Phoenix\Exceptions\NoticeException;
 use \Phoenix\Exceptions\WarningException;
 
 /**
  * Html response object.
  *
- * @version 1.13
+ * @version 1.14
  * @author MPI
  *        
  */
@@ -41,11 +41,11 @@ final class HtmlResponse extends Response {
      *            [optional] default null
      * @param Phoenix\Utils\TemplateData $template_data
      *            [optional] default null
-     * @param Exception $e
+     * @param Phoenix\Exceptions\BaseException $e
      *            [optional] default null
      */
-    public function __construct($template_file = null, TemplateData $template_data = null, Exception $e = null) {
-        parent::__construct(self::CONTENT_TYPE_HTML, self::CHARSET_HTML, $e);
+    public function __construct($template_file = null, TemplateData $template_data = null, BaseException $e = null) {
+        parent::__construct(Response::S200_OK, self::CONTENT_TYPE_HTML, self::CHARSET_HTML, $e);
         $this->setTemplateData($template_data);
         $this->setTemplateFile($template_file);
     }
@@ -57,9 +57,6 @@ final class HtmlResponse extends Response {
         $e = $this->getException();
         $tpd = $this->template_data; // variable $tpd is accessible in each template file
         if (is_null($e) || $e instanceof NoticeException || $e instanceof WarningException) {
-            // send header
-            $this->sendHeader();
-            
             $templates_path = Config::get(Config::KEY_DIR_APP_TEMPLATES);
             
             // include Master header template
@@ -101,9 +98,7 @@ final class HtmlResponse extends Response {
      * @param Phoenix\Utils\TemplateData $template_data            
      */
     public function setTemplateData(TemplateData $template_data = null) {
-        if (!is_null($template_data)) {
-            $this->template_data = $template_data;
-        }
+        $this->template_data = $template_data;
     }
 
     /**
