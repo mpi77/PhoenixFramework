@@ -5,7 +5,7 @@ namespace Phoenix\Core;
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.16
+ * @version 1.17
  * @author MPI
  *        
  */
@@ -39,6 +39,7 @@ class Config {
     const KEY_DB_PRIMARY_POOL = 50;
     const KEY_DB_SECONDARY_POOL = 51;
     const KEY_DB_THIRD_POOL = 52;
+    const KEY_APP_EXCEPTION_MODULE_NAME = 53;
     
     /* default config values for config keys */
     const DEFAULT_DIR_ROOT = __DIR__;
@@ -65,6 +66,7 @@ class Config {
     const DEFAULT_DB_PRIMARY_POOL = 1;
     const DEFAULT_DB_SECONDARY_POOL = 2;
     const DEFAULT_DB_THIRD_POOL = 3;
+    const DEFAULT_APP_EXCEPTION_MODULE_NAME = "Exception";
     
     /* db keys */
     const DB_DRIVER = 1;
@@ -308,7 +310,8 @@ class Config {
                         self::KEY_SESSION_FIXATION_REDIRECT_PATH => self::DEFAULT_SESSION_FIXATION_REDIRECT_PATH,
                         self::KEY_DB_PRIMARY_POOL => self::DEFAULT_DB_PRIMARY_POOL,
                         self::KEY_DB_SECONDARY_POOL => self::DEFAULT_DB_SECONDARY_POOL,
-                        self::KEY_DB_THIRD_POOL => self::DEFAULT_DB_THIRD_POOL 
+                        self::KEY_DB_THIRD_POOL => self::DEFAULT_DB_THIRD_POOL,
+                        self::KEY_APP_EXCEPTION_MODULE_NAME => self::DEFAULT_APP_EXCEPTION_MODULE_NAME
         );
     }
 }

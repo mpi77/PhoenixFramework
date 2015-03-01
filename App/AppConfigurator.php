@@ -13,7 +13,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Application configurator.
  *
- * @version 1.8
+ * @version 1.9
  * @author MPI
  *        
  */
@@ -49,6 +49,7 @@ class AppConfigurator extends Configurator {
         Config::set(Config::KEY_SITE_FQDN, "http://localhost/phoenix/www");
         Config::set(Config::KEY_SITE_BASE, "/phoenix/");
         Config::set(Config::KEY_FORCE_HTTPS, false);
+        Config::set(Config::KEY_APP_EXCEPTION_MODULE_NAME, ED::getModuleName());
         Config::setDatabasePool(Config::get(Config::KEY_DB_PRIMARY_POOL), "mysql", "localhost", "3306", "phoenix", "phoenix", "phoenix", "utf8");
     }
 

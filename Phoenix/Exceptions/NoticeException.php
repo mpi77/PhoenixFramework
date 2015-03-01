@@ -12,7 +12,7 @@ use \Phoenix\Exceptions\BaseException;
  * While generating Response.send, the output content (in html content
  * div) is attached into response object with this exception.
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
  *        
  */
@@ -24,9 +24,12 @@ class NoticeException extends BaseException {
     
     /**
      * NoticeException constructor.
-     * 
-     * @param integer $code            
-     * @param string $message            
+     *
+     * @param integer $code
+     *            [optional] default is 0
+     * @param string $message
+     *            [optional] default is null
+     * @return void
      */
     public function __construct($code = 0, $message = null) {
         parent::__construct($code, $message);

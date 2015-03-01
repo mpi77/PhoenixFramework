@@ -3,6 +3,8 @@
 namespace Phoenix\Exceptions;
 
 use \Exception;
+use \Phoenix\Core\Config;
+use \Phoenix\Locale\Translate;
 
 /**
  * BaseException for Phoenix framework.
@@ -10,7 +12,7 @@ use \Exception;
  * It is predecessor of all Exception
  * used in framework.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  */
 abstract class BaseException extends Exception {
@@ -23,8 +25,11 @@ abstract class BaseException extends Exception {
     /**
      * FrameworkException constructor.
      *
-     * @param integer $code            
-     * @param string $message            
+     * @param integer $code
+     *            [optional] default is 0
+     * @param string $message
+     *            [optional] default is null
+     * @return void
      */
     public function __construct($code = 0, $message = null) {
         if (!is_int($code) || !array_key_exists($code, static::$data)) {
@@ -36,12 +41,12 @@ abstract class BaseException extends Exception {
     /**
      * Get translation key for given exception key.
      *
-     * @param integer $exception_key
+     * @param integer $exception_code
      *            it is $code from Exception
      * @return integer|null
      */
-    public static function get($exception_key) {
-        return (is_int($exception_key) && array_key_exists($exception_key, static::$data)) ? static::$data[$exception_key] : null;
+    public static final function get($exception_code) {
+        return (is_int($exception_code) && array_key_exists($exception_code, static::$data)) ? static::$data[$exception_code] : null;
     }
 
     /**
@@ -49,40 +54,38 @@ abstract class BaseException extends Exception {
      *
      * @return array
      */
-    public static function getAll() {
+    public static final function getAll() {
         return static::$data;
     }
 
     /**
      * Get translated message of exception.
-     *
-     * @todo : Translate message
+     * 
      * @param integer $exception_key
      *            it is $code from Exception
      * @return string
      */
-    public static function getTranslatedMessage($exception_key) {
-        // return Translate::get(static::$data[$exception_key]);
-        return "Translated " . $exception_key . " -> " . self::get($exception_key);
+    public static final function getTranslatedMessage($exception_code) {
+        return Translate::get(Config::get(Config::KEY_APP_EXCEPTION_MODULE_NAME), self::get($exception_code));
     }
 
     /**
      * Set translation key for given exception key.
      *
-     * @param integer $exception_key
+     * @param integer $exception_code
      *            it is $code from Exception
      * @param integer $translator_key            
      * @return boolean
      */
-    public static function set($exception_key, $translator_key) {
-        if (!is_int($exception_key) || !is_int($translator_key)) {
+    public static final function set($exception_code, $translator_key) {
+        if (!is_int($exception_code) || !is_int($translator_key)) {
             return false;
         }
         if (static::$registration_enabled === true) {
             if (empty(static::$data)) {
                 static::$data = array ();
             }
-            static::$data[$exception_key] = $translator_key;
+            static::$data[$exception_code] = $translator_key;
             return true;
         }
         return false;
@@ -95,7 +98,7 @@ abstract class BaseException extends Exception {
      *            must have integer keys and values
      * @return boolean
      */
-    public static function setArray($array) {
+    public static final function setArray($array) {
         $k = array_unique(array_map("is_int", array_keys($array))) === array (
                         true 
         );
@@ -114,8 +117,10 @@ abstract class BaseException extends Exception {
 
     /**
      * Disable registration (modifications) of values in *Exception.
+     * 
+     * @return void
      */
-    public static function disableRegistration() {
+    public static final function disableRegistration() {
         static::$registration_enabled = false;
     }
 
@@ -124,7 +129,7 @@ abstract class BaseException extends Exception {
      *
      * @return boolean
      */
-    public static function isRegistrationEnabled() {
+    public static final function isRegistrationEnabled() {
         return static::$registration_enabled;
     }
 }
