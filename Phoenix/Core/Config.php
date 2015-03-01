@@ -5,7 +5,7 @@ namespace Phoenix\Core;
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.15
+ * @version 1.16
  * @author MPI
  *        
  */
@@ -52,16 +52,16 @@ class Config {
     const DEFAULT_DIR_APP_TEMPLATES = "/Templates";
     const DEFAULT_SITE_FQDN = "http://localhost/phoenix/";
     const DEFAULT_SITE_BASE = "/phoenix/";
-    const DEFAULT_SHUTDOWN_PAGE = "500";
+    const DEFAULT_SHUTDOWN_PAGE = "/500";
     const DEFAULT_ENVIRONMENT = 0;
     const DEFAULT_LOG_SIZE = 4194304;
     const DEFAULT_TIME_ZONE = "Europe/Prague";
     const DEFAULT_FORCE_HTTPS = false;
     const DEFAULT_SESSION_INACTIVITY_ENABLED = true;
     const DEFAULT_SESSION_INACTIVITY_TIMEOUT = 1800;
-    const DEFAULT_SESSION_INACTIVITY_REDIRECT_PATH = "user/inactivity/";
+    const DEFAULT_SESSION_INACTIVITY_REDIRECT_PATH = "/user/inactivity/";
     const DEFAULT_SESSION_FIXATION_DETECTION_ENABLED = true;
-    const DEFAULT_SESSION_FIXATION_REDIRECT_PATH = "user/fixation/";
+    const DEFAULT_SESSION_FIXATION_REDIRECT_PATH = "/user/fixation/";
     const DEFAULT_DB_PRIMARY_POOL = 1;
     const DEFAULT_DB_SECONDARY_POOL = 2;
     const DEFAULT_DB_THIRD_POOL = 3;

@@ -1,69 +1,89 @@
 <?php
 
+namespace Phoenix\Utils;
+
+use \Exception;
+use \Phoenix\Core\Config;
+use \Phoenix\Core\Database;
+use \Phoenix\Dao\InternalLogDao;
+use \Phoenix\Exceptions\WarningException;
+use \Phoenix\Exceptions\FailureException;
+use \Phoenix\Exceptions\FrameworkExceptions;
+use \Phoenix\Utils\System;
+use \Phoenix\Utils\Files;
+
 /**
  * Logger object
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
- * */
+ *        
+ */
 class Logger {
 
+    /**
+     * Logger constructor.
+     */
     private function __construct() {
     }
 
     /**
-     * Log Exception.
+     * Log exception.
      *
-     * @param Database $db
-     *            database object
-     * @param Exception $e
-     *            Exception object
+     * @param \Exception $e
+     *            exception object
+     * @param Phoenix\Core\Database $db
+     *            [optional] database object, default null means save exception into log file
+     * @return void
      */
     public static function log(Exception $e, Database $db = null) {
         try {
             if (!is_null($db)) {
-                Logger::saveIntoDatabase($db, $e);
+                self::saveToDatabase($db, $e);
             } else {
-                Logger::saveIntoFile($e);
+                self::saveToFile($e);
             }
         } catch (Exception $ex) {
-            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
+            System::redirect(Config::get(Config::KEY_SITE_FQDN) . Config::get(Config::KEY_SHUTDOWN_PAGE));
         }
     }
 
     /**
-     * Save Exception into Databse.
+     * Save exception into databse.
      *
-     * @param Database $db
+     * @param Phoenix\Core\Database $db
      *            database object
-     * @param Exception $e
-     *            Exception object
+     * @param \Exception $e
+     *            exception object
+     * @return void
      */
-    public static function saveIntoDatabase(Database $db, Exception $e) {
+    public static function saveToDatabase(Database $db, Exception $e) {
         try {
-            $r = InternalLogEntity::insertRecord($db, get_class($e), $e->getCode(), $e->getTraceAsString(), $e->getMessage());
+            $r = InternalLogDao::insertRecord($db, get_class($e), $e->getCode(), $e->getTraceAsString(), $e->getMessage());
             if ($r != 1) {
-                throw new WarningException(WarningException::W_INVALID_SQL_ACTION);
+                throw new WarningException(FrameworkExceptions::W_DB_INVALID_SQL_ACTION);
             }
         } catch (WarningException $ex) {
-            self::saveIntoFile(new FailureException(FailureException::F_UNABLE_SAVE_WARNING));
-            self::saveIntoFile($e);
-            System::redirect(Config::SITE_PATH . Config::SHUTDOWN_PAGE);
+            self::saveToFile(new FailureException(FrameworkExceptions::F_UNABLE_SAVE_WARNING));
+            self::saveToFile($e);
+            System::redirect(Config::get(Config::KEY_SITE_FQDN) . Config::get(Config::KEY_SHUTDOWN_PAGE));
         }
     }
 
     /**
-     * Save Exception into log file.
+     * Save exception into log file.
      *
-     * @param FailureException $e
-     *            Exception object
+     * @param \Exception $e
+     *            exception object
+     * @return void
      */
-    public static function saveIntoFile(Exception $e) {
-        $files = System::findAllFiles(Config::LOG_DIR, array (
+    public static function saveToFile(Exception $e) {
+        $path = Config::getAbsoluteFolderPath(Config::KEY_DIR_LOG);
+        $files = Files::findAllFiles($path, array (
                         ".",
                         ".." 
         ));
-        $out_file = Config::LOG_DIR;
+        $out_file = $path;
         sort($files);
         $reg_files = array ();
         foreach ($files as $file) {
@@ -73,7 +93,7 @@ class Logger {
             }
         }
         $last = count($reg_files);
-        if ($last > 0 && $reg_files[$last - 1] <= Config::LOG_SIZE) {
+        if ($last > 0 && $reg_files[$last - 1] <= Config::get(Config::KEY_LOG_SIZE)) {
             $out_file .= "/" . ($last - 1) . ".log";
         } else {
             $out_file .= "/" . $last . ".log";
