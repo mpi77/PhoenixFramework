@@ -5,7 +5,7 @@ namespace Phoenix\Core;
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.17
+ * @version 1.18
  * @author MPI
  *        
  */
@@ -134,7 +134,7 @@ class Config {
      *
      * @param integer $key
      *            valid keys are Config::KEY_DIR_*
-     * @return string|NULL
+     * @return string|null
      */
     public static function getAbsoluteFolderPath($key) {
         if (!is_int($key)) {
@@ -265,6 +265,8 @@ class Config {
 
     /**
      * Disable registration (modifications) of values in Config.
+     * 
+     * @return void
      */
     public static function disableRegistration() {
         self::$registrationEnabled = false;
@@ -281,6 +283,8 @@ class Config {
 
     /**
      * Set defaults to Config.
+     * 
+     * @return void
      */
     private static function setConfigDefaults() {
         $dir_root = substr(self::DEFAULT_DIR_ROOT, 0, strrpos(self::DEFAULT_DIR_ROOT, "/")); // remove /Core
@@ -311,7 +315,7 @@ class Config {
                         self::KEY_DB_PRIMARY_POOL => self::DEFAULT_DB_PRIMARY_POOL,
                         self::KEY_DB_SECONDARY_POOL => self::DEFAULT_DB_SECONDARY_POOL,
                         self::KEY_DB_THIRD_POOL => self::DEFAULT_DB_THIRD_POOL,
-                        self::KEY_APP_EXCEPTION_MODULE_NAME => self::DEFAULT_APP_EXCEPTION_MODULE_NAME
+                        self::KEY_APP_EXCEPTION_MODULE_NAME => self::DEFAULT_APP_EXCEPTION_MODULE_NAME 
         );
     }
 }

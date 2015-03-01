@@ -8,7 +8,7 @@ use \Phoenix\Dao\ActivityLogDao;
 /**
  * Root model object.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  *        
  */
@@ -18,7 +18,8 @@ abstract class Model {
     /**
      * Model constructor.
      *
-     * @param Database $db            
+     * @param Phoenix\Core\Database $db            
+     * @return void
      */
     public function __construct(Database $db) {
         $this->db = $db;
@@ -27,7 +28,7 @@ abstract class Model {
     /**
      * Get this db instance.
      *
-     * @return Database
+     * @return Phoenix\Core\Database
      */
     protected final function getDb() {
         return $this->db;

@@ -8,7 +8,7 @@ use \Phoenix\Http\Request;
 /**
  * Root view object.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *        
  */
@@ -19,8 +19,9 @@ abstract class View {
     /**
      * View constructor.
      *
-     * @param Model $model            
-     * @param Request $request            
+     * @param Phoenix\Core\Model $model            
+     * @param Phoenix\Http\Request $request            
+     * @return void
      */
     public function __construct(Model $model, Request $request) {
         $this->model = $model;
@@ -30,7 +31,7 @@ abstract class View {
     /**
      * Get this model.
      *
-     * @return Model
+     * @return Phoenix\Core\Model
      */
     protected final function getModel() {
         return $this->model;
@@ -39,7 +40,7 @@ abstract class View {
     /**
      * Get this request.
      *
-     * @return Request
+     * @return Phoenix\Http\Request
      */
     protected final function getRequest() {
         return $this->request;

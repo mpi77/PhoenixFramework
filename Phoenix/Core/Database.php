@@ -12,8 +12,9 @@ use \PDOException;
 /**
  * Database provides interaction between this program
  * and db server.
+ * It is PDO wrapper for this framework.
  *
- * @version 1.8
+ * @version 1.9
  * @author MPI
  *        
  */
@@ -26,9 +27,10 @@ class Database {
     /**
      * Initialize connection with db server.
      *
-     * @param array $connectionParams
-     *            with keys[server, port, login, password, schema, charset, driver]
-     * @throws FailureException
+     * @throws Phoenix\Exceptions\FailureException
+     * @param integer $pool_id
+     *            it is key into Config::getDatabasePoll($pool_id)
+     * @return void
      */
     public function __construct($pool_id) {
         $this->pool_id = $pool_id;
@@ -42,13 +44,13 @@ class Database {
     /**
      * Run SELECT query on db.
      *
+     * @throws Phoenix\Exceptions\WarningException
      * @param string $query
      *            SELECT single query
      * @param array $query_args
      *            array with query arguments
      * @param array $fetch_config
      *            array with config fetch op. [type=>PDO::FETCH_ASSOC or PDO::FETCH_NUM or PDO::FETCH_CLASS, className=>string]
-     * @throws WarningException
      * @return 2D array (more rows fetched) | 1D array (one row fetched) | Database::EMPTY_RESULT (nothing fetched)
      */
     public function selectQuery($query, $query_args, $fetch_config = array("type"=>PDO::FETCH_ASSOC, "className" => "")) {
@@ -84,11 +86,11 @@ class Database {
     /**
      * Run INSERT, UPDATE, DELETE query on db.
      *
+     * @throws Phoenix\Exceptions\WarningException
      * @param string $query
      *            action (INSERT, UPDATE, DELETE) single query
      * @param array $query_args
      *            array with query arguments
-     * @throws WarningException
      * @return integer of affected rows
      */
     public function actionQuery($query, $query_args) {
@@ -131,7 +133,7 @@ class Database {
     /**
      * Start transaction.
      *
-     * @throws WarningException
+     * @throws Phoenix\Exceptions\WarningException
      * @return boolean
      */
     public function beginTransaction() {
@@ -147,7 +149,7 @@ class Database {
     /**
      * Commit current transaction.
      *
-     * @throws WarningException
+     * @throws Phoenix\Exceptions\WarningException
      * @return boolean
      */
     public function commitTransaction() {
@@ -163,7 +165,7 @@ class Database {
     /**
      * Rollback current transaction.
      *
-     * @throws WarningException
+     * @throws Phoenix\Exceptions\WarningException
      * @return boolean
      */
     public function rollbackTransaction() {
@@ -220,7 +222,8 @@ class Database {
     /**
      * Connect to db server.
      *
-     * @throws FailureException
+     * @throws Phoenix\Exceptions\FailureException
+     * @return void
      */
     private function connect() {
         $cp = Config::getDatabasePool($this->pool_id);

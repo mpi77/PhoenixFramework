@@ -9,7 +9,7 @@ use \Phoenix\Exceptions\FrameworkExceptions;
 /**
  * SimpleRoute object.
  *
- * @version 1.11
+ * @version 1.12
  * @author MPI
  *        
  */
@@ -25,6 +25,7 @@ class SimpleRoute implements IRoute {
      * @param string $model            
      * @param string $view            
      * @param string $controller            
+     * @return void
      */
     public function __construct($model, $view, $controller) {
         if (empty($model) || empty($view) || empty($controller)) {

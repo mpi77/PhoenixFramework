@@ -7,7 +7,7 @@ use \Phoenix\Locale\IApplicationTranslator;
 /**
  * App translator.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  */
 class AppTranslator implements IApplicationTranslator {
@@ -32,8 +32,6 @@ class AppTranslator implements IApplicationTranslator {
     /**
      * Get all available languages in App.
      *
-     * @todo
-     *
      * @return array (2D array; each sub-array has keys IApplicationTranslator::LANG_*)
      */
     public static final function getAvailableLanguages() {
@@ -43,8 +41,6 @@ class AppTranslator implements IApplicationTranslator {
     /**
      * Get default language.
      * This language is defaultly used when user do not select any language.
-     *
-     * @todo
      *
      * @return array (1D array has keys IApplicationTranslator::LANG_*)
      */

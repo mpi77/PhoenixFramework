@@ -5,7 +5,7 @@ namespace Phoenix\Loaders;
 /**
  * SimpleLoader
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  *        
  */
@@ -18,13 +18,14 @@ class SimpleLoader {
     /**
      * Load given class name.
      *
-     * @param string $className            
+     * @param string $class_name            
+     * @return void
      */
-    public static function load($className) {
-        $file = self::FOLDER_PREFIX . str_replace("\\", "/", $className) . self::PHP_SUFFIX;
+    public static function load($class_name) {
+        $file = self::FOLDER_PREFIX . str_replace("\\", "/", $class_name) . self::PHP_SUFFIX;
         if (file_exists($file)) {
             include ($file);
-            if (class_exists($className)) {
+            if (class_exists($class_name)) {
                 self::$filesOk++;
                 return true;
             }

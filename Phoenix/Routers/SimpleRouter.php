@@ -9,7 +9,7 @@ use \Phoenix\Routers\SimpleRoute;
 /**
  * SimpleRouter
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  *        
  */
@@ -73,6 +73,7 @@ class SimpleRouter implements IRouter {
      * @throws Phoenix\Exceptions\FailureException
      * @param string $route_name            
      * @param IRoute $route            
+     * @return void
      */
     public static function register($route_name, IRoute $route) {
         if (self::$registration_enabled === true) {
@@ -86,6 +87,8 @@ class SimpleRouter implements IRouter {
 
     /**
      * Disable registration of routes into SimpleRouter.
+     *
+     * @return void
      */
     public static function disableRegistration() {
         self::$registration_enabled = false;
@@ -94,6 +97,8 @@ class SimpleRouter implements IRouter {
     /**
      * Init SimpleRouter table.
      * It creates route table with default self::DEFAULT_EMPTY_ROUTE=>SimpleRoute("IndexModel", "IndexView", "IndexController")
+     *
+     * @return void
      */
     private static function init() {
         if (empty(self::$table) || !is_array(self::$table)) {

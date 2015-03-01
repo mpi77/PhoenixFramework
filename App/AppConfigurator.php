@@ -13,12 +13,12 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Application configurator.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *        
  */
 class AppConfigurator extends Configurator {
-    
+
     /* at this place can be user defined constants for exceptions */
     
     /**
@@ -34,6 +34,7 @@ class AppConfigurator extends Configurator {
      * Will be executed after all register methods in this class.
      *
      * @todo disable router
+     * @return void
      */
     public final function disableRegistrations() {
         Config::disableRegistration();
@@ -44,6 +45,8 @@ class AppConfigurator extends Configurator {
 
     /**
      * Register App Configuration into Config object.
+     * 
+     * @return void
      */
     protected final function registerConfiguration() {
         Config::set(Config::KEY_SITE_FQDN, "http://localhost/phoenix/www");
@@ -55,6 +58,10 @@ class AppConfigurator extends Configurator {
 
     /**
      * Register Routes into Router object.
+     * 
+     * @todo
+     *
+     * @return void
      */
     protected final function registerRoutes() {
     }
@@ -70,6 +77,8 @@ class AppConfigurator extends Configurator {
 
     /**
      * Register WarningExceptions defined in App (in this file) into WarningException object.
+     * 
+     * @return void
      */
     protected final function registerWarningExceptions() {
         WarningException::setArray(array (
@@ -87,12 +96,14 @@ class AppConfigurator extends Configurator {
                         FX::W_DB_UNABLE_ROLLBACK_TRANSACTION => ED::W_DB_UNABLE_ROLLBACK_TRANSACTION,
                         FX::W_ROUTER_INVALID_ROUTE => ED::W_ROUTER_INVALID_ROUTE,
                         FX::W_ROUTER_INVALID_ROUTE_ACTION => ED::W_ROUTER_INVALID_ROUTE_ACTION,
-                        FX::W_RESPONSE_INVALID_FORMAT => ED::W_RESPONSE_INVALID_FORMAT
+                        FX::W_RESPONSE_INVALID_FORMAT => ED::W_RESPONSE_INVALID_FORMAT 
         ));
     }
 
     /**
      * Register FailureExceptions defined in App (in this file) into FailureException object.
+     * 
+     * @return void
      */
     protected final function registerFailureExceptions() {
         FailureException::setArray(array (
@@ -104,7 +115,7 @@ class AppConfigurator extends Configurator {
                         FX::F_RESPONSE_HEADERS_SENT => ED::F_RESPONSE_HEADERS_SENT,
                         FX::F_RESPONSE_INVALID_HTTP_CODE => ED::F_RESPONSE_INVALID_HTTP_CODE,
                         FX::F_URL_PARSE_ERROR => ED::F_URL_PARSE_ERROR,
-                        FX::F_ROUTE_MISSING_ARGS => ED::F_ROUTE_MISSING_ARGS
+                        FX::F_ROUTE_MISSING_ARGS => ED::F_ROUTE_MISSING_ARGS 
         ));
     }
 }

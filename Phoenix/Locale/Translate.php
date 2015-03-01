@@ -8,7 +8,7 @@ use \App\AppTranslator;
 /**
  * Translate is wrapper for ModuleTranslators.
  *
- * @version 1.11
+ * @version 1.12
  * @author MPI
  *        
  */
@@ -21,11 +21,11 @@ class Translate {
      * Get string or string pattern from ModuleTranslator.
      *
      * @param string $translator_module
-     *            call \App\Locale\Def\ModuleDefinition::getModuleName()
+     *            call \App\Locale\Def\*Module*Definition::getModuleName()
      * @param integer $key
-     *            constant defined in \App\Locale\Def\ModuleDefinition
+     *            constant defined in \App\Locale\Def\*Module*Definition
      * @param string $language
-     *            language prefix defined as IApplicationTranslator::LANG_PREFIX index in AppTranslator::$languages[i]; if is null then default language is selected
+     *            [optional] language prefix defined as IApplicationTranslator::LANG_PREFIX index in AppTranslator::$languages[i]; if is null then default language is selected
      *            
      * @return string
      */
@@ -44,14 +44,15 @@ class Translate {
     }
 
     /**
-     * Print htmlspecialchars(string) from ModuleTranslator.
+     * Print htmlspecialchars(string, ENT_HTML5, UTF-8) from ModuleTranslator.
      *
      * @param string $translator_module
-     *            call \App\Locale\Def\ModuleDefinition::getModuleName()
+     *            call \App\Locale\Def\*Module*Definition::getModuleName()
      * @param integer $key
-     *            constant defined in \App\Locale\Def\ModuleDefinition
+     *            constant defined in \App\Locale\Def\*Module*Definition
      * @param string $language
-     *            language prefix defined as IApplicationTranslator::LANG_PREFIX index in AppTranslator::$languages[i]; if is null then default language is selected
+     *            [optional] language prefix defined as IApplicationTranslator::LANG_PREFIX index in AppTranslator::$languages[i]; if is null then default language is selected
+     * @return void
      */
     public static function es($translator_module, $key, $language = null) {
         echo htmlspecialchars(self::get($translator_module, $key, $language), ENT_HTML5, "UTF-8");
@@ -61,11 +62,12 @@ class Translate {
      * Print string from ModuleTranslator.
      *
      * @param string $translator_module
-     *            call \App\Locale\Def\ModuleDefinition::getModuleName()
+     *            call \App\Locale\Def\*Module*Definition::getModuleName()
      * @param integer $key
-     *            constant defined in \App\Locale\Def\ModuleDefinition
+     *            constant defined in \App\Locale\Def\*Module*Definition
      * @param string $language
-     *            language prefix defined as IApplicationTranslator::LANG_PREFIX index in AppTranslator::$languages[i]; if is null then default language is selected
+     *            [optional] language prefix defined as IApplicationTranslator::LANG_PREFIX index in AppTranslator::$languages[i]; if is null then default language is selected
+     * @return void
      */
     public static function e($translator_module, $key, $language = null) {
         echo self::get($translator_module, $key, $language);
