@@ -2,7 +2,7 @@
 /**
  * Index view.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  * */
 class IndexView extends View {
@@ -24,7 +24,7 @@ class IndexView extends View {
             $tpd->set("greeting", "<Welcome page>");
             $response = new HtmlResponse("gui/template/IndexTemplate.php", $tpd);
         } else {
-            throw new WarningException(WarningException::W_RESPONSE_UNSUPPORTED_FORMAT);
+            //throw new WarningException(WarningException::W_RESPONSE_UNSUPPORTED_FORMAT);
         }
         return $response;
     }

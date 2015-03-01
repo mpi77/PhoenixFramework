@@ -13,7 +13,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Application configurator.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  *        
  */
@@ -86,9 +86,7 @@ class AppConfigurator extends Configurator {
                         FX::W_DB_UNABLE_ROLLBACK_TRANSACTION => ED::W_DB_UNABLE_ROLLBACK_TRANSACTION,
                         FX::W_ROUTER_INVALID_ROUTE => ED::W_ROUTER_INVALID_ROUTE,
                         FX::W_ROUTER_INVALID_ROUTE_ACTION => ED::W_ROUTER_INVALID_ROUTE_ACTION,
-                        FX::W_RESPONSE_INVALID_FORMAT => ED::W_RESPONSE_INVALID_FORMAT,
-                        FX::W_RESPONSE_UNSUPPORTED_FORMAT => ED::W_RESPONSE_UNSUPPORTED_FORMAT,
-                        FX::W_URL_UNSUPPORTED_FORMAT => ED::W_URL_UNSUPPORTED_FORMAT 
+                        FX::W_RESPONSE_INVALID_FORMAT => ED::W_RESPONSE_INVALID_FORMAT
         ));
     }
 

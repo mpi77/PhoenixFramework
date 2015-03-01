@@ -8,7 +8,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Exception translator.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  *        
  */
@@ -43,8 +43,6 @@ class ExceptionTranslator implements IModuleTranslator {
                     ED::W_ROUTER_INVALID_ROUTE => "Neznámá cesta.",
                     ED::W_ROUTER_INVALID_ROUTE_ACTION => "Neznámá akce.",
                     ED::W_RESPONSE_INVALID_FORMAT => "Neplatný formát odpovědi.",
-                    ED::W_RESPONSE_UNSUPPORTED_FORMAT => "Neznámý formát odpovědi.",
-                    ED::W_URL_UNSUPPORTED_FORMAT => "Neznámý formát URL.",
                     ED::N_UNKNOWN => "Neznámé upozornění." 
     );
 

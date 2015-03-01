@@ -7,7 +7,7 @@ use \Phoenix\Locale\IModuleDefinition;
 /**
  * Exception definition.
  *
- * @version 1.3
+ * @version 1.4
  * @author MPI
  *        
  */
@@ -39,7 +39,6 @@ class ExceptionDefinition implements IModuleDefinition {
     const W_ROUTER_INVALID_ROUTE = 250;
     const W_ROUTER_INVALID_ROUTE_ACTION = 251;
     const W_RESPONSE_INVALID_FORMAT = 260;
-    const W_RESPONSE_UNSUPPORTED_FORMAT = 261;
     
     /* notice exceptions */
     const N_UNKNOWN = 500;
