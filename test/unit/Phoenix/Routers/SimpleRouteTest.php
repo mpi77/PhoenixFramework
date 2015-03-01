@@ -2,11 +2,14 @@
 /**
  * SimpleRoute unit test.
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  * */
 include '../../../../Phoenix/Routers/IRoute.php';
 include '../../../../Phoenix/Routers/SimpleRoute.php';
+include '../../../../Phoenix/Exceptions/BaseException.php';
+include '../../../../Phoenix/Exceptions/FrameworkExceptions.php';
+include '../../../../Phoenix/Exceptions/FailureException.php';
 
 use \Phoenix\Routers\SimpleRoute;
 class SimpleRouteTest extends PHPUnit_Framework_TestCase {
@@ -16,26 +19,32 @@ class SimpleRouteTest extends PHPUnit_Framework_TestCase {
         $this->routeItem = null;
     }
 
+    /**
+     * @expectedException Phoenix\Exceptions\FailureException
+     */
     public function testEmptyConstructor() {
         $this->routeItem = new SimpleRoute(null, null, null);
-        $this->assertNull($this->routeItem->getModelName());
-        $this->assertNull($this->routeItem->getViewName());
-        $this->assertNull($this->routeItem->getControllerName());
-        
+    }
+
+    /**
+     * @expectedException Phoenix\Exceptions\FailureException
+     */
+    public function testInvalidConstructor1() {
         $this->routeItem = new SimpleRoute("IndexModel", null, null);
-        $this->assertNull($this->routeItem->getModelName());
-        $this->assertNull($this->routeItem->getViewName());
-        $this->assertNull($this->routeItem->getControllerName());
-        
+    }
+
+    /**
+     * @expectedException Phoenix\Exceptions\FailureException
+     */
+    public function testInvalidConstructor2() {
         $this->routeItem = new SimpleRoute(null, "IndexView", null);
-        $this->assertNull($this->routeItem->getModelName());
-        $this->assertNull($this->routeItem->getViewName());
-        $this->assertNull($this->routeItem->getControllerName());
-        
+    }
+
+    /**
+     * @expectedException Phoenix\Exceptions\FailureException
+     */
+    public function testInvalidConstructor3() {
         $this->routeItem = new SimpleRoute(null, null, "IndexController");
-        $this->assertNull($this->routeItem->getModelName());
-        $this->assertNull($this->routeItem->getViewName());
-        $this->assertNull($this->routeItem->getControllerName());
     }
 
     public function testBaseConstructor() {

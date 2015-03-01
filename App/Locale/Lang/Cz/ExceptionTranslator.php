@@ -8,7 +8,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Exception translator.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  *        
  */
@@ -28,6 +28,7 @@ class ExceptionTranslator implements IModuleTranslator {
                     ED::F_RESPONSE_HEADERS_SENT => "Nepovedlo se odeslat hlavičky ve správném pořadí.",
                     ED::F_RESPONSE_INVALID_HTTP_CODE => "Nepodařilo se nastavit správný kód odpovědi.",
                     ED::F_URL_PARSE_ERROR => "Nepodařilo se vytvořit url adresu.",
+                    ED::F_ROUTE_MISSING_ARGS => "Nepodařilo se vytvořit objekt cesty v routeru.",
                     ED::W_UNKNOWN => "Neznámá chyba.",
                     ED::W_CLASS_NOT_FOUND => "Požadovaná třída nebyla nalezena.",
                     ED::W_ACTION_IS_NOT_CALLABLE => "Zadanou akci nelze spustit.",

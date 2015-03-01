@@ -13,7 +13,7 @@ namespace Phoenix\Exceptions;
  * in AppConfigurator should be an integer greater 
  * than 1000.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  *        
  */
@@ -48,5 +48,6 @@ class FrameworkExceptions {
     const F_RESPONSE_HEADERS_SENT = 5;
     const F_RESPONSE_INVALID_HTTP_CODE = 6;
     const F_URL_PARSE_ERROR = 7;
+    const F_ROUTE_MISSING_ARGS = 8;
 }
 ?>

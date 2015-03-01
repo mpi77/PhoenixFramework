@@ -6,7 +6,7 @@ namespace Phoenix\Routers;
  * IRouter interface.
  *
  *
- * @version 1.0
+ * @version 1.1
  * @author MPI
  *        
  */
@@ -19,21 +19,21 @@ interface IRouter {
      *            (if not found route, returns default route)
      * @return IRoute
      */
-    public static function getRoute($route_name);
+    public function getRoute($route_name);
 
     /**
      * Get all registered routes.
      *
      * @return array of IRoute
      */
-    public static function getAllRoutes();
+    public function getAllRoutes();
 
     /**
      * Check if route exists.
      *
-     * @param string $routeName            
-     * @return boolean => true (if route exists) | false (if route doesn't exist)
+     * @param string $route_name            
+     * @return boolean
      */
-    public static function isRoute($route_name);
+    public function isRoute($route_name);
 }
 ?>

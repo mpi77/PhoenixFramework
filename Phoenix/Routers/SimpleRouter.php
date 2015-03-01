@@ -4,11 +4,12 @@ namespace Phoenix\Routers;
 
 use \Phoenix\Routers\IRouter;
 use \Phoenix\Routers\IRoute;
+use \Phoenix\Routers\SimpleRoute;
 
 /**
  * SimpleRouter
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  *        
  */
@@ -17,27 +18,28 @@ class SimpleRouter implements IRouter {
     const DEFAULT_EMPTY_ROUTE = "index";
     const DEFAULT_EMPTY_ACTION = "index";
     private static $table = array ();
-    private static $registrationEnabled = true;
+    private static $registration_enabled = true;
 
     /**
      * SimpleRouter constructor.
+     * Default route table is: array(self::DEFAULT_EMPTY_ROUTE=>SimpleRoute("IndexModel", "IndexView", "IndexController"))
      */
-    private function __construct() {
+    public function __construct() {
     }
 
     /**
      * Get route by given route name.
      *
      * @param string $route_name
-     *            (if not found route, returns default route)
+     *            (if route is not found, returns default route specified by self::DEFAULT_EMPTY_ROUTE)
      * @return IRoute
      */
-    public static function getRoute($route_name) {
+    public function getRoute($route_name) {
         $route_name = strtolower($route_name);
-        self::initRouter();
+        self::init();
         
         // return a default route if no route is found
-        if (self::isRoute($route_name) === false) {
+        if ($this->isRoute($route_name) === false) {
             return self::$table[self::DEFAULT_EMPTY_ROUTE];
         }
         
@@ -49,8 +51,8 @@ class SimpleRouter implements IRouter {
      *
      * @return array of IRoute
      */
-    public static function getAllRoutes() {
-        self::initRouter();
+    public function getAllRoutes() {
+        self::init();
         return self::$table;
     }
 
@@ -60,22 +62,23 @@ class SimpleRouter implements IRouter {
      * @param string $route_name            
      * @return boolean => true (if route exists) | false (if route doesn't exist)
      */
-    public static function isRoute($route_name) {
-        self::initRouter();
+    public function isRoute($route_name) {
+        self::init();
         return array_key_exists(strtolower($route_name), self::$table);
     }
 
     /**
      * Register new route into SimpleRouter.
      *
+     * @throws Phoenix\Exceptions\FailureException
      * @param string $route_name            
      * @param IRoute $route            
      */
     public static function register($route_name, IRoute $route) {
-        if (self::$registrationEnabled === true) {
+        if (self::$registration_enabled === true) {
             $route_name = strtolower($route_name);
-            self::initRouter();
-            if ((self::DISABLE_ROUTE_OVERWRITING !== true) || (self::DISABLE_ROUTE_OVERWRITING === true && self::isRoute($route_name) === false)) {
+            self::init();
+            if ((self::DISABLE_ROUTE_OVERWRITING !== true) || (self::DISABLE_ROUTE_OVERWRITING === true && array_key_exists($route_name, self::$table) === false)) {
                 self::$table[$route_name] = $route;
             }
         }
@@ -85,13 +88,14 @@ class SimpleRouter implements IRouter {
      * Disable registration of routes into SimpleRouter.
      */
     public static function disableRegistration() {
-        self::$registrationEnabled = false;
+        self::$registration_enabled = false;
     }
 
     /**
      * Init SimpleRouter table.
+     * It creates route table with default self::DEFAULT_EMPTY_ROUTE=>SimpleRoute("IndexModel", "IndexView", "IndexController")
      */
-    private static function initRouter() {
+    private static function init() {
         if (empty(self::$table) || !is_array(self::$table)) {
             self::$table = array (
                             self::DEFAULT_EMPTY_ROUTE => new SimpleRoute("IndexModel", "IndexView", "IndexController") 

@@ -1,12 +1,15 @@
 <?php
 
 namespace Phoenix\Routers;
+
 use \Phoenix\Routers\IRoute;
+use \Phoenix\Exceptions\FailureException;
+use \Phoenix\Exceptions\FrameworkExceptions;
 
 /**
  * SimpleRoute object.
  *
- * @version 1.10
+ * @version 1.11
  * @author MPI
  *        
  */
@@ -17,14 +20,15 @@ class SimpleRoute implements IRoute {
 
     /**
      * SimpleRoute constructor.
-     * 
+     *
+     * @throws Phoenix\Exceptions\FailureException
      * @param string $model            
      * @param string $view            
      * @param string $controller            
      */
     public function __construct($model, $view, $controller) {
         if (empty($model) || empty($view) || empty($controller)) {
-            return;
+            throw new FailureException(FrameworkExceptions::F_ROUTE_MISSING_ARGS);
         }
         $this->model = $model;
         $this->view = $view;

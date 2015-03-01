@@ -10,7 +10,7 @@ use Phoenix\Utils\Strings;
  * Url object.
  * It is based on URI Syntax (RFC 3986).
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  *        
  */
@@ -77,8 +77,8 @@ class Url {
      * Url constructor.
      *
      * @param string $url
-     *            [optional]
-     * @throws Phoenix\Exceptions\WarningException if URL is unsupported
+     *            [optional] default null creates emtpy Url object
+     * @throws Phoenix\Exceptions\FailureException if URL is unsupported
      */
     public function __construct($url = null) {
         if (is_string($url)) {
