@@ -1,27 +1,38 @@
 <?php
+
+namespace App\Controllers;
+
+use \Phoenix\Core\Controller;
+use \Phoenix\Core\Model;
+use \Phoenix\Http\Request;
+
 /**
  * Index controller.
  *
- * @version 1.8
+ * @version 1.9
  * @author MPI
  *        
  */
 class IndexController extends Controller {
 
-    public function __construct(Model $model, $args) {
-        parent::__construct($model, $args);
+    /**
+     * Index controller constructor.
+     *
+     * @param Phoenix\Core\Model $model            
+     * @param Phoenix\Http\Request $request            
+     * @return void
+     */
+    public function __construct(Model $model, Request $request) {
+        parent::__construct($model, $request);
     }
 
     /**
      * Show index page.
-     * 
+     *
      * @access HTML
+     * @return void
      */
     public function index() {
-        // allow only HtmlResponse
-        /*if ($this->getResponseFormat() != Response::RESPONSE_HTML) {
-            throw new WarningException(WarningException::W_RESPONSE_UNSUPPORTED_FORMAT);
-        }*/
     }
 }
 ?>
