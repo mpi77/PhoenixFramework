@@ -8,12 +8,13 @@ use \Phoenix\Exceptions\NoticeException;
 use \Phoenix\Exceptions\WarningException;
 use \Phoenix\Exceptions\FailureException;
 use \Phoenix\Exceptions\FrameworkExceptions as FX;
+use \Phoenix\Routers\RouterFactory;
 use \App\Locale\Def\ExceptionDefinition as ED;
 
 /**
  * Application configurator.
  *
- * @version 1.10
+ * @version 1.11
  * @author MPI
  *        
  */
@@ -45,7 +46,7 @@ class AppConfigurator extends Configurator {
 
     /**
      * Register App Configuration into Config object.
-     * 
+     *
      * @return void
      */
     protected final function registerConfiguration() {
@@ -53,12 +54,13 @@ class AppConfigurator extends Configurator {
         Config::set(Config::KEY_SITE_BASE, "/phoenix/");
         Config::set(Config::KEY_FORCE_HTTPS, false);
         Config::set(Config::KEY_APP_EXCEPTION_MODULE_NAME, ED::getModuleName());
+        Config::set(Config::KEY_APP_USE_ROUTER, RouterFactory::SIMPLE_ROUTER);
         Config::setDatabasePool(Config::get(Config::KEY_DB_PRIMARY_POOL), "mysql", "localhost", "3306", "phoenix", "phoenix", "phoenix", "utf8");
     }
 
     /**
      * Register Routes into Router object.
-     * 
+     *
      * @todo
      *
      * @return void
@@ -77,7 +79,7 @@ class AppConfigurator extends Configurator {
 
     /**
      * Register WarningExceptions defined in App (in this file) into WarningException object.
-     * 
+     *
      * @return void
      */
     protected final function registerWarningExceptions() {
@@ -102,7 +104,7 @@ class AppConfigurator extends Configurator {
 
     /**
      * Register FailureExceptions defined in App (in this file) into FailureException object.
-     * 
+     *
      * @return void
      */
     protected final function registerFailureExceptions() {
