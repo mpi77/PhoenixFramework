@@ -14,14 +14,26 @@ use \PDOException;
  * and db server.
  * It is PDO wrapper for this framework.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *        
  */
 class Database {
     const EMPTY_RESULT = -1;
+    /**
+     *
+     * @var PDO
+     */
     private $link = null;
+    /**
+     *
+     * @var integer
+     */
     private $pool_id = null;
+    /**
+     *
+     * @var boolean
+     */
     private $status = null;
 
     /**

@@ -8,12 +8,20 @@ use \Phoenix\Http\Request;
 /**
  * Root controller object.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *        
  */
 abstract class Controller {
+    /**
+     *
+     * @var Phoenix\Core\Model
+     */
     private $model;
+    /**
+     *
+     * @var Phoenix\Http\Request
+     */
     private $request;
 
     /**

@@ -8,11 +8,15 @@ use \Phoenix\Dao\ActivityLogDao;
 /**
  * Root model object.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  *        
  */
 abstract class Model {
+    /**
+     *
+     * @var Phoenix\Core\Database
+     */
     private $db;
 
     /**
@@ -26,25 +30,12 @@ abstract class Model {
     }
 
     /**
-     * Get this db instance.
+     * Get this database instance.
      *
      * @return Phoenix\Core\Database
      */
-    protected final function getDb() {
+    protected final function getDatabase() {
         return $this->db;
-    }
-
-    /**
-     * Save user activity record to db.
-     *
-     * @param integer $uid
-     *            of user
-     * @param string $description
-     *            text msg to save
-     * @return integer
-     */
-    public final function insertActivityRecord($uid, $message) {
-        return ActivityLogDao::insertRecord($this->db, $uid, $message);
     }
 }
 ?>
