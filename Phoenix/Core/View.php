@@ -4,17 +4,31 @@ namespace Phoenix\Core;
 
 use \Phoenix\Core\Model;
 use \Phoenix\Http\Request;
+use \Phoenix\Http\Response;
 
 /**
  * Root view object.
  *
- * @version 1.10
+ * @version 1.11
  * @author MPI
  *        
  */
 abstract class View {
+    /**
+     *
+     * @var Phoenix\Core\Model
+     */
     private $model;
+    /**
+     *
+     * @var Phoenix\Http\Request
+     */
     private $request;
+    /**
+     *
+     * @var Phoenix\Http\Response
+     */
+    private $response;
 
     /**
      * View constructor.
@@ -44,6 +58,25 @@ abstract class View {
      */
     protected final function getRequest() {
         return $this->request;
+    }
+
+    /**
+     * Set this response.
+     *
+     * @param Phoenix\Http\Response $response            
+     * @return void
+     */
+    protected final function setResponse(Response $response) {
+        $this->response = $response;
+    }
+
+    /**
+     * Get this response.
+     *
+     * @return Phoenix\Http\Response
+     */
+    public final function getResponse() {
+        return $this->response;
     }
 }
 ?>

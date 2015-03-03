@@ -40,11 +40,10 @@ class IndexView extends View {
      * Show index page.
      *
      * @access HTML
-     * @return Phoenix\Http\Response
      */
     public function index() {
         $this->teplate_data->set("greeting", "<Welcome page>");
-        return new HtmlResponse("IndexTemplate.php", $this->teplate_data);
+        $this->setResponse(new HtmlResponse("IndexTemplate.php", $this->teplate_data));
     }
 }
 ?>
