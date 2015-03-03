@@ -23,11 +23,10 @@ class FrameworkExceptions {
     
     /* warning exceptions */
     const W_UNKNOWN = 0;
-    const W_CLASS_NOT_FOUND = 1;
-    const W_ACTION_IS_NOT_CALLABLE = 2;
-    const W_INVALID_PARAMETERS = 3;
-    const W_PERMISSION_DENIED = 4;
-    const W_INVALID_TOKEN = 5;
+    const W_ACTION_IS_NOT_CALLABLE = 1;
+    const W_INVALID_PARAMETERS = 2;
+    const W_PERMISSION_DENIED = 3;
+    const W_INVALID_TOKEN = 4;
     const W_DB_INVALID_SQL_SELECT = 40;
     const W_DB_INVALID_SQL_ACTION = 41;
     const W_DB_UNABLE_VERIFY_RESULT = 42;
@@ -49,5 +48,6 @@ class FrameworkExceptions {
     const F_RESPONSE_INVALID_HTTP_CODE = 6;
     const F_URL_PARSE_ERROR = 7;
     const F_ROUTE_MISSING_ARGS = 8;
+    const F_CLASS_NOT_FOUND = 9;
 }
 ?>

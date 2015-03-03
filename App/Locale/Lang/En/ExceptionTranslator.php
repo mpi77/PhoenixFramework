@@ -8,7 +8,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Exception translator.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  *        
  */
@@ -29,8 +29,8 @@ class ExceptionTranslator implements IModuleTranslator {
                     ED::F_RESPONSE_INVALID_HTTP_CODE => "Unable to set http status code.",
                     ED::F_URL_PARSE_ERROR => "Unable to parse url.",
                     ED::F_ROUTE_MISSING_ARGS => "Unable to create route in the router.",
+                    ED::F_CLASS_NOT_FOUND => "Missing required class.",
                     ED::W_UNKNOWN => "Unknown warning.",
-                    ED::W_CLASS_NOT_FOUND => "Missing required class.",
                     ED::W_ACTION_IS_NOT_CALLABLE => "Requested action is not runnable.",
                     ED::W_INVALID_PARAMETERS => "Given attributes are not valid.",
                     ED::W_PERMISSION_DENIED => "Permission denied.",

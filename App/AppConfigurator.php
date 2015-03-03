@@ -14,7 +14,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Application configurator.
  *
- * @version 1.11
+ * @version 1.12
  * @author MPI
  *        
  */
@@ -85,7 +85,6 @@ class AppConfigurator extends Configurator {
     protected final function registerWarningExceptions() {
         WarningException::setArray(array (
                         FX::W_UNKNOWN => ED::W_UNKNOWN,
-                        FX::W_CLASS_NOT_FOUND => ED::W_CLASS_NOT_FOUND,
                         FX::W_ACTION_IS_NOT_CALLABLE => ED::W_ACTION_IS_NOT_CALLABLE,
                         FX::W_INVALID_PARAMETERS => ED::W_INVALID_PARAMETERS,
                         FX::W_PERMISSION_DENIED => ED::W_PERMISSION_DENIED,
@@ -117,7 +116,8 @@ class AppConfigurator extends Configurator {
                         FX::F_RESPONSE_HEADERS_SENT => ED::F_RESPONSE_HEADERS_SENT,
                         FX::F_RESPONSE_INVALID_HTTP_CODE => ED::F_RESPONSE_INVALID_HTTP_CODE,
                         FX::F_URL_PARSE_ERROR => ED::F_URL_PARSE_ERROR,
-                        FX::F_ROUTE_MISSING_ARGS => ED::F_ROUTE_MISSING_ARGS 
+                        FX::F_ROUTE_MISSING_ARGS => ED::F_ROUTE_MISSING_ARGS,
+                        FX::F_CLASS_NOT_FOUND => ED::F_CLASS_NOT_FOUND
         ));
     }
 }
