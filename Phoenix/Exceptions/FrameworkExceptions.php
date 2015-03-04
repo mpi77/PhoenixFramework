@@ -13,7 +13,7 @@ namespace Phoenix\Exceptions;
  * in AppConfigurator should be an integer greater 
  * than 1000.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *        
  */
@@ -23,7 +23,7 @@ class FrameworkExceptions {
     
     /* warning exceptions */
     const W_UNKNOWN = 0;
-    const W_ACTION_IS_NOT_CALLABLE = 1;
+    const W_FUNCTION_IS_NOT_CALLABLE = 1;
     const W_INVALID_PARAMETERS = 2;
     const W_PERMISSION_DENIED = 3;
     const W_INVALID_TOKEN = 4;
@@ -34,7 +34,7 @@ class FrameworkExceptions {
     const W_DB_UNABLE_COMMIT_TRANSACTION = 44;
     const W_DB_UNABLE_ROLLBACK_TRANSACTION = 45;
     const W_ROUTER_INVALID_ROUTE = 50;
-    const W_ROUTER_INVALID_ROUTE_ACTION = 51;
+    const W_ROUTER_INVALID_ACTION = 51;
     const W_RESPONSE_INVALID_FORMAT = 60;
     
     

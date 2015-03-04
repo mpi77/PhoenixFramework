@@ -8,7 +8,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Exception translator.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *        
  */
@@ -33,7 +33,7 @@ class ExceptionTranslator implements IModuleTranslator {
                     ED::F_URL_PARSE_ERROR => "Unable to parse url.",
                     ED::F_ROUTE_MISSING_ARGS => "Unable to create route in the router.",
                     ED::W_UNKNOWN => "Unknown warning.",
-                    ED::W_ACTION_IS_NOT_CALLABLE => "Requested action is not runnable.",
+                    ED::W_FUNCTION_IS_NOT_CALLABLE => "Requested action is not runnable.",
                     ED::W_INVALID_PARAMETERS => "Given attributes are not valid.",
                     ED::W_PERMISSION_DENIED => "Permission denied.",
                     ED::W_INVALID_TOKEN => "Invalid token.",
@@ -44,7 +44,7 @@ class ExceptionTranslator implements IModuleTranslator {
                     ED::W_DB_UNABLE_COMMIT_TRANSACTION => "Unable to commit transaction.",
                     ED::W_DB_UNABLE_ROLLBACK_TRANSACTION => "Unable to rollback transaction.",
                     ED::W_ROUTER_INVALID_ROUTE => "Path is invalid.",
-                    ED::W_ROUTER_INVALID_ROUTE_ACTION => "Action is invalid.",
+                    ED::W_ROUTER_INVALID_ACTION => "Action is invalid.",
                     ED::W_RESPONSE_INVALID_FORMAT => "Invalid response format.",
                     ED::N_UNKNOWN => "Unknown notice." 
     );

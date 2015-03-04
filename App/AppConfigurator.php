@@ -14,7 +14,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Application configurator.
  *
- * @version 1.15
+ * @version 1.16
  * @author MPI
  *        
  */
@@ -85,7 +85,7 @@ class AppConfigurator extends Configurator {
     protected final function registerWarningExceptions() {
         WarningException::setArray(array (
                         FX::W_UNKNOWN => ED::W_UNKNOWN,
-                        FX::W_ACTION_IS_NOT_CALLABLE => ED::W_ACTION_IS_NOT_CALLABLE,
+                        FX::W_FUNCTION_IS_NOT_CALLABLE => ED::W_FUNCTION_IS_NOT_CALLABLE,
                         FX::W_INVALID_PARAMETERS => ED::W_INVALID_PARAMETERS,
                         FX::W_PERMISSION_DENIED => ED::W_PERMISSION_DENIED,
                         FX::W_INVALID_TOKEN => ED::W_INVALID_TOKEN,
@@ -96,7 +96,7 @@ class AppConfigurator extends Configurator {
                         FX::W_DB_UNABLE_COMMIT_TRANSACTION => ED::W_DB_UNABLE_COMMIT_TRANSACTION,
                         FX::W_DB_UNABLE_ROLLBACK_TRANSACTION => ED::W_DB_UNABLE_ROLLBACK_TRANSACTION,
                         FX::W_ROUTER_INVALID_ROUTE => ED::W_ROUTER_INVALID_ROUTE,
-                        FX::W_ROUTER_INVALID_ROUTE_ACTION => ED::W_ROUTER_INVALID_ROUTE_ACTION,
+                        FX::W_ROUTER_INVALID_ACTION => ED::W_ROUTER_INVALID_ACTION,
                         FX::W_RESPONSE_INVALID_FORMAT => ED::W_RESPONSE_INVALID_FORMAT 
         ));
     }

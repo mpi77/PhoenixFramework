@@ -23,11 +23,15 @@ use \Phoenix\Utils\System;
 /**
  * FrontController
  *
- * @version 1.25
+ * @version 1.26
  * @author MPI
  *        
  */
 class FrontController {
+    const URL_GET_ROUTE = "route";
+    const URL_GET_ACTION = "action";
+    const URL_GET_FORMAT = "format";
+    
     /** @var Phoenix\Core\Database */
     private $db;
     
@@ -136,8 +140,8 @@ class FrontController {
      * @return void
      */
     private function dispatch() {
-        $route_name = $this->request->getUrl()->getQueryParameter("route");
-        $this->response_format = $this->request->getUrl()->getQueryParameter("format");
+        $route_name = $this->request->getUrl()->getQueryParameter(self::URL_GET_ROUTE);
+        $this->response_format = $this->request->getUrl()->getQueryParameter(self::URL_GET_FORMAT);
         
         // if route is not found in router, it will returns default route for used router
         $route = $this->router->getRoute($route_name);
@@ -177,12 +181,12 @@ class FrontController {
      * @return void
      */
     private function performControllerAction() {
-        $route_name = $this->request->getUrl()->getQueryParameter("route");
-        $action_name = $this->request->getUrl()->getQueryParameter("action");
+        $route_name = $this->request->getUrl()->getQueryParameter(self::URL_GET_ROUTE);
+        $action_name = $this->request->getUrl()->getQueryParameter(self::URL_GET_ACTION);
         if (System::isCallable($this->controller, $action_name)) {
             $this->controller->{$action_name}();
         } else {
-            throw new WarningException(FrameworkExceptions::W_ACTION_IS_NOT_CALLABLE, json_encode($this->request));
+            throw new WarningException(FrameworkExceptions::W_ROUTER_INVALID_ACTION, json_encode($this->request));
         }
         
         // @todo
@@ -206,7 +210,7 @@ class FrontController {
          *
          * it is possible to create new response with content only in situations mentioned above
          */
-        $action_name = $this->request->getUrl()->getQueryParameter("action");
+        $action_name = $this->request->getUrl()->getQueryParameter(self::URL_GET_ACTION);
         if (is_null($this->response) || ($this->response instanceof Response && $this->response->getException() instanceof NoticeException)) {
             if (System::isCallable($this->view, $action_name)) {
                 $old_exception = ($this->response instanceof Response && $this->response->getException() instanceof NoticeException) ? $this->response->getException() : null;
@@ -214,7 +218,7 @@ class FrontController {
                 $this->response = $this->view->getResponse();
                 $this->response->setException($old_exception);
             } else {
-                throw new WarningException(FrameworkExceptions::W_ACTION_IS_NOT_CALLABLE, json_encode($this->request));
+                throw new WarningException(FrameworkExceptions::W_ROUTER_INVALID_ACTION, json_encode($this->request));
             }
         }
     }

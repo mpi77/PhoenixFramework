@@ -7,7 +7,7 @@ use \Phoenix\Locale\IModuleDefinition;
 /**
  * Exception definition.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *        
  */
@@ -29,7 +29,7 @@ class ExceptionDefinition implements IModuleDefinition {
     
     /* warning exceptions */
     const W_UNKNOWN = 200;
-    const W_ACTION_IS_NOT_CALLABLE = 201;
+    const W_FUNCTION_IS_NOT_CALLABLE = 201;
     const W_INVALID_PARAMETERS = 202;
     const W_PERMISSION_DENIED = 203;
     const W_INVALID_TOKEN = 204;
@@ -40,7 +40,7 @@ class ExceptionDefinition implements IModuleDefinition {
     const W_DB_UNABLE_COMMIT_TRANSACTION = 244;
     const W_DB_UNABLE_ROLLBACK_TRANSACTION = 245;
     const W_ROUTER_INVALID_ROUTE = 250;
-    const W_ROUTER_INVALID_ROUTE_ACTION = 251;
+    const W_ROUTER_INVALID_ACTION = 251;
     const W_RESPONSE_INVALID_FORMAT = 260;
     
     /* notice exceptions */

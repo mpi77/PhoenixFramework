@@ -8,7 +8,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Exception translator.
  *
- * @version 1.9
+ * @version 1.10
  * @author MPI
  *        
  */
@@ -33,7 +33,7 @@ class ExceptionTranslator implements IModuleTranslator {
                     ED::F_URL_PARSE_ERROR => "Nepodařilo se vytvořit url adresu.",
                     ED::F_ROUTE_MISSING_ARGS => "Nepodařilo se vytvořit objekt cesty v routeru.",
                     ED::W_UNKNOWN => "Neznámá chyba.",
-                    ED::W_ACTION_IS_NOT_CALLABLE => "Zadanou akci nelze spustit.",
+                    ED::W_FUNCTION_IS_NOT_CALLABLE => "Zadanou akci nelze spustit.",
                     ED::W_INVALID_PARAMETERS => "Zadané parametry nejsou platné.",
                     ED::W_PERMISSION_DENIED => "Nemáte potřebné oprávnění k provedení této akce.",
                     ED::W_INVALID_TOKEN => "Token není platný.",
@@ -44,7 +44,7 @@ class ExceptionTranslator implements IModuleTranslator {
                     ED::W_DB_UNABLE_COMMIT_TRANSACTION => "Nepodařilo se potvrdit transakci.",
                     ED::W_DB_UNABLE_ROLLBACK_TRANSACTION => "Nepodařilo se ukončit transakci.",
                     ED::W_ROUTER_INVALID_ROUTE => "Neznámá cesta.",
-                    ED::W_ROUTER_INVALID_ROUTE_ACTION => "Neznámá akce.",
+                    ED::W_ROUTER_INVALID_ACTION => "Neznámá akce.",
                     ED::W_RESPONSE_INVALID_FORMAT => "Neplatný formát odpovědi.",
                     ED::N_UNKNOWN => "Neznámé upozornění." 
     );
