@@ -8,7 +8,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Exception translator.
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
  *        
  */
@@ -28,6 +28,7 @@ class ExceptionTranslator implements IModuleTranslator {
                     ED::F_LOGGER_UNABLE_SAVE_WARNING => "Unable to save warning to db.",
                     ED::F_RESPONSE_HEADERS_SENT => "Unable to send headers.",
                     ED::F_RESPONSE_INVALID_HTTP_CODE => "Unable to set http status code.",
+                    ED::F_REQUEST_FORCED_HTTPS => "It is required secured connection.",
                     ED::F_URL_PARSE_ERROR => "Unable to parse url.",
                     ED::F_ROUTE_MISSING_ARGS => "Unable to create route in the router.",
                     ED::W_UNKNOWN => "Unknown warning.",

@@ -13,7 +13,7 @@ namespace Phoenix\Exceptions;
  * in AppConfigurator should be an integer greater 
  * than 1000.
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
  *        
  */
@@ -47,7 +47,8 @@ class FrameworkExceptions {
     const F_LOGGER_UNABLE_SAVE_WARNING = 13;
     const F_RESPONSE_HEADERS_SENT = 14;
     const F_RESPONSE_INVALID_HTTP_CODE = 15;
-    const F_URL_PARSE_ERROR = 16;
-    const F_ROUTE_MISSING_ARGS = 17;
+    const F_REQUEST_FORCED_HTTPS = 16;
+    const F_URL_PARSE_ERROR = 17;
+    const F_ROUTE_MISSING_ARGS = 18;
 }
 ?>

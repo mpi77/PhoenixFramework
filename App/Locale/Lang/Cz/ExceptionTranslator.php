@@ -8,7 +8,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Exception translator.
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
  *        
  */
@@ -28,6 +28,7 @@ class ExceptionTranslator implements IModuleTranslator {
                     ED::F_LOGGER_UNABLE_SAVE_WARNING => "Nepovedlo se uložit chybu do databáze.",
                     ED::F_RESPONSE_HEADERS_SENT => "Nepovedlo se odeslat hlavičky ve správném pořadí.",
                     ED::F_RESPONSE_INVALID_HTTP_CODE => "Nepodařilo se nastavit správný kód odpovědi.",
+                    ED::F_REQUEST_FORCED_HTTPS => "Je vyžadováno zabezpečené spojení pro zpracování požadavku.",
                     ED::F_URL_PARSE_ERROR => "Nepodařilo se vytvořit url adresu.",
                     ED::F_ROUTE_MISSING_ARGS => "Nepodařilo se vytvořit objekt cesty v routeru.",
                     ED::W_UNKNOWN => "Neznámá chyba.",
