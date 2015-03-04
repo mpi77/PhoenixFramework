@@ -14,7 +14,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Application configurator.
  *
- * @version 1.12
+ * @version 1.13
  * @author MPI
  *        
  */
@@ -109,15 +109,15 @@ class AppConfigurator extends Configurator {
     protected final function registerFailureExceptions() {
         FailureException::setArray(array (
                         FX::F_UNKNOWN => ED::F_UNKNOWN,
-                        FX::F_MISSING_CONFIG_DB => ED::F_MISSING_CONFIG_DB,
-                        FX::F_UNABLE_CONNECT_DB => ED::F_UNABLE_CONNECT_DB,
-                        FX::F_UNABLE_SAVE_WARNING => ED::F_UNABLE_SAVE_WARNING,
-                        FX::F_UNABLE_SET_DB_CHARSET => ED::F_UNABLE_SET_DB_CHARSET,
+                        FX::F_CLASS_NOT_FOUND => ED::F_CLASS_NOT_FOUND,
+                        FX::F_DB_MISSING_CONFIG => ED::F_DB_MISSING_CONFIG,
+                        FX::F_DB_UNABLE_CONNECT => ED::F_DB_UNABLE_CONNECT,
+                        FX::F_DB_UNABLE_SET_CHARSET => ED::F_DB_UNABLE_SET_CHARSET,
+                        FX::F_LOGGER_UNABLE_SAVE_WARNING => ED::F_LOGGER_UNABLE_SAVE_WARNING,
                         FX::F_RESPONSE_HEADERS_SENT => ED::F_RESPONSE_HEADERS_SENT,
                         FX::F_RESPONSE_INVALID_HTTP_CODE => ED::F_RESPONSE_INVALID_HTTP_CODE,
                         FX::F_URL_PARSE_ERROR => ED::F_URL_PARSE_ERROR,
-                        FX::F_ROUTE_MISSING_ARGS => ED::F_ROUTE_MISSING_ARGS,
-                        FX::F_CLASS_NOT_FOUND => ED::F_CLASS_NOT_FOUND
+                        FX::F_ROUTE_MISSING_ARGS => ED::F_ROUTE_MISSING_ARGS
         ));
     }
 }

@@ -15,7 +15,7 @@ use \Phoenix\Utils\Files;
 /**
  * Logger object
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  *        
  */
@@ -64,7 +64,7 @@ class Logger {
                 throw new WarningException(FrameworkExceptions::W_DB_INVALID_SQL_ACTION);
             }
         } catch (WarningException $ex) {
-            self::saveToFile(new FailureException(FrameworkExceptions::F_UNABLE_SAVE_WARNING));
+            self::saveToFile(new FailureException(FrameworkExceptions::F_LOGGER_UNABLE_SAVE_WARNING));
             self::saveToFile($e);
             System::redirect(Config::get(Config::KEY_SITE_FQDN) . Config::get(Config::KEY_SHUTDOWN_PAGE));
         }

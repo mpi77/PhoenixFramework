@@ -14,7 +14,7 @@ use \PDOException;
  * and db server.
  * It is PDO wrapper for this framework.
  *
- * @version 1.10
+ * @version 1.11
  * @author MPI
  *        
  */
@@ -47,7 +47,7 @@ class Database {
     public function __construct($pool_id) {
         $this->pool_id = $pool_id;
         if (empty($this->pool_id)) {
-            throw new FailureException(FX::F_MISSING_CONFIG_DB);
+            throw new FailureException(FX::F_DB_MISSING_CONFIG);
         } else {
             $this->connect();
         }
@@ -248,7 +248,7 @@ class Database {
             $this->status = true;
         } catch (PDOException $e) {
             $this->status = false;
-            throw new FailureException(FX::F_UNABLE_CONNECT_DB);
+            throw new FailureException(FX::F_DB_UNABLE_CONNECT);
         }
     }
 }

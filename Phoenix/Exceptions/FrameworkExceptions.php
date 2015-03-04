@@ -13,7 +13,7 @@ namespace Phoenix\Exceptions;
  * in AppConfigurator should be an integer greater 
  * than 1000.
  *
- * @version 1.6
+ * @version 1.7
  * @author MPI
  *        
  */
@@ -40,14 +40,14 @@ class FrameworkExceptions {
     
     /* failure exceptions */
     const F_UNKNOWN = 0;
-    const F_MISSING_CONFIG_DB = 1;
-    const F_UNABLE_CONNECT_DB = 2;
-    const F_UNABLE_SET_DB_CHARSET = 3;
-    const F_UNABLE_SAVE_WARNING = 4;
-    const F_RESPONSE_HEADERS_SENT = 5;
-    const F_RESPONSE_INVALID_HTTP_CODE = 6;
-    const F_URL_PARSE_ERROR = 7;
-    const F_ROUTE_MISSING_ARGS = 8;
-    const F_CLASS_NOT_FOUND = 9;
+    const F_CLASS_NOT_FOUND = 1;
+    const F_DB_MISSING_CONFIG = 10;
+    const F_DB_UNABLE_CONNECT = 11;
+    const F_DB_UNABLE_SET_CHARSET = 12;
+    const F_LOGGER_UNABLE_SAVE_WARNING = 13;
+    const F_RESPONSE_HEADERS_SENT = 14;
+    const F_RESPONSE_INVALID_HTTP_CODE = 15;
+    const F_URL_PARSE_ERROR = 16;
+    const F_ROUTE_MISSING_ARGS = 17;
 }
 ?>
