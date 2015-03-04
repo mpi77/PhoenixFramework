@@ -14,7 +14,7 @@ use \App\Locale\Def\ExceptionDefinition as ED;
 /**
  * Application configurator.
  *
- * @version 1.14
+ * @version 1.15
  * @author MPI
  *        
  */
@@ -117,6 +117,7 @@ class AppConfigurator extends Configurator {
                         FX::F_RESPONSE_HEADERS_SENT => ED::F_RESPONSE_HEADERS_SENT,
                         FX::F_RESPONSE_INVALID_HTTP_CODE => ED::F_RESPONSE_INVALID_HTTP_CODE,
                         FX::F_REQUEST_FORCED_HTTPS => ED::F_REQUEST_FORCED_HTTPS,
+                        FX::F_REQUEST_INVALID_METHOD => ED::F_REQUEST_INVALID_METHOD,
                         FX::F_URL_PARSE_ERROR => ED::F_URL_PARSE_ERROR,
                         FX::F_ROUTE_MISSING_ARGS => ED::F_ROUTE_MISSING_ARGS
         ));

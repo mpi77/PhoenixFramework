@@ -7,7 +7,7 @@ use \Phoenix\Locale\IModuleDefinition;
 /**
  * Exception definition.
  *
- * @version 1.8
+ * @version 1.9
  * @author MPI
  *        
  */
@@ -23,8 +23,9 @@ class ExceptionDefinition implements IModuleDefinition {
     const F_RESPONSE_HEADERS_SENT = 114;
     const F_RESPONSE_INVALID_HTTP_CODE = 115;
     const F_REQUEST_FORCED_HTTPS = 116;
-    const F_URL_PARSE_ERROR = 117;
-    const F_ROUTE_MISSING_ARGS = 118;
+    const F_REQUEST_INVALID_METHOD = 117;
+    const F_URL_PARSE_ERROR = 118;
+    const F_ROUTE_MISSING_ARGS = 119;
     
     /* warning exceptions */
     const W_UNKNOWN = 200;

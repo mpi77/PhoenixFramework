@@ -3,11 +3,14 @@
 namespace Phoenix\Http;
 
 use \Phoenix\Http\Url;
+use \Phoenix\Core\Config;
+use \Phoenix\Exceptions\FailureException;
+use \Phoenix\Exceptions\FrameworkExceptions;
 
 /**
  * Root request object.
  *
- * @version 1.4
+ * @version 1.5
  * @author MPI
  *        
  */
@@ -68,23 +71,33 @@ class Request {
     /**
      * Request constructor.
      *
+     * @throws Phoenix\Exceptions\FailureException
      * @param Url $url            
      * @param string $method            
      * @param string $post
-     *            [optional]
+     *            [optional] default null
      * @param string $files
-     *            [optional]
+     *            [optional] default null
      * @param string $cookies
-     *            [optional]
+     *            [optional] default null
      * @param string $headers
-     *            [optional]
+     *            [optional] default null
      * @param string $remote_address
-     *            [optional]
+     *            [optional] default null
      * @param string $remote_host
-     *            [optional]
+     *            [optional] default null
+     * @return void
      */
     public function __construct(Url $url, $method, $post = null, $files = null, $cookies = null, $headers = null, $remote_address = null, $remote_host = null) {
+        if (empty($method) || !is_string($method)) {
+            throw new FailureException(FrameworkExceptions::F_REQUEST_INVALID_METHOD);
+        }
+        
         $this->url = $url;
+        if (Config::get(Config::KEY_FORCE_HTTPS) === true && $this->isHttps() !== true) {
+            throw new FailureException(FrameworkExceptions::F_REQUEST_FORCED_HTTPS);
+        }
+        
         $this->method = $method;
         $this->post = (array) $post;
         $this->files = (array) $files;
@@ -154,16 +167,16 @@ class Request {
      * @return mixed
      */
     public function getFile($pool, $file_name, $default = null) {
-        if(empty($pool) || !is_string($pool)){
+        if (empty($pool) || !is_string($pool)) {
             return $default;
         }
-        if(is_string($file_name) && array_key_exists($pool, $this->files) && !empty($this->files)){
-            foreach ($this->files[$pool] as $v){
-                if($v["name"] == $file_name){
+        if (is_string($file_name) && array_key_exists($pool, $this->files) && !empty($this->files)) {
+            foreach ($this->files[$pool] as $v) {
+                if ($v["name"] == $file_name) {
                     return $v;
                 }
             }
-        } 
+        }
         return $default;
     }
 

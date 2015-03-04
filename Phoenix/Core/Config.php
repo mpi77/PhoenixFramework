@@ -5,7 +5,7 @@ namespace Phoenix\Core;
 /**
  * Config stores and servers required configuration values.
  *
- * @version 1.19
+ * @version 1.20
  * @author MPI
  *        
  */
@@ -41,6 +41,8 @@ class Config {
     const KEY_DB_THIRD_POOL = 52;
     const KEY_APP_EXCEPTION_MODULE_NAME = 100;
     const KEY_APP_USE_ROUTER = 101;
+    const KEY_APP_PROXY_FILE_ROUTE = 102;
+    const KEY_APP_PROXY_FILE_ACTION = 103;
     
     /* default config values for config keys */
     const DEFAULT_DIR_ROOT = __DIR__;
@@ -69,6 +71,8 @@ class Config {
     const DEFAULT_DB_THIRD_POOL = 3;
     const DEFAULT_APP_EXCEPTION_MODULE_NAME = "Exception";
     const DEFAULT_APP_USE_ROUTER = 0;
+    const DEFAULT_APP_PROXY_FILE_ROUTE = "";
+    const DEFAULT_APP_PROXY_FILE_ACTION = "";
     
     /* db keys */
     const DB_DRIVER = 1;
@@ -318,7 +322,9 @@ class Config {
                         self::KEY_DB_SECONDARY_POOL => self::DEFAULT_DB_SECONDARY_POOL,
                         self::KEY_DB_THIRD_POOL => self::DEFAULT_DB_THIRD_POOL,
                         self::KEY_APP_EXCEPTION_MODULE_NAME => self::DEFAULT_APP_EXCEPTION_MODULE_NAME,
-                        self::KEY_APP_USE_ROUTER => self::DEFAULT_APP_USE_ROUTER
+                        self::KEY_APP_USE_ROUTER => self::DEFAULT_APP_USE_ROUTER,
+                        self::KEY_APP_PROXY_FILE_ROUTE => self::DEFAULT_APP_PROXY_FILE_ROUTE,
+                        self::KEY_APP_PROXY_FILE_ACTION => self::DEFAULT_APP_PROXY_FILE_ACTION
         );
     }
 }

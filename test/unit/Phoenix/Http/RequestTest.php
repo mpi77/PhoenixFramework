@@ -2,11 +2,15 @@
 /**
  * Request unit test.
  *
- * @version 1.2
+ * @version 1.3
  * @author MPI
  * */
+include '../../../../Phoenix/Core/Config.php';
 include '../../../../Phoenix/Http/Url.php';
 include '../../../../Phoenix/Http/Request.php';
+include '../../../../Phoenix/Exceptions/BaseException.php';
+include '../../../../Phoenix/Exceptions/FailureException.php';
+include '../../../../Phoenix/Exceptions/FrameworkExceptions.php';
 
 use \Phoenix\Http\Url;
 use \Phoenix\Http\Request;
@@ -17,14 +21,23 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
         $this->request = null;
     }
     
+    /**
+     * @expectedException Phoenix\Exceptions\FailureException
+     */
     public function testEmptyConstructor() {
         $url = new Url();
         
         $this->request = new Request($url, null);
+    }
+    
+    public function testMinimalConstructor1() {
+        $url = new Url();
+    
+        $this->request = new Request($url, "GET");
         $this->assertSame($url, $this->request->getUrl());
-        $this->assertNull($this->request->getMethod());
-        $this->assertFalse($this->request->isMethod("GET"));
-        $this->assertFalse($this->request->isGet());
+        $this->assertSame("GET", $this->request->getMethod());
+        $this->assertTrue($this->request->isMethod("GET"));
+        $this->assertTrue($this->request->isGet());
         $this->assertFalse($this->request->isPost());
         $this->assertFalse($this->request->isAjax());
         $this->assertFalse($this->request->isHttp());
@@ -43,7 +56,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
         $this->assertNull($this->request->getRemoteHost());
     }
 
-    public function testMinimalConstructor() {
+    public function testMinimalConstructor2() {
         $url = new Url("http://localhost.com/phoenix/index.php?route=index&action=index");
         $this->request = new Request($url, "GET");
         $this->assertEquals("http://localhost.com/phoenix/index.php?route=index&action=index", $this->request->getUrl()->getAbsoluteUrl());
