@@ -9,22 +9,30 @@ use \Phoenix\Exceptions\FrameworkExceptions;
 /**
  * SimpleRoute object.
  *
- * @version 1.12
+ * @version 1.13
  * @author MPI
  *        
  */
 class SimpleRoute implements IRoute {
+    /** @var string */
     private $model;
+    
+    /** @var string */
     private $view;
+    
+    /** @var string */
     private $controller;
 
     /**
      * SimpleRoute constructor.
      *
      * @throws Phoenix\Exceptions\FailureException
-     * @param string $model            
-     * @param string $view            
-     * @param string $controller            
+     * @param string $model
+     *            fully namespaced class name
+     * @param string $view
+     *            fully namespaced class name
+     * @param string $controller
+     *            fully namespaced class name
      * @return void
      */
     public function __construct($model, $view, $controller) {
@@ -37,7 +45,8 @@ class SimpleRoute implements IRoute {
     }
 
     /**
-     * Get this model name.
+     * Get this model name. 
+     * It is fully namespaced class name.
      *
      * @return string
      */
@@ -46,7 +55,8 @@ class SimpleRoute implements IRoute {
     }
 
     /**
-     * Get this view name.
+     * Get this view name. 
+     * It is fully namespaced class name.
      *
      * @return string
      */
@@ -55,7 +65,8 @@ class SimpleRoute implements IRoute {
     }
 
     /**
-     * Get this controller name.
+     * Get this controller name. 
+     * It is fully namespaced class name.
      *
      * @return string
      */

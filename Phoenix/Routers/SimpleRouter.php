@@ -9,7 +9,7 @@ use \Phoenix\Routers\SimpleRoute;
 /**
  * SimpleRouter
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
  *        
  */
@@ -17,7 +17,11 @@ class SimpleRouter implements IRouter {
     const DISABLE_ROUTE_OVERWRITING = true;
     const DEFAULT_EMPTY_ROUTE = "index";
     const DEFAULT_EMPTY_ACTION = "index";
+    
+    /** @var array */
     private static $table = array ();
+    
+    /** @var boolean */
     private static $registration_enabled = true;
 
     /**
