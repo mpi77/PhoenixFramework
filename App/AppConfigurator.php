@@ -9,12 +9,15 @@ use \Phoenix\Exceptions\WarningException;
 use \Phoenix\Exceptions\FailureException;
 use \Phoenix\Exceptions\FrameworkExceptions as FX;
 use \Phoenix\Routers\RouterFactory;
+use \Phoenix\Routers\SimpleRoute;
+use \Phoenix\Routers\SimpleRouter;
 use \App\Locale\Def\ExceptionDefinition as ED;
+use Phoenix\Routers\Phoenix\Routers;
 
 /**
  * Application configurator.
  *
- * @version 1.16
+ * @version 1.17
  * @author MPI
  *        
  */
@@ -39,6 +42,7 @@ class AppConfigurator extends Configurator {
      */
     public final function disableRegistrations() {
         Config::disableRegistration();
+        SimpleRouter::disableRegistration();
         NoticeException::disableRegistration();
         WarningException::disableRegistration();
         FailureException::disableRegistration();
@@ -66,6 +70,7 @@ class AppConfigurator extends Configurator {
      * @return void
      */
     protected final function registerRoutes() {
+        SimpleRouter::register("index", new SimpleRoute("App\Models\IndexModel", "App\Views\IndexView", "App\Controllers\IndexController"));
     }
 
     /**

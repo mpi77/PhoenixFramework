@@ -9,7 +9,7 @@ use \Phoenix\Routers\SimpleRoute;
 /**
  * SimpleRouter
  *
- * @version 1.8
+ * @version 1.9
  * @author MPI
  *        
  */
@@ -100,14 +100,15 @@ class SimpleRouter implements IRouter {
 
     /**
      * Init SimpleRouter table.
-     * It creates route table with default self::DEFAULT_EMPTY_ROUTE=>SimpleRoute("IndexModel", "IndexView", "IndexController")
+     * It creates route table with default self::DEFAULT_EMPTY_ROUTE=>new SimpleRoute("App\Models\IndexModel",
+     * "App\Views\IndexView", "App\Controllers\IndexController")
      *
      * @return void
      */
     private static function init() {
         if (empty(self::$table) || !is_array(self::$table)) {
             self::$table = array (
-                            self::DEFAULT_EMPTY_ROUTE => new SimpleRoute("IndexModel", "IndexView", "IndexController") 
+                            self::DEFAULT_EMPTY_ROUTE => new SimpleRoute("App\Models\IndexModel", "App\Views\IndexView", "App\Controllers\IndexController") 
             );
         }
     }
