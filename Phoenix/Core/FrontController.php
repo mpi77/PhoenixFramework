@@ -23,7 +23,7 @@ use \Phoenix\Utils\System;
 /**
  * FrontController
  *
- * @version 1.26
+ * @version 1.27
  * @author MPI
  *        
  */
@@ -72,6 +72,7 @@ class FrontController {
             }
             $this->db = $db;
             $this->request = $request;
+            $this->response_format = $this->request->getUrl()->getQueryParameter(self::URL_GET_FORMAT);
             $this->router = RouterFactory::createRouter(Config::get(Config::KEY_APP_USE_ROUTER));
             
             $this->dispatch();
@@ -141,7 +142,6 @@ class FrontController {
      */
     private function dispatch() {
         $route_name = $this->request->getUrl()->getQueryParameter(self::URL_GET_ROUTE);
-        $this->response_format = $this->request->getUrl()->getQueryParameter(self::URL_GET_FORMAT);
         
         // if route is not found in router, it will returns default route for used router
         $route = $this->router->getRoute($route_name);

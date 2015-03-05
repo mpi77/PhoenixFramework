@@ -2,6 +2,7 @@
 
 namespace Phoenix\Http;
 
+use \JsonSerializable;
 use Phoenix\Exceptions\FailureException;
 use Phoenix\Exceptions\FrameworkExceptions;
 use Phoenix\Utils\Strings;
@@ -10,67 +11,40 @@ use Phoenix\Utils\Strings;
  * Url object.
  * It is based on URI Syntax (RFC 3986).
  *
- * @version 1.7
+ * @version 1.8
  * @author MPI
  *        
  */
-class Url {
+class Url implements JsonSerializable {
     
-    /**
-     *
-     * @var array
-     */
+    /** @var array */
     public static $default_ports = array (
                     "http" => 80,
                     "https" => 443 
     );
     
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     private $scheme = "";
     
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     private $user = "";
     
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     private $pass = "";
     
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     private $host = "";
     
-    /**
-     *
-     * @var int
-     */
+    /** @var int */
     private $port = null;
     
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     private $path = "";
     
-    /**
-     *
-     * @var array
-     */
+    /** @var array */
     private $query = array ();
     
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     private $fragment = "";
 
     /**
@@ -434,6 +408,15 @@ class Url {
             $res = Strings::stripSlashes($res);
         }
         return $res;
+    }
+    
+    /**
+     * Serialize this object to JSON.
+     *
+     * @return string
+     */
+    public function jsonSerialize() {
+        return $this->getAbsoluteUrl();
     }
 }
 ?>

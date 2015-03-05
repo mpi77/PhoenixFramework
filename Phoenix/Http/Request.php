@@ -2,6 +2,7 @@
 
 namespace Phoenix\Http;
 
+use \JsonSerializable;
 use \Phoenix\Http\Url;
 use \Phoenix\Core\Config;
 use \Phoenix\Exceptions\FailureException;
@@ -10,62 +11,38 @@ use \Phoenix\Exceptions\FrameworkExceptions;
 /**
  * Root request object.
  *
- * @version 1.5
+ * @version 1.6
  * @author MPI
  *        
  */
-class Request {
+class Request implements JsonSerializable {
     const GET = "GET";
     const POST = "POST";
     const HEAD = "HEAD";
     const PUT = "PUT";
     
-    /**
-     *
-     * @var Phoenix\Http\Url
-     */
+    /** @var Phoenix\Http\Url */
     private $url;
     
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     private $method;
     
-    /**
-     *
-     * @var array
-     */
+    /** @var array */
     private $post;
     
-    /**
-     *
-     * @var array
-     */
+    /** @var array */
     private $files;
     
-    /**
-     *
-     * @var array
-     */
+    /** @var array */
     private $cookies;
     
-    /**
-     *
-     * @var array
-     */
+    /** @var array */
     private $headers;
     
-    /**
-     *
-     * @var string|null
-     */
+    /** @var string|null */
     private $remote_address;
     
-    /**
-     *
-     * @var string|null
-     */
+    /** @var string|null */
     private $remote_host;
 
     /**
@@ -344,6 +321,20 @@ class Request {
         }
         
         return $lang;
+    }
+
+    /**
+     * Serialize this object to JSON.
+     *
+     * @return array
+     */
+    public function jsonSerialize() {
+        return array (
+                        "url" => $this->url,
+                        "method" => $this->method,
+                        "remote_address" => $this->remote_address,
+                        "remote_host" => $this->remote_host 
+        );
     }
 }
 ?>
