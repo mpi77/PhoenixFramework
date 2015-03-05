@@ -1,151 +1,180 @@
 <?php
+namespace Phoenix\Core;
+
+use \Phoenix\Core\Config;
+use \Phoenix\Core\Database;
+use \Phoenix\Core\FrontController;
+use \Phoenix\Dao\ProxyDao;
+use \Phoenix\Exceptions\BaseException;
+use \Phoenix\Exceptions\NoticeException;
+use \Phoenix\Exceptions\WarningException;
+use \Phoenix\Exceptions\FailureException;
+use \Phoenix\Exceptions\FrameworkExceptions;
+use \Phoenix\Http\Request;
+use \Phoenix\Http\RequestFactory;
+use \Phoenix\Http\Response;
+use \Phoenix\Http\ResponseFactory;
+use \Phoenix\Utils\Logger;
+use \Phoenix\Utils\System;
 
 /**
  * Proxy gateway
  * 
- * @version 1.21
+ * @version 1.22
  * @author MPI
  * */
 class Proxy {
+    
+    /** @var Phoenix\Core\Database */
     private $db;
-    private $args;
-    private $frontController;
+    
+    /** @var Phoenix\Http\Request */
+    private $request;
+    
+    /** @var Phoenix\Http\Response */
     private $response;
-    private $responseFormat;
-    const FILE_DOWNLOAD_ROUTE = "file";
-    const FILE_DOWNLOAD_ACTION = "download";
+    
+    /** @var string */
+    private $response_format;
+    
+    /** @var Phoenix\Core\FrontController */
+    private $front_controller;
 
+    /**
+     * Proxy constructor.
+     * 
+     * @return void
+     */
     public function __construct() {
         $this->response = null;
-        $this->args["GET"] = System::trimSlashMultidimAssocArray($_GET);
-        $this->args["POST"] = System::trimSlashMultidimAssocArray($_POST);
-        $this->args["GET"]["route"] = isset($this->args["GET"]["route"]) ? $this->args["GET"]["route"] : Router::DEFAULT_EMPTY_ROUTE;
-        $this->args["GET"]["action"] = isset($this->args["GET"]["action"]) ? $this->args["GET"]["action"] : Router::DEFAULT_EMPTY_ACTION;
-        $this->args["GET"]["format"] = (isset($this->args["GET"]["format"]) && Response::isValidResponseFormat($this->args["GET"]["format"])) ? $this->args["GET"]["format"] : Response::RESPONSE_HTML;
-        $this->responseFormat = $this->args["GET"]["format"];
-        
         try {
-            $this->db = new Database(Config::getDatabaseConnectionParams(Config::DB_DEFAULT_POOL));
+            $this->request = RequestFactory::createRequest();
+            $this->response_format = $this->request->getUrl()->getQueryParameter(FrontController::URL_GET_FORMAT);
+            
+            $this->db = new Database(Config::getDatabasePool(Config::get(Config::KEY_DB_PRIMARY_POOL)));
+            
             $this->runProxy();
         } catch (NoticeException $e) {
-            $this->response = Response::responseFactory($this->responseFormat);
+            $this->response = ResponseFactory::createResponse($this->response_format);
             $this->response->setException($e);
         } catch (WarningException $e) {
             Logger::log($e, $this->db);
-            $this->response = Response::responseFactory($this->responseFormat);
+            $this->response = ResponseFactory::createResponse($this->response_format);
             $this->response->setException($e);
         } catch (FailureException $e) {
             Logger::log($e);
-            $this->response = Response::responseFactory($this->responseFormat);
+            $this->response = ResponseFactory::createResponse($this->response_format);
             $this->response->setException($e);
         } catch (Exception $e) {
             Logger::log($e);
-            $this->response = Response::responseFactory($this->responseFormat);
+            $this->response = ResponseFactory::createResponse($this->response_format);
             $this->response->setException($e);
         }
         
-        // send response with exception
+        // send response
         if ($this->response instanceof Response) {
             $this->response->send();
             exit();
+        } else {
+            System::redirect(Config::get(Config::KEY_SITE_FQDN) . Config::get(Config::KEY_SHUTDOWN_PAGE));
         }
     }
 
+    /**
+     * Proxy destructor.
+     *
+     * @return void
+     */
     public function __destruct() {
         if (!empty($this->db)) {
             $this->db = null;
         }
     }
-
-    /**
-     * Get FrontController.
-     *
-     * @return FrontController
-     */
-    public function getFrontController() {
-        return $this->frontController;
-    }
-
-    /**
-     * Run proxy detection.
-     */
-    private function runProxy() {
-        if ($this->isFcpRequest() === true) {
-            $this->createFrontController();
-            return;
-        }
-        
-        if ($this->isProxyRequest() === true) {
-            $this->proxyRequest();
-        }
-    }
     
     /**
-     * Process fcp request.
+     * Run proxy detection.
+     * 
+     * @throws Phoenix\Exceptions\WarningException
+     * @return void
      */
-    private function createFrontController() {
-        $this->frontController = new FrontController($this->db, $this->args);
+    private function runProxy() {
+        if ($this->isFrontControllerRequest() === true) {
+            $this->performFrontControllerRequest();
+            return;
+        }
+    
+        if ($this->isProxyRequest() === true) {
+            $this->performProxyRequest();
+        }
     }
 
     /**
-     * Process proxy request.
+     * Resolve request in FrontController.
      *
-     * @throws WarningException
+     * @return void
      */
-    private function proxyRequest() {
-        $proxyItem = ProxyEntity::getProxyItemByValidToken($this->db, $_GET["token"]);
-        if ($proxyItem == Database::EMPTY_RESULT) {
-            throw new WarningException(WarningException::W_INVALID_TOKEN);
-        }
-        $proxyItem = $proxyItem[0];
+    private function performFrontControllerRequest() {
+        $this->$front_controller = new FrontController($this->db, $this->request);
+        $this->response = $this->front_controller->getResponse();
+    }
+
+    /**
+     * Resolve proxy request.
+     *
+     * @todo cache
+     * @todo file download + condition
+     * @throws Phoenix\Exceptions\WarningException
+     */
+    private function performProxyRequest() {
+        $token = $this->request->getUrl()->getQueryParameter(FrontController::URL_GET_TOKEN);
         
-        // check ACL conditions
-        if ($proxyItem->getOnlyAuthenticated() == Config::SET && Acl::isLoggedin() !== true) {
-            // need to login before continue
-            System::redirect(Config::SITE_PATH . "user/login/?r=" . $proxyItem->getToken());
+        // @todo load from cache
+        
+        // load from db
+        $proxy_item = ProxyDao::getProxyItemByValidToken($this->db, $token);
+        if ($proxy_item == Database::EMPTY_RESULT) {
+            throw new WarningException(FrameworkExceptions::W_INVALID_TOKEN);
         }
-        if (!is_null($proxyItem->getOnlyUid()) && $_SESSION[Config::SERVER_FQDN]["user"]["uid"] != $proxyItem->getOnlyUid()) {
-            // user is blocked
-            throw new WarningException(WarningException::W_PERMISSION_DENIED);
-        }
-        if (!is_null($proxyItem->getOnlyGid()) && !in_array($proxyItem->getOnlyGid(), $_SESSION[Config::SERVER_FQDN]["user"]["gid"])) {
-            // user has not membership in allowed group
-            throw new WarningException(WarningException::W_PERMISSION_DENIED);
-        }
+        $proxy_item = $proxy_item[0];
         
         // detect type of request
-        if (is_null($proxyItem->getRoute()) && is_null($proxyItem->getAction()) && !is_null($proxyItem->getData())) {
+        if (is_null($proxy_item->getRoute()) && is_null($proxy_item->getAction()) && !is_null($proxy_item->getData())) {
             // external link to redirect on (data=url)
-            System::redirect($proxyItem->getData());
-        } else if (!is_null($proxyItem->getRoute()) && !is_null($proxyItem->getAction())) {
-            if ($proxyItem->getRoute() == self::FILE_DOWNLOAD_ROUTE && $proxyItem->getAction() == self::FILE_DOWNLOAD_ACTION && !is_null($proxyItem->getData())) {
-                // file download
-                // TODO
-                exit();
+            System::redirect($proxy_item->getData());
+        } else if (!is_null($proxy_item->getRoute()) && !is_null($proxy_item->getAction())) {
+            $config_route = Config::get(Config::KEY_APP_PROXY_FILE_ROUTE);
+            $config_action = Config::get(Config::KEY_APP_PROXY_FILE_ACTION);
+            if (!empty($config_route) && !empty($config_action) && $proxy_item->getRoute() == $config_route && $proxy_item->getAction() == $config_action && !is_null($proxy_item->getData())) {
+                // @todo file download
             } else {
                 // internal rewrite link to app (data=query string part of url saved as json)
-                $_GET["route"] = $proxyItem->getRoute();
-                $_GET["action"] = $proxyItem->getAction();
-                if (!is_null($proxyItem->getData())) {
+                $_GET = array();
+                $_GET[FrontController::URL_GET_ROUTE] = $proxy_item->getRoute();
+                $_GET[FrontController::URL_GET_ACTION] = $proxy_item->getAction();
+                $_GET[FrontController::URL_GET_FORMAT] = $$this->response_format;
+                if (!is_null($proxy_item->getData())) {
                     // decode json data and put into GET
-                    $_GET = array_merge($_GET, json_decode($proxyItem->getData(), true));
+                    $_GET = array_merge($_GET, json_decode($proxy_item->getData(), true));
                 }
-                $this->args["GET"] = System::trimSlashMultidimAssocArray($_GET);
-                $this->createFrontController();
+                $this->request = RequestFactory::createRequest();
+                $this->performFrontControllerRequest();
                 return;
             }
         } else {
-            throw new WarningException(WarningException::W_INVALID_TOKEN);
+            throw new WarningException(FrameworkExceptions::W_INVALID_TOKEN);
         }
     }
 
     /**
-     * Detects fcp request.
+     * Detect front controller request.
      * 
      * @return boolean
      */
-    private function isFcpRequest() {
-        return ((!isset($_GET["route"]) && !isset($_GET["action"]) && !isset($_GET["token"])) || (isset($_GET["route"]) && !empty($_GET["route"]) && isset($_GET["action"]) && !empty($_GET["action"])));
+    private function isFrontControllerRequest() {
+        $route = $this->request->getUrl()->getQueryParameter(FrontController::URL_GET_ROUTE);
+        $action = $this->request->getUrl()->getQueryParameter(FrontController::URL_GET_ACTION);
+        $token = $this->request->getUrl()->getQueryParameter(FrontController::URL_GET_TOKEN);
+        return ((empty($route) && empty($action) && empty($token)) || (!empty($route) && !empty($action)));
     }
 
     /**
@@ -154,7 +183,10 @@ class Proxy {
      * @return boolean
      */
     private function isProxyRequest() {
-        return (!isset($_GET["route"]) && !isset($_GET["action"]) && isset($_GET["token"]) && !empty($_GET["token"]));
+        $route = $this->request->getUrl()->getQueryParameter(FrontController::URL_GET_ROUTE);
+        $action = $this->request->getUrl()->getQueryParameter(FrontController::URL_GET_ACTION);
+        $token = $this->request->getUrl()->getQueryParameter(FrontController::URL_GET_TOKEN);
+        return (empty($route) && empty($action) && !empty($token));
     }
 }
 ?>

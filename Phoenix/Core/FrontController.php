@@ -23,7 +23,7 @@ use \Phoenix\Utils\System;
 /**
  * FrontController
  *
- * @version 1.27
+ * @version 1.28
  * @author MPI
  *        
  */
@@ -31,6 +31,7 @@ class FrontController {
     const URL_GET_ROUTE = "route";
     const URL_GET_ACTION = "action";
     const URL_GET_FORMAT = "format";
+    const URL_GET_TOKEN = "token";
     
     /** @var Phoenix\Core\Database */
     private $db;
