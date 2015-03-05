@@ -12,12 +12,11 @@ use \Phoenix\Routers\RouterFactory;
 use \Phoenix\Routers\SimpleRoute;
 use \Phoenix\Routers\SimpleRouter;
 use \App\Locale\Def\ExceptionDefinition as ED;
-use Phoenix\Routers\Phoenix\Routers;
 
 /**
  * Application configurator.
  *
- * @version 1.17
+ * @version 1.18
  * @author MPI
  *        
  */
