@@ -13,15 +13,15 @@ use \Phoenix\Exceptions\WarningException;
 /**
  * Html response object.
  *
- * @version 1.14
+ * @version 1.15
  * @author MPI
  *        
  */
 final class HtmlResponse extends Response {
     const CONTENT_TYPE_HTML = "text/html";
     const CHARSET_HTML = "utf-8";
-    const HEADER_TEMPLATE_FILE = "MasterHeaderTemplate.php";
-    const FOOTER_TEMPLATE_FILE = "MasterFooterTemplate.php";
+    const HEADER_TEMPLATE_FILE = "HeaderTemplate.php";
+    const FOOTER_TEMPLATE_FILE = "FooterTemplate.php";
     
     /**
      *
@@ -57,7 +57,7 @@ final class HtmlResponse extends Response {
         $e = $this->getException();
         $tpd = $this->template_data; // variable $tpd is accessible in each template file
         if (is_null($e) || $e instanceof NoticeException || $e instanceof WarningException) {
-            $templates_path = Config::get(Config::KEY_DIR_APP_TEMPLATES);
+            $templates_path = sprintf("%s/",Config::getAbsoluteFolderPath(Config::KEY_DIR_APP_TEMPLATES));
             
             // include Master header template
             if (!empty($templates_path) && is_file($templates_path . self::HEADER_TEMPLATE_FILE)) {
@@ -70,8 +70,8 @@ final class HtmlResponse extends Response {
             }
             
             // make content (only for null or Notice exception)
-            if ((is_null($e) || $e instanceof NoticeException) && !empty($this->template_file) && is_file($this->template_file)) {
-                include $this->template_file;
+            if ((is_null($e) || $e instanceof NoticeException) && !empty($this->template_file) && is_file($templates_path . $this->template_file)) {
+                include $templates_path . $this->template_file;
             }
             
             // include Master footer template

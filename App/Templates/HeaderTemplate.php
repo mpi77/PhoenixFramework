@@ -1,17 +1,32 @@
+<?php 
+
+namespace App\Templates;
+
+use \Phoenix\Core\Config;
+use \Phoenix\Locale\Translate;
+
+/**
+ * HTML page header template.
+ *
+ * @version 1.1
+ * @author MPI
+ *
+ */
+?>
 <!DOCTYPE html>
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<base href="<?php echo htmlspecialchars(Config::SITE_BASE);?>">
-<title><?php Translate::es(Translator::SITE_TITLE);?></title>
-<meta name="description" content="<?php Translate::es(Translator::SITE_DESCRIPTION);?>">
-<meta name="keywords" content="<?php Translate::es(Translator::SITE_KEYWORDS);?>">
-<meta name="author" content="<?php Translate::es(Translator::SITE_AUTHORS);?>">
+<base href="<?php echo htmlspecialchars(Config::get(Config::KEY_SITE_BASE));?>">
+<title><?php ?></title>
+<meta name="description" content="<?php ?>">
+<meta name="keywords" content="<?php ?>">
+<meta name="author" content="<?php ?>">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
 <meta name="format-detection" content="telephone=no">
-<link rel="shortcut icon" href="gui/images/favicon/favicon.ico" title="favicon" />
-<link rel="stylesheet" href="gui/css/custom.css" />
+<link rel="shortcut icon" href="images/favicon/favicon.ico" title="favicon" />
+<link rel="stylesheet" href="css/custom.css" />
 </head>
 
 <body role="document">

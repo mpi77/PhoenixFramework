@@ -1,15 +1,26 @@
-<?php if(Acl::isLoggedin() === true){ /* loggedin user */?>
+<?php 
+
+namespace App\Templates;
+
+/**
+ * HTML index template.
+ *
+ * @version 1.1
+ * @author MPI
+ *
+ */
+?>
+<?php /*if(Acl::isLoggedin() === true){*/ /* loggedin user */?>
 <div class="container" role="main">
 	<div class="page-header">
 		<h1>Dashboard</h1>
 	</div>
 </div>
-<?php /* end of loggedin user*/ } else {?>
+<?php /* end of loggedin user*/ /*} else {*/?>
 <div class="container" role="main">
 	<div class="page-header">
 		<h1><?php $tpd->es("greeting");?></h1>
 	</div>
-	<?php Breadcrumbs::e();?>
 	<div class="col-md-12">
 		<div class="row">
 			<div class="col-md-1"></div>
@@ -25,4 +36,4 @@
 		<div class="spacer-20"></div>
 	</div>
 </div>
-<?php }?>
+<?php /*}*/?>
