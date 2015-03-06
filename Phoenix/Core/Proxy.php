@@ -21,7 +21,7 @@ use \Phoenix\Utils\System;
 /**
  * Proxy gateway
  * 
- * @version 1.24
+ * @version 1.25
  * @author MPI
  * */
 class Proxy {
@@ -97,7 +97,7 @@ class Proxy {
             $this->response->send();
             exit();
         } else {
-            System::redirect(Config::get(Config::KEY_SITE_FQDN) . "400");
+            System::redirect(Config::get(Config::KEY_SITE_FQDN) . Config::get(Config::KEY_SHUTDOWN_PAGE));
         }
     }
     
