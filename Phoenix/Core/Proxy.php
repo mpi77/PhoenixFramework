@@ -21,7 +21,7 @@ use \Phoenix\Utils\System;
 /**
  * Proxy gateway
  * 
- * @version 1.23
+ * @version 1.24
  * @author MPI
  * */
 class Proxy {
@@ -48,12 +48,32 @@ class Proxy {
      */
     public function __construct() {
         $this->response = null;
+    }
+
+    /**
+     * Proxy destructor.
+     *
+     * @return void
+     */
+    public function __destruct() {
+        if (!empty($this->db)) {
+            $this->db = null;
+        }
+    }
+    
+    /**
+     * Run proxy. 
+     * It resolves user request and sends response to user.
+     *
+     * @return void
+     */
+    public function run(){
         try {
             $this->request = RequestFactory::createRequest();
             $this->response_format = $this->request->getUrl()->getQueryParameter(FrontController::URL_GET_FORMAT);
-            
-            $this->db = new Database(Config::getDatabasePool(Config::get(Config::KEY_DB_PRIMARY_POOL)));
-            
+        
+            $this->db = new Database(Config::get(Config::KEY_DB_PRIMARY_POOL));
+        
             $this->runProxy();
         } catch (NoticeException $e) {
             $this->response = ResponseFactory::createResponse($this->response_format);
@@ -77,18 +97,7 @@ class Proxy {
             $this->response->send();
             exit();
         } else {
-            System::redirect(Config::get(Config::KEY_SITE_FQDN) . Config::get(Config::KEY_SHUTDOWN_PAGE));
-        }
-    }
-
-    /**
-     * Proxy destructor.
-     *
-     * @return void
-     */
-    public function __destruct() {
-        if (!empty($this->db)) {
-            $this->db = null;
+            System::redirect(Config::get(Config::KEY_SITE_FQDN) . "400");
         }
     }
     
@@ -115,7 +124,7 @@ class Proxy {
      * @return void
      */
     private function performFrontControllerRequest() {
-        $this->$front_controller = new FrontController($this->db, $this->request);
+        $this->front_controller = new FrontController($this->db, $this->request);
         $this->response = $this->front_controller->getResponse();
     }
 
