@@ -2,6 +2,7 @@
 
 namespace Phoenix\Core;
 
+use \Exception;
 use \Phoenix\Core\Model;
 use \Phoenix\Core\View;
 use \Phoenix\Core\Controller;
@@ -23,7 +24,7 @@ use \Phoenix\Utils\System;
 /**
  * FrontController
  *
- * @version 1.28
+ * @version 1.29
  * @author MPI
  *        
  */

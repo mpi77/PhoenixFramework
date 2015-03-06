@@ -1,6 +1,7 @@
 <?php
 namespace Phoenix\Core;
 
+use \Exception;
 use \Phoenix\Core\Config;
 use \Phoenix\Core\Database;
 use \Phoenix\Core\FrontController;
@@ -20,7 +21,7 @@ use \Phoenix\Utils\System;
 /**
  * Proxy gateway
  * 
- * @version 1.22
+ * @version 1.23
  * @author MPI
  * */
 class Proxy {
