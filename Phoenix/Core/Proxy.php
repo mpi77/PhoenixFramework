@@ -21,7 +21,7 @@ use \Phoenix\Utils\System;
 /**
  * Proxy gateway
  * 
- * @version 1.25
+ * @version 1.26
  * @author MPI
  * */
 class Proxy {
@@ -71,10 +71,37 @@ class Proxy {
         try {
             $this->request = RequestFactory::createRequest();
             $this->response_format = $this->request->getUrl()->getQueryParameter(FrontController::URL_GET_FORMAT);
-        
             $this->db = new Database(Config::get(Config::KEY_DB_PRIMARY_POOL));
         
             $this->runProxy();
+            
+            // send response
+            if ($this->response instanceof Response) {
+                $this->response->send();
+                exit();
+            }
+        } catch (Exception $e) {
+            Logger::log($e);
+            System::redirect(Config::get(Config::KEY_SITE_FQDN) . Config::get(Config::KEY_SHUTDOWN_PAGE));
+        }
+    }
+    
+    /**
+     * Run proxy detection.
+     * 
+     * @throws Phoenix\Exceptions\FailureException
+     * @return void
+     */
+    private function runProxy() {
+        try {
+            if ($this->isFrontControllerRequest() === true) {
+                $this->performFrontControllerRequest();
+                return;
+            }
+        
+            if ($this->isProxyRequest() === true) {
+                $this->performProxyRequest();
+            }
         } catch (NoticeException $e) {
             $this->response = ResponseFactory::createResponse($this->response_format);
             $this->response->setException($e);
@@ -90,31 +117,6 @@ class Proxy {
             Logger::log($e);
             $this->response = ResponseFactory::createResponse($this->response_format);
             $this->response->setException($e);
-        }
-        
-        // send response
-        if ($this->response instanceof Response) {
-            $this->response->send();
-            exit();
-        } else {
-            System::redirect(Config::get(Config::KEY_SITE_FQDN) . Config::get(Config::KEY_SHUTDOWN_PAGE));
-        }
-    }
-    
-    /**
-     * Run proxy detection.
-     * 
-     * @throws Phoenix\Exceptions\WarningException
-     * @return void
-     */
-    private function runProxy() {
-        if ($this->isFrontControllerRequest() === true) {
-            $this->performFrontControllerRequest();
-            return;
-        }
-    
-        if ($this->isProxyRequest() === true) {
-            $this->performProxyRequest();
         }
     }
 
