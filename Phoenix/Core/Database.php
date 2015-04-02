@@ -14,7 +14,7 @@ use \PDOException;
  * and db server.
  * It is PDO wrapper for this framework.
  *
- * @version 1.11
+ * @version 1.12
  * @author MPI
  *        
  */
@@ -60,7 +60,7 @@ class Database {
      * @param string $query
      *            SELECT single query
      * @param array $query_args
-     *            array with query arguments
+     *            array with query arguments in format array(":key1" => value1, ...)
      * @param array $fetch_config
      *            array with config fetch op. [type=>PDO::FETCH_ASSOC or PDO::FETCH_NUM or PDO::FETCH_CLASS, className=>string]
      * @return 2D array (more rows fetched) | 1D array (one row fetched) | Database::EMPTY_RESULT (nothing fetched)
@@ -102,7 +102,7 @@ class Database {
      * @param string $query
      *            action (INSERT, UPDATE, DELETE) single query
      * @param array $query_args
-     *            array with query arguments
+     *            array with query arguments in format array(":key1" => value1, ...)
      * @return integer of affected rows
      */
     public function actionQuery($query, $query_args) {
